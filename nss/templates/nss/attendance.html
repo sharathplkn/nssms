@@ -1,0 +1,105 @@
+{% extends 'nss/base.html'%}
+{% block title %}
+    attendance
+{% endblock%}
+{% block content %}
+    <form method="post" action="{% url 'attendance'%}">
+        {% csrf_token %}
+    <label for="event">Event:</label>
+    <select id="event" name="event">
+    {% for i in even %}
+    <option value="{{ i.event_name }}">{{ i.event_name }}</option>
+    {% endfor %}
+    </select><br>
+    <label for="date">Date:</label>
+    <br>
+    <input type="date" id="date" name="date">
+    <br>
+    <label for="time">Number of hours:</label>
+    <br>
+    <input type="number" id="time" name="time">
+    <br>
+    <br>
+    Computer Science
+    <br>
+        {% for i in vol %}
+            {%if i.program.dept.dep_name == "ComputerScience"%} 
+                <input type=checkbox id="name" name="name" value="{{i.name}}_ComputerScience">
+                <label for="name">{{i.name}}</label>
+            {% endif %}
+        {% endfor %}
+    <br>
+    Maths
+    <br>
+        {% for i in vol %}
+            {%if i.program.dept.dep_name == "Maths"%} 
+                <input type=checkbox id="name" name="name" value="{{i.name}}_Maths">
+                <label for="name">{{i.name}}</label>
+            {% endif %}
+        {% endfor %}
+    <br>
+    Statistics
+    <br>
+        {% for i in vol %}
+            {%if i.program.dept.dep_name == "Statistics"%} 
+                <input type=checkbox id="name" name="name" value="{{i.name}}_Statistics">
+                <label for="name">{{i.name}}</label>
+            {% endif %}
+        {% endfor %}
+    <br>
+    Commerce
+    <br>
+        {% for i in vol %}
+            {%if i.program.dept.dep_name == "commerce"%} 
+                <input type=checkbox id="name" name="name" value="{{i.name}}_commerce">
+                <label for="name">{{i.name}}</label>
+            {% endif %}
+        {% endfor %}
+        <br>
+    Chemistry
+    <br>
+        {% for i in vol %}
+            {%if i.program.dept.dep_name == "Chemistry"%} 
+                <input type=checkbox id="name" name="name" value="{{i.name}}_chemistry">
+                <label for="name">{{i.name}}</label>
+            {% endif %}
+        {% endfor %}
+    <br>
+    PlantScience
+    <br>
+        {% for i in vol %}
+            {%if i.program.dept.dep_name == "Botany"%} 
+                <input type=checkbox id="name" name="name" value="{{i.name}}_Botany">
+                <label for="name">{{i.name}}</label>
+            {% endif %}
+        {% endfor %}
+    <br>
+    Economics
+    <br>
+        {% for i in vol %}
+            {%if i.program.dept.dep_name == "Economics"%} 
+                <input type=checkbox id="name" name="name" value="{{i.name}}_Economics">
+                <label for="name">{{i.name}}</label>
+            {% endif %}
+        {% endfor %}
+    <br>
+    History
+    <br>
+        {% for i in vol %}
+            {%if i.program.dept.dep_name == "History"%} 
+                <input type=checkbox id="name" name="name" value="{{i.name}}_History">
+                <label for="name">{{i.name}}</label>
+            {% endif %}
+        {% endfor %}
+    <br>
+    Malayalam
+    <br>
+        {% for i in vol %}
+            {%if i.program.dept.dep_name == "Malayalam"%} 
+                <input type=checkbox id="name" name="name" value="{{i.name}}_Malayalam">
+                <label for="name">{{i.name}}</label>
+            {% endif %}
+        {% endfor %}
+    <input type="submit" value="submit">
+</form>
+{% endblock%}

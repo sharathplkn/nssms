@@ -1,0 +1,42 @@
+{% extends 'nss/base.html' %}
+{% block style %}
+<style>
+    table {
+        width: 80%;
+        border-collapse: collapse;
+        margin: 20px auto;
+    }
+    th, td {
+        border: 1px solid #dddddd;
+        padding: 8px;
+        text-align: left;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+    tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+    tr:hover {
+        background-color: #f2f2f2;
+    }
+</style>
+{% endblock %}
+{% block content %} 
+<table border="1px">
+    <tr>
+        <th>Date</th>
+        <th>Name</th>
+        <th>Department</th>
+        <th>Event</th>
+    </tr>
+{% for i in atte %}
+    <tr>
+        <td>{{i.date}}</td>
+        <td>{{i.name}}</td>
+        <td>{{i.department}}</td>
+        <td>{{i.event}}</td>
+    </tr>
+{% endfor %}
+</table>
+{% endblock %}

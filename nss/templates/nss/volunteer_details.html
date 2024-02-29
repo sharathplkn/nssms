@@ -1,0 +1,69 @@
+{% extends 'nss/base.html' %}
+
+{% block title %}
+    Volunteer Details
+{% endblock %}
+
+{% block style %}
+    table {
+        width: 50%;
+        border-collapse: collapse;
+        margin: 0 auto; /* Center the table */
+    }
+
+    td, th {
+        padding: 10px;
+        border: 1px solid #dddddd;
+    }
+
+    th {
+        background-color: #f2f2f2;
+        text-align: left;
+    }
+
+    tr:hover {
+        background-color: #f5f5f5;
+    }
+
+    img {
+        border-radius: 50%;
+    }
+
+    #link {
+        display: block;
+        margin-top: 20px;
+        text-align: center; /* Center the link */
+    }
+{% endblock %}
+
+{% block content %}
+{% for i in voluntee %}
+    <table>
+        <tr><th>Name</th><td>{{ i.name }}</td><td rowspan="4"><img src="{{ i.image.url }}" alt="Volunteer Image" height="100px" width="100px"></td></tr>
+        <tr><th>Fathers/Guardian Name</th><td>{{ i.guard_name }}</td></tr>
+        <tr><th>Fathers/Guardian Mobile-No</th><td>{{ i.guard_mob_no }}</td></tr>
+        <tr><th>Sex</th><td>{{ i.sex }}</td></tr>
+        <tr><th>Date of Birth</th><td colspan="2">{{ i.dob }}</td></tr>
+        <tr><th>Programme</th><td colspan="2">{{ i.program.program_name }}</td></tr>
+        <tr><th>Year</th><td colspan="2">{{ i.year }}</td></tr>
+        <tr><th>Community</th><td colspan="2">{{ i.community }}</td></tr>
+        <tr><th>Address</th><td colspan="2">{{ i.address }}</td></tr>
+        <tr><th>Blood Group</th><td colspan="2">{{ i.blood_group }}</td></tr>
+        <tr><th>Height</th><td colspan="2">{{ i.height }} Cm</td></tr>
+        <tr><th>Weight</th><td colspan="2">{{ i.weight }} Kg</td></tr>
+        <tr><th>Mobile-No</th><td colspan="2">{{ i.mobile_no }}</td></tr>
+        <tr><th>Year of Enrollment</th><td colspan="2">{{ i.year_of_enrollment }}</td></tr>
+        <tr><th>Roll_no</th><td colspan="2">{{ i.roll_no }}</td></tr>
+        <tr><th>Cultural talents</th><td colspan="2">{{ i.cultural_talents }}</td></tr>
+        <tr><th>Hobbies</th><td colspan="2">{{ i.hobbies }}</td></tr>
+        <tr><th>Events Participated</th><td colspan="2">
+            <ul>
+              {% for item in even %}
+                <li>{{ item.event.event_name }}</li>
+              {% endfor %}
+            </ul>
+        </td></tr>
+    </table>
+{% endfor %}
+<a id="link" href="{% url 'view_volunteer' %}" style="color: blue; text-decoration: underline;">Back to Volunteer List</a>
+{% endblock %}
