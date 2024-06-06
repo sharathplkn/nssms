@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from .models import *
 from django.db import connection
@@ -27,7 +27,7 @@ def add_volunteer(request):
         height=request.POST.get('height')
         weight=request.POST.get('weight')
         mobile_no=request.POST.get('mobile_no')
-        Email_id=request.POST.get('Email_id')
+        Email_id=request.POST.get('email')
         year_of_enrollment=request.POST.get('year_of_enrollment')
         cultural_talents=request.POST.get('cultural_talents')
         hobbies=request.POST.get('hobbies')
@@ -38,7 +38,7 @@ def add_volunteer(request):
         voluntee=volunteer(image=image,name=name,guard_name=guard_name,guard_mob_no=guard_mob_no,sex=sex,dob=dob,program=programme_id,year=year,community=community,address=address,blood_group=blood_group,height=height,weight=weight,mobile_no=mobile_no,Email_id=Email_id,year_of_enrollment=year_of_enrollment,cultural_talents=cultural_talents,hobbies=hobbies,roll_no=roll_no)
         voluntee.save()
 
-        return HttpResponse('submitted')
+        return redirect('view_volunteer')
     return render(request,'nss/form.html',prog)
 @login_required()
 def view_volunteer(request):
@@ -73,7 +73,7 @@ def attendance(request):
             att = Attendance(volunteer=volunteer_instance,date=datet, name=name, department=department_name,event=event)
             att.save()
 
-        return HttpResponse("Attendance Submitted")
+        return redirect('view_attendance')
 
     return render(request, 'nss/attendance.html',{**vole,**eve})
 @login_required()
@@ -175,3 +175,76 @@ def event_photos(request):
 def event2(request):
 
     return render(request,'nss/event2.html')
+
+def edit_volunteer(request, pk):
+    Volunteer = get_object_or_404(volunteer, pk=pk)
+    if request.method == "POST":
+        name = request.POST.get('name')
+        guard_name = request.POST.get('guard_name')
+        guard_mob_no = request.POST.get('guard_mob_no')
+        sex = request.POST.get('sex')
+        dob = request.POST.get('dob')
+        programme_name = request.POST.get('programme')
+        year = request.POST.get('year')
+        community = request.POST.get('community')
+        address = request.POST.get('address')
+        blood_group = request.POST.get('blood_group')
+        height = request.POST.get('height')
+        weight = request.POST.get('weight')
+        mobile_no = request.POST.get('mobile_no')
+        Email_id = request.POST.get('email')
+        year_of_enrollment = request.POST.get('year_of_enrollment')
+        cultural_talents = request.POST.get('cultural_talents')
+        hobbies = request.POST.get('hobbies')
+        roll_no = request.POST.get('roll_no')
+        if 'image' in request.FILES:
+            image = request.FILES['image']
+            Volunteer.image = image
+        programme_id = Programme.objects.get(program_name=programme_name)
+
+        Volunteer.name = name
+        Volunteer.guard_name = guard_name
+        Volunteer.guard_mob_no = guard_mob_no
+        Volunteer.sex = sex
+        Volunteer.dob = dob
+        Volunteer.programme = programme_id
+        Volunteer.year = year
+        Volunteer.community = community
+        Volunteer.address = address
+        Volunteer.blood_group = blood_group
+        Volunteer.height = height
+        Volunteer.weight = weight
+        Volunteer.mobile_no = mobile_no
+        Volunteer.Email_id = Email_id
+        Volunteer.year_of_enrollment = year_of_enrollment
+        Volunteer.cultural_talents = cultural_talents
+        Volunteer.hobbies = hobbies
+        Volunteer.roll_no = roll_no
+
+
+        Volunteer.save()
+        return redirect('view_volunteer')  # Adjust this to redirect to an appropriate page
+
+    context = {
+        'dep': Programme.objects.all(),
+        'Volunteer': Volunteer
+    }
+    return render(request, 'nss/edit_volunteer.html', context)
+
+
+@login_required()
+def delete2(request, volunteer_name):
+    vol={
+        'voluntee':volunteer.objects.filter(volunteer_id=volunteer_name)
+    }
+    
+    ev={
+        'even':Attendance.objects.filter(volunteer=volunteer_name)
+    }
+    # Pass the volunteer details to the template
+    return render(request, 'nss/delete_volunteer.html', {**vol,**ev})
+
+def delete_volunteer(request, pk):
+    Volunteer = get_object_or_404(volunteer, pk=pk)
+    Volunteer.delete()
+    return redirect('view_volunteer') 

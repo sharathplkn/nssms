@@ -27,6 +27,7 @@
 
     .volunteer-form input[type="text"],
     .volunteer-form input[type="number"],
+    .volunteer-form input[type="tel"],
     .volunteer-form input[type="date"],
     .volunteer-form input[type="email"],
     .volunteer-form select,
@@ -79,7 +80,7 @@
         <input type="text" id="guard_name" name="guard_name" required>
 
         <label for="guard_mob_no">Fathers/Guardian Mobile-No:</label>
-        <input type="number" id="guard_mob_no" name="guard_mob_no" required>
+        <input type="tel" id="guard_mob_no" name="guard_mob_no" required>
         Gender:
         <div class="radio-group">
             <label for="male">Male</label>
@@ -112,14 +113,14 @@
 
         <label>Community:</label>
         <div class="radio-group">
-            <label for="general">General</label>
             <input type="radio" id="general" name="community" value="General">
-            <label for="sc">SC</label>
+            <label for="general">General</label>
             <input type="radio" id="sc" name="community" value="SC">
-            <label for="st">ST</label>
+            <label for="sc">SC</label>
             <input type="radio" id="st" name="community" value="ST">
-            <label for="obc">OBC</label>
+            <label for="st">ST</label>
             <input type="radio" id="obc" name="community" value="OBC">
+            <label for="obc">OBC</label>
         </div>
 
         <label for="address">Address:</label>
@@ -144,7 +145,7 @@
         <input type="number" id="weight" name="weight" required>
 
         <label for="mobile_no">Mobile-No:</label>
-        <input type="number" id="mobile_no" name="mobile_no" pattern="\d{10}" required>
+        <input type="tel" id="mobile_no" name="mobile_no" pattern="\d{10}" required>
 
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" required>
