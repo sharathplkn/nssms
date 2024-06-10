@@ -1,74 +1,12 @@
 {% extends 'nss/base.html'%}
+{% load static %}
 {% block title %}
     attendance
 {% endblock%}
 {% block content %}
-<style>
-    .volunteer-form {
-        max-width: 600px;
-        margin: 0 auto;
-        padding: 20px;
-        background-color: #f9f9f9;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        text-align: left;
-    }
-
-    .volunteer-form legend {
-        font-size: 1.2em;
-        font-weight: bold;
-        color: #333;
-    }
-
-    .volunteer-form label {
-        display: block;
-        margin-bottom: 5px;
-    }
-
-    .volunteer-form input[type="text"],
-    .volunteer-form input[type="number"],
-    .volunteer-form input[type="tel"],
-    .volunteer-form input[type="date"],
-    .volunteer-form input[type="email"],
-    .volunteer-form select,
-    .volunteer-form textarea {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        box-sizing: border-box;
-        font-size: 16px;
-    }
-
-    .volunteer-form input[type="radio"] {
-        margin-right: 5px;
-    }
-
-    .volunteer-form textarea {
-        resize: vertical;
-    }
-
-    .volunteer-form input[type="submit"] {
-        background-color: #007bff;
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        padding: 10px 20px;
-        cursor: pointer;
-        font-size: 16px;
-        transition: background-color 0.3s ease;
-    }
-
-    .volunteer-form input[type="submit"]:hover {
-        background-color: #0056b3;
-    }
-
-    .volunteer-form .radio-group label {
-        display: inline-block;
-        margin-right: 10px; /* Adjust spacing between radio buttons */
-    }
-</style>
+<head>
+    <link rel="stylesheet" href="{% static '/css/add_attendance.css'%}">
+</head>
 
     <form class="volunteer-form" method="post" action="{% url 'attendance'%}">
         {% csrf_token %}
@@ -82,16 +20,12 @@
     <br>
     <input type="date" id="date" name="date">
     <br>
-    <label for="time">Number of hours:</label>
-    <br>
-    <input type="number" id="time" name="time">
-    <br>
     <br>
     Computer Science
     <br>
         {% for i in vol %}
             {%if i.program.dept.dep_name == "ComputerScience"%} 
-                <input type=checkbox id="name" name="name" value="{{i.name}}_ComputerScience">
+                <input type=checkbox id="name" name="name" value="{{i.volunteer_id}}_ComputerScience">
                 <label for="name">{{i.name}}</label>
             {% endif %}
         {% endfor %}
@@ -100,7 +34,7 @@
     <br>
         {% for i in vol %}
             {%if i.program.dept.dep_name == "Maths"%} 
-                <input type=checkbox id="name" name="name" value="{{i.name}}_Maths">
+                <input type=checkbox id="name" name="name" value="{{i.volunteer_id}}_Maths">
                 <label for="name">{{i.name}}</label>
             {% endif %}
         {% endfor %}
@@ -109,7 +43,7 @@
     <br>
         {% for i in vol %}
             {%if i.program.dept.dep_name == "Statistics"%} 
-                <input type=checkbox id="name" name="name" value="{{i.name}}_Statistics">
+                <input type=checkbox id="name" name="name" value="{{i.volunteer_id}}_Statistics">
                 <label for="name">{{i.name}}</label>
             {% endif %}
         {% endfor %}
@@ -118,7 +52,7 @@
     <br>
         {% for i in vol %}
             {%if i.program.dept.dep_name == "commerce"%} 
-                <input type=checkbox id="name" name="name" value="{{i.name}}_commerce">
+                <input type=checkbox id="name" name="name" value="{{i.volunteer_id}}_commerce">
                 <label for="name">{{i.name}}</label>
             {% endif %}
         {% endfor %}
@@ -127,7 +61,7 @@
     <br>
         {% for i in vol %}
             {%if i.program.dept.dep_name == "Chemistry"%} 
-                <input type=checkbox id="name" name="name" value="{{i.name}}_chemistry">
+                <input type=checkbox id="name" name="name" value="{{i.volunteer_id}}_chemistry">
                 <label for="name">{{i.name}}</label>
             {% endif %}
         {% endfor %}
@@ -136,7 +70,7 @@
     <br>
         {% for i in vol %}
             {%if i.program.dept.dep_name == "Botany"%} 
-                <input type=checkbox id="name" name="name" value="{{i.name}}_Botany">
+                <input type=checkbox id="name" name="name" value="{{i.volunteer_id}}_Botany">
                 <label for="name">{{i.name}}</label>
             {% endif %}
         {% endfor %}
@@ -145,7 +79,7 @@
     <br>
         {% for i in vol %}
             {%if i.program.dept.dep_name == "Economics"%} 
-                <input type=checkbox id="name" name="name" value="{{i.name}}_Economics">
+                <input type=checkbox id="name" name="name" value="{{i.volunteer_id}}_Economics">
                 <label for="name">{{i.name}}</label>
             {% endif %}
         {% endfor %}
@@ -154,7 +88,7 @@
     <br>
         {% for i in vol %}
             {%if i.program.dept.dep_name == "History"%} 
-                <input type=checkbox id="name" name="name" value="{{i.name}}_History">
+                <input type=checkbox id="name" name="name" value="{{i.volunteer_id}}_History">
                 <label for="name">{{i.name}}</label>
             {% endif %}
         {% endfor %}
@@ -163,7 +97,7 @@
     <br>
         {% for i in vol %}
             {%if i.program.dept.dep_name == "Malayalam"%} 
-                <input type=checkbox id="name" name="name" value="{{i.name}}_Malayalam">
+                <input type=checkbox id="name" name="name" value="{{i.volunteer_id}}_Malayalam">
                 <label for="name">{{i.name}}</label>
             {% endif %}
         {% endfor %}

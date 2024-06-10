@@ -1,0 +1,37 @@
+{% extends 'nss/base.html' %}
+{% load static %}
+{% block content %}
+<head>
+    <link rel="stylesheet" href="{% static '/css/report_list_more.css'%}">
+</head>
+<div class="no-print">
+    <button  class="buttons" onclick="printPdf()">Print as PDF</button>
+</div>
+<div class="print-content">
+    {% for i in eve%}
+    <div class="event-container">
+        <h1 class="event-heading">{{i.event_name | upper }}</h1>
+        <div class="event-date">{{i.date}}</div>
+    {% endfor %}
+    <div class="event-description">
+        {% for j in desc%}
+        {{j.des}}
+        {%endfor%}
+    </div>
+    <div class="image-gallery">
+        {% for k in pics%}
+        <div class="gallery-item">
+        <img src="{{k.photo.url}}">
+        </div>
+        {%endfor%}
+    </div>
+</div>
+
+
+
+<script>
+function printPdf() {
+    window.print();
+}
+</script>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'nss/base.html' %}
+{% load static %}
+{% block content %}
+<head>
+    <link rel="stylesheet" href="{% static '/css/full_attendance.css' %}">
+</head> 
+<table border="1px">
+    <tr>
+        <th>Date</th>
+        <th>Name</th>
+        <th>Department</th>
+        <th>Event</th>
+    </tr>
+    
+{% for i in atte %}
+    <tr>
+        <td>{{i.date}}</td>
+        <td>{{i.name}}</td>
+        <td>{{i.department}}</td>
+        <td>{{ i.event.event_name }}</td>
+    </tr>
+{% endfor %}
+</table>
+{% endblock %}

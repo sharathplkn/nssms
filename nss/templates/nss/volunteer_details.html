@@ -1,41 +1,12 @@
 {% extends 'nss/base.html' %}
-
+{% load static %}
 {% block title %}
     Volunteer Details
 {% endblock %}
 {% block content %}
-<style>
-    table {
-        width: 50%;
-        border-collapse: collapse;
-        margin: 0 auto; /* Center the table */
-    }
-
-    td, th {
-        padding: 10px;
-        border: 1px solid #dddddd;
-    }
-
-    th {
-        background-color: #f2f2f2;
-        text-align: left;
-    }
-
-    tr:hover {
-        background-color: #f5f5f5;
-    }
-
-    img {
-        border-radius: 50%;
-    }
-
-    #link {
-        display: block;
-        margin-top: 20px;
-        text-align: center; /* Center the link */
-    }
-
-</style>
+<head>
+    <link rel="stylesheet" href="{% static '/css/volunteer_details.css'%}">
+</head>
 
 {% for i in voluntee %}
     <table>

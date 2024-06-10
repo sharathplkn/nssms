@@ -1,74 +1,12 @@
 {% extends 'nss/base.html'%}
+{% load static %}
 {% block title %}
     add volunteer
 {% endblock%}
 {% block content %}
-<style>
-    .volunteer-form {
-        max-width: 600px;
-        margin: 0 auto;
-        padding: 20px;
-        background-color: #f9f9f9;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        text-align: left;
-    }
-
-    .volunteer-form legend {
-        font-size: 1.2em;
-        font-weight: bold;
-        color: #333;
-    }
-
-    .volunteer-form label {
-        display: block;
-        margin-bottom: 5px;
-    }
-
-    .volunteer-form input[type="text"],
-    .volunteer-form input[type="number"],
-    .volunteer-form input[type="tel"],
-    .volunteer-form input[type="date"],
-    .volunteer-form input[type="email"],
-    .volunteer-form select,
-    .volunteer-form textarea {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        box-sizing: border-box;
-        font-size: 16px;
-    }
-
-    .volunteer-form input[type="radio"] {
-        margin-right: 5px;
-    }
-
-    .volunteer-form textarea {
-        resize: vertical;
-    }
-
-    .volunteer-form input[type="submit"] {
-        background-color: #007bff;
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        padding: 10px 20px;
-        cursor: pointer;
-        font-size: 16px;
-        transition: background-color 0.3s ease;
-    }
-
-    .volunteer-form input[type="submit"]:hover {
-        background-color: #0056b3;
-    }
-
-    .volunteer-form .radio-group label {
-        display: inline-block;
-        margin-right: 10px; /* Adjust spacing between radio buttons */
-    }
-</style>
+<head>
+    <link rel="stylesheet" href="{% static '/css/add_volunteer.css' %}">
+</head>
 <form class="volunteer-form" method="post" action="{% url 'add_volunteer' %}" align="center" enctype="multipart/form-data">
     <fieldset>
         <legend>Volunteer Details</legend>
@@ -80,13 +18,14 @@
         <input type="text" id="guard_name" name="guard_name" required>
 
         <label for="guard_mob_no">Fathers/Guardian Mobile-No:</label>
-        <input type="tel" id="guard_mob_no" name="guard_mob_no" required>
+        <input type="tel" id="guard_mob_no" name="guard_mob_no" pattern="\d{10}" required>
         Gender:
         <div class="radio-group">
-            <label for="male">Male</label>
+            
             <input type="radio" id="male" name="sex" value="male">
-            <label for="female">Female</label>
+            <label for="male">Male</label>
             <input type="radio" id="female" name="sex" value="female">
+            <label for="female">Female</label>
         </div>
 
         <label for="dob">Date of Birth:</label>
@@ -139,10 +78,10 @@
         </select>
 
         <label for="height">Height (in cm):</label>
-        <input type="number" id="height" name="height" required>
+        <input type="number" id="height" name="height" required min="20">
 
         <label for="weight">Weight (in kg):</label>
-        <input type="number" id="weight" name="weight" required>
+        <input type="number" id="weight" name="weight" required min="20">
 
         <label for="mobile_no">Mobile-No:</label>
         <input type="tel" id="mobile_no" name="mobile_no" pattern="\d{10}" required>

@@ -8,7 +8,7 @@ class Department(models.Model):
         return f"{self.dep_name}"
 class Programme(models.Model):
     programme_id=models.IntegerField(primary_key=True)
-    dept=models.ForeignKey(Department,on_delete=models.DO_NOTHING)
+    dept=models.ForeignKey(Department,on_delete=models.CASCADE)
     program_name=models.CharField(max_length=65)
     no_of_sems=models.IntegerField()
     grad_level=models.CharField(max_length=10)
@@ -34,7 +34,7 @@ class volunteer(models.Model):
     hobbies=models.TextField()
     roll_no=models.IntegerField(unique=False)
     image=models.ImageField(upload_to='volunteers',default="")
-    program=models.ForeignKey(Programme,on_delete=models.DO_NOTHING)
+    program=models.ForeignKey(Programme,on_delete=models.CASCADE)
     def __str__(self):
         return f"{self.name}"
 

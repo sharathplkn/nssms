@@ -1,42 +1,9 @@
 {% extends 'nss/base.html' %}
+{% load static %}
 {% block content %}
-    <style>
-        .add-event-form {
-            width: 40%;
-            margin: 50px auto;
-            padding: 20px;
-            background-color: #f9f9f9;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .add-event-form label {
-            font-weight: bold;
-            margin-bottom: 10px;
-            display: block;
-        }
-        .add-event-form input[type="text"],
-        .add-event-form input[type="date"],
-        .add-event-form input[type="submit"] {
-            width: calc(100% - 20px); /* Adjusted width */
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
-        .add-event-form input[type="submit"] {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        .add-event-form input[type="submit"]:hover {
-            background-color: #0056b3;
-        }
-    </style>
-
+<head>
+    <link rel="stylesheet" href="{% static '/css/add_event.css'%}">
+</head>
     <form class="add-event-form" method="post" action="{% url 'add_event' %}" enctype="multipart/form-data">
         {% csrf_token %}
         <label for="event_name">Event Name:</label>

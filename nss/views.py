@@ -1,14 +1,32 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from .models import *
+from django.contrib.auth.models import Group,User
 from django.db import connection
 from django.contrib.auth.decorators import login_required
+from .decorators import group_required 
 
-# Create your views here.
+def access_denied(request):
+    return render(request, 'nss/acess_denied.html')
+@login_required()
+def your_view(request):
+    user = request.user
+    is_po_group = user.groups.filter(name='po').exists()
+    print("Logged in user:", user)
+    print("Is user in 'po' group?", is_po_group)
+
+    context = {
+        'is_po_group': is_po_group,
+        # Add other context variables as needed
+    }
+    
+    return render(request, 'nss/base.html', context)
+
 @login_required()
 def ns(request):
     return render(request,'nss/home.html')
 @login_required()
+@group_required('po', login_url='/access-denied/')
 def add_volunteer(request):
     prog={
         'dep':Programme.objects.all()
@@ -39,7 +57,7 @@ def add_volunteer(request):
         voluntee.save()
 
         return redirect('view_volunteer')
-    return render(request,'nss/form.html',prog)
+    return render(request,'nss/add_volunteer.html',prog)
 @login_required()
 def view_volunteer(request):
     vol={
@@ -62,26 +80,27 @@ def attendance(request):
         time=request.POST.get('time')
         #converting roll_numbers from string to Integers
 
-        for name_department in name_list:
+        for volunteer_id_department in name_list:
             # Split the value into roll_no and department_name
-            name, department_name = name_department.split('_')
+            volunteer_id, department_name = volunteer_id_department.split('_')
 
             # Convert roll_no to an integer
-            volunteer_instance= volunteer.objects.get(name=name)
+            volunteer_instance= volunteer.objects.get(volunteer_id=volunteer_id)
+
             # Save the attendance record
             event=Event.objects.get(event_name=event)
-            att = Attendance(volunteer=volunteer_instance,date=datet, name=name, department=department_name,event=event)
+            att = Attendance(volunteer=volunteer_instance,date=datet,department=department_name,event=event)
             att.save()
 
         return redirect('view_attendance')
 
-    return render(request, 'nss/attendance.html',{**vole,**eve})
+    return render(request, 'nss/add_attendance.html',{**vole,**eve})
 @login_required()
 def view_attendance(request):
     at={
-        'atte':Attendance.objects.all().order_by('date','department').values()
+        'atte':Attendance.objects.all().order_by('date','department').select_related('event')
     }
-    return render(request,'nss/view_attendance.html',at)
+    return render(request,'nss/full_attendance.html',at)
 @login_required()
 def view_attendance2(request):
     eve = {
@@ -92,10 +111,10 @@ def view_attendance2(request):
         selected_event=ev
         event_id=Event.objects.get(event_name=ev).event_id
         res = {
-            'resul': Attendance.objects.filter(event=event_id).order_by('date').values()
+            'resul': Attendance.objects.filter(event=event_id).order_by('date').select_related('volunteer')
         }
-        return render(request, 'nss/sample.html',{**res,**eve,'selected_event': selected_event})
-    return render(request,'nss/sample.html',eve)
+        return render(request, 'nss/view_attendance.html',{**res,**eve,'selected_event': selected_event})
+    return render(request,'nss/view_attendance.html',eve)
 @login_required()
 def volunteer_details(request, volunteer_name):
     # Assuming you have a Volunteer model with a 'name' field
@@ -244,7 +263,48 @@ def delete2(request, volunteer_name):
     # Pass the volunteer details to the template
     return render(request, 'nss/delete_volunteer.html', {**vol,**ev})
 
+@login_required()
 def delete_volunteer(request, pk):
     Volunteer = get_object_or_404(volunteer, pk=pk)
     Volunteer.delete()
     return redirect('view_volunteer') 
+
+@login_required()
+def report_list(request):
+    report={
+        'event':Event.objects.all().order_by('date')
+    }
+    pics={
+        'pics':Event_Photos.objects.all()
+    }
+    details={
+        'details':Event_details.objects.all()
+    }
+    return render(request,'nss/report_list.html',{**report,**pics,**details})
+def report_list_more(request,pk):
+    event={
+        'eve':Event.objects.filter(event_id=pk)
+    }
+    pics={
+        'pics':Event_Photos.objects.filter(event_id=pk)
+    }
+    desc={
+        'desc':Event_details.objects.filter(event_id=pk)
+    }
+    return render(request,'nss/report_list_more.html',{**event,**pics,**desc})
+
+def view_event(request):
+    event={
+        'eve':Event.objects.all()
+    }
+    return render(request,'nss/view_event.html',event)
+
+def edit_event(request,pk):
+
+    return render(request,'nss/edit_event.html')
+    
+def delete_event(request,pk):
+    event = get_object_or_404(Event, pk=pk)
+    print(event)
+    event.delete()
+    return redirect('view_event')

@@ -1,42 +1,36 @@
 {% extends 'nss/base.html' %}
-{% block style %}
-<style>
-    table {
-        width: 80%;
-        border-collapse: collapse;
-        margin: 20px auto;
-    }
-    th, td {
-        border: 1px solid #dddddd;
-        padding: 8px;
-        text-align: left;
-    }
-    th {
-        background-color: #f2f2f2;
-    }
-    tr:nth-child(even) {
-        background-color: #f9f9f9;
-    }
-    tr:hover {
-        background-color: #f2f2f2;
-    }
-</style>
-{% endblock %}
-{% block content %} 
-<table border="1px">
-    <tr>
-        <th>Date</th>
-        <th>Name</th>
-        <th>Department</th>
-        <th>Event</th>
-    </tr>
-{% for i in atte %}
-    <tr>
-        <td>{{i.date}}</td>
-        <td>{{i.name}}</td>
-        <td>{{i.department}}</td>
-        <td>{{i.event}}</td>
-    </tr>
-{% endfor %}
-</table>
+{% load static %}
+{% block content %}
+<head>
+<link rel="stylesheet" href="{% static '/css/view_attendance.css'%}">
+</head>
+    <div class="form-container">
+        <form method="post" action="{% url 'view_attendance2' %}">
+            {% csrf_token %}
+            <label for="event">Select Event:</label>
+            <select id="event" name="event">
+                <option>---------</option>
+                {% for i in even %}
+                    <option value="{{ i.event_name }}">{{ i.event_name|title }}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="Submit">
+        </form>
+        <h1 class="event-heading">Selected Event: {{ selected_event|title }}</h1>
+        <table class="attendance-table" border="1">
+            <tr>
+                <th>Name</th>
+                <th>Department</th>
+            </tr>
+            {% for i in resul %}
+                <tr>
+                    <td>{{ i.volunteer.name }}</td>
+                    <td>{{ i.department }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <div class="full-report">
+            <a href="{% url 'view_attendance' %}">View Full Attendance Report</a>
+        </div>
+    </div>
 {% endblock %}

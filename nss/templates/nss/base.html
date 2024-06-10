@@ -1,93 +1,11 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
-  <title>{% block title %}
-          {% endblock%}
-  </title>
-  <style>
-    body {
-      background-color: #f9f9f9;
-      color: #333;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      padding: 0;
-    }
-    .header {
-      background-color: #34495e;
-      color: #fff;
-      text-align: center;
-      padding: 20px 0;
-    }
-    nav {
-      background-color: #2c3e50;
-      padding: 10px 0;
-    }
-    nav ul {
-      list-style-type: none;
-      padding: 0;
-      margin: 0;
-      text-align: center;
-    }
-    nav ul li {
-      display: inline;
-    }
-    nav ul li a {
-      display: inline-block;
-      padding: 10px 20px;
-      color: #fff;
-      text-decoration: none;
-      transition: all 0.3s ease;
-    }
-    nav ul li a:hover {
-      background-color: #1abc9c;
-    }
-    .dropdown {
-      position: relative;
-      display: inline-block;
-    }
-    .dropdown-content {
-      display: none;
-      position: absolute;
-      background-color: #2c3e50;
-      min-width: 160px;
-      z-index: 1;
-      top: 100%;
-      left: 0;
-    }
-    .dropdown:hover .dropdown-content {
-      display: block;
-    }
-    .dropdown-content a {
-      color: #fff;
-      padding: 12px 16px;
-      text-decoration: none;
-      display: block;
-      transition: all 0.3s ease;
-    }
-    .dropdown-content a:hover {
-      background-color: #1abc9c;
-    }
-    .logout-form {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-    }
-    .logout-button {
-      background-color: #3498db;
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.9em; /* Smaller font size */
-      padding: 8px 16px; /* Smaller padding */
-      transition: background-color 0.3s ease;
-    }
-    .logout-button:hover {
-      background-color: #2980b9;
-    }
-  </style>
-  {% block style%}
-  {% endblock %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/base.css' %}">
 </head>
 <body>
   <div class="header">
@@ -97,32 +15,34 @@
   <nav>
     <ul>
       <li>
-        <a href="{% url 'ns'%}">Home</a>
+        <a href="{% url 'ns' %}">Home</a>
       </li>
+      {% if is_po_group %}
       <li class="dropdown">
         <a href="#">Volunteer</a>
         <div class="dropdown-content">
-          <a href="{%url 'add_volunteer'%}">Add Volunteer</a>
-          <a href="{%url 'view_volunteer'%}">View Volunteer</a>
+          <a href="{% url 'add_volunteer' %}">Add Volunteer</a>
+          <a href="{% url 'view_volunteer' %}">View Volunteer</a>
         </div>
       </li>
       <li class="dropdown">
         <a href="#">Attendance</a>
         <div class="dropdown-content">
-          <a href="{%url 'attendance'%}">Add Attendance</a>
-          <a href="{%url 'view_attendance2'%}">View Attendance</a>
+          <a href="{% url 'attendance' %}">Add Attendance</a>
+          <a href="{% url 'view_attendance2' %}">View Attendance</a>
         </div>
       </li>
       <li class="dropdown">
         <a href="#">Event</a>
         <div class="dropdown-content">
-          <a href="{% url 'add_event'%}">Add Event</a>
-          <a href="{% url 'event2'%}">Events</a>
+          <a href="{% url 'add_event' %}">Add Event</a>
+          <a href="{% url 'event2' %}">Events</a>
         </div>
       </li>
       <li>
-        <a href="{%url 'report'%}">Report</a>
+        <a href="{% url 'report_list' %}">Report</a>
       </li>
+      {% endif %}
     </ul>
   </nav>
   
