@@ -28,6 +28,14 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+
+
+# Session settings
+SESSION_COOKIE_AGE = 1800  # 30 minutes
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_SAVE_EVERY_REQUEST = True
+
+
 # Application definition
 
 INSTALLED_APPS = [

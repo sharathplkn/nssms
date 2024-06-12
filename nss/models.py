@@ -52,6 +52,7 @@ class Attendance(models.Model):
     name=models.CharField(max_length=30)
     department=models.CharField(max_length=20)
     event=models.ForeignKey(Event,on_delete=models.CASCADE)
+    status=models.CharField(max_length=40,default="Pending for Approval")
     def __str__(self):
         return f"{self.event.event_name}"
 

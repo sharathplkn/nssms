@@ -17,19 +17,11 @@
       <li>
         <a href="{% url 'ns' %}">Home</a>
       </li>
-      {% if is_po_group %}
       <li class="dropdown">
         <a href="#">Volunteer</a>
         <div class="dropdown-content">
           <a href="{% url 'add_volunteer' %}">Add Volunteer</a>
           <a href="{% url 'view_volunteer' %}">View Volunteer</a>
-        </div>
-      </li>
-      <li class="dropdown">
-        <a href="#">Attendance</a>
-        <div class="dropdown-content">
-          <a href="{% url 'attendance' %}">Add Attendance</a>
-          <a href="{% url 'view_attendance2' %}">View Attendance</a>
         </div>
       </li>
       <li class="dropdown">
@@ -39,10 +31,16 @@
           <a href="{% url 'event2' %}">Events</a>
         </div>
       </li>
+      <li class="dropdown">
+        <a href="#">Attendance</a>
+        <div class="dropdown-content">
+          <a href="{% url 'attendance' %}">Add Attendance</a>
+          <a href="{% url 'view_attendance2' %}">View Attendance</a>
+        </div>
+      </li>
       <li>
         <a href="{% url 'report_list' %}">Report</a>
       </li>
-      {% endif %}
     </ul>
   </nav>
   

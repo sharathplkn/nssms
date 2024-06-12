@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404, redirect,reverse
 from django.http import HttpResponse
 from .models import *
 from django.contrib.auth.models import Group,User
@@ -8,25 +8,13 @@ from .decorators import group_required
 
 def access_denied(request):
     return render(request, 'nss/acess_denied.html')
-@login_required()
-def your_view(request):
-    user = request.user
-    is_po_group = user.groups.filter(name='po').exists()
-    print("Logged in user:", user)
-    print("Is user in 'po' group?", is_po_group)
 
-    context = {
-        'is_po_group': is_po_group,
-        # Add other context variables as needed
-    }
-    
-    return render(request, 'nss/base.html', context)
 
 @login_required()
 def ns(request):
+    #request.session.set_expiry(60)
     return render(request,'nss/home.html')
 @login_required()
-@group_required('po', login_url='/access-denied/')
 def add_volunteer(request):
     prog={
         'dep':Programme.objects.all()
@@ -281,6 +269,8 @@ def report_list(request):
         'details':Event_details.objects.all()
     }
     return render(request,'nss/report_list.html',{**report,**pics,**details})
+
+@login_required()
 def report_list_more(request,pk):
     event={
         'eve':Event.objects.filter(event_id=pk)
@@ -293,18 +283,28 @@ def report_list_more(request,pk):
     }
     return render(request,'nss/report_list_more.html',{**event,**pics,**desc})
 
+@login_required()
 def view_event(request):
     event={
         'eve':Event.objects.all()
     }
     return render(request,'nss/view_event.html',event)
 
+@login_required()
 def edit_event(request,pk):
 
     return render(request,'nss/edit_event.html')
-    
+
+@login_required()
 def delete_event(request,pk):
     event = get_object_or_404(Event, pk=pk)
     print(event)
     event.delete()
     return redirect('view_event')
+
+@login_required()
+def approve_attendance(request,pk):
+    att=Attendance.objects.get(Attendance_id=pk)
+    att.status="approved"
+    att.save()
+    return HttpResponse('submitted')
