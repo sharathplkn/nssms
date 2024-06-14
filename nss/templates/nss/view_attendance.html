@@ -18,37 +18,35 @@
     window.onload = setSelectedEvent;
 </script>
     <div class="form-container">
-        <form method="post" action="{% url 'view_attendance2' %}">
+        <form method="post" action="{% url 'view_attendance' %}">
             {% csrf_token %}
             <label for="event">Select Event:</label>
             <select id="event" name="event">
-                <option>---------</option>
+                <option disabled selected>Select Event</option>
                 {% for i in even %}
-                    <option value="{{ i.event_name }}">{{ i.event_name|title }}</option>
+                    <option value="{{ i.event_id }}">{{ i.event_name|title }}</option>
                 {% endfor %}
             </select>
             <input type="submit" value="Submit">
         </form>
-        <h1 class="event-heading">Selected Event: {{ selected_event|title }}</h1>
+        <h1 class="event-heading">Selected Event: {{ selected_event.event_name|title }}-{{selected_event.date}}</h1>
         <table class="attendance-table" border="1">
             <tr>
                 <th>Name</th>
-                <th>Department</th>
-                <th>Status</th>
+                <th>Programme</th>
             </tr>
             {% for i in resul %}
                 <tr>
                     <td>{{ i.volunteer.name }}</td>
-                    <td>{{ i.department }}</td>
-                    <td>{{i.status}}</td>
-                    {% if is_po_group %}
+                    <td>{{i.volunteer.year}}-Year {{ i.volunteer.program}}</td>
+                   <!-- {% if is_po_group %}
                     <td><a href="{% url 'approve_attendance' i.Attendance_id %}"> Approve</a></td>
-                    {% endif %}
+                    {% endif %}-->
                 </tr>
             {% endfor %}
         </table>
         <div class="full-report">
-            <a href="{% url 'view_attendance' %}">View Full Attendance Report</a>
+            <a href="{% url 'view_attendance2' %}">View Full Attendance Report</a>
         </div>
     </div>
 {% endblock %}

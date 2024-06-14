@@ -36,7 +36,7 @@
 .attendance-table {
     border-collapse: collapse;
     width: 100%;
-    text-align: center;
+    text-align: left;
 }
 
 .attendance-table th, .attendance-table td {

@@ -1,12 +1,15 @@
 {% extends 'nss/base.html' %}
-{% load static%}
+{% load static %}
+
 {% block title %}
-    view_volunteer
+    View Volunteers
 {% endblock %}
+
 {% block content %}
 <head>
     <link rel="stylesheet" href="{% static '/css/view_volunteer.css' %}">
 </head>
+
 
 <div class="table-container">
     <table>
@@ -24,7 +27,7 @@
                 <div class="button-container">
                     <a class="button" href="{% url 'volunteer_details' i.volunteer_id %}">More</a>
                     <a class="button" href="{% url 'edit_volunteer' pk=i.volunteer_id %}">Edit</a>
-                    <a class="button" href="{% url 'delete2' i.volunteer_id %} ">Delete</a>
+                    <a class="button delete-btn" href="{% url 'delete_volunteer' pk=i.volunteer_id %}">Delete</a>
                 </div>
             </td>
         </tr>

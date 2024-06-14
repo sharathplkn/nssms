@@ -38,10 +38,11 @@ def add_volunteer(request):
         cultural_talents=request.POST.get('cultural_talents')
         hobbies=request.POST.get('hobbies')
         roll_no=request.POST.get('roll_no')
-        image=request.FILES.get ('image')   
+        image=request.FILES.get ('image')  
+        unit=request.POST.get('unit') 
         programme_id=Programme.objects.get(program_name=programme_name)
         print(programme_id)
-        voluntee=volunteer(image=image,name=name,guard_name=guard_name,guard_mob_no=guard_mob_no,sex=sex,dob=dob,program=programme_id,year=year,community=community,address=address,blood_group=blood_group,height=height,weight=weight,mobile_no=mobile_no,Email_id=Email_id,year_of_enrollment=year_of_enrollment,cultural_talents=cultural_talents,hobbies=hobbies,roll_no=roll_no)
+        voluntee=volunteer(unit=unit,image=image,name=name,guard_name=guard_name,guard_mob_no=guard_mob_no,sex=sex,dob=dob,program=programme_id,year=year,community=community,address=address,blood_group=blood_group,height=height,weight=weight,mobile_no=mobile_no,Email_id=Email_id,year_of_enrollment=year_of_enrollment,cultural_talents=cultural_talents,hobbies=hobbies,roll_no=roll_no)
         voluntee.save()
 
         return redirect('view_volunteer')
@@ -52,52 +53,31 @@ def view_volunteer(request):
         'volunteer':volunteer.objects.all()
     }
     return render(request,'nss/view_volunteer.html',vol)
-@login_required()
-def attendance(request):
-    vole = {
-        'vol': volunteer.objects.all()
-    }
-    eve = {
-        'even': Event.objects.all().order_by('date').values()
-    }
 
-    if request.method == "POST":
-        datet = request.POST.get('date')
-        name_list = request.POST.getlist('name')
-        event=request.POST.get('event')
-        time=request.POST.get('time')
-        #converting roll_numbers from string to Integers
 
-        for volunteer_id_department in name_list:
-            # Split the value into roll_no and department_name
-            volunteer_id, department_name = volunteer_id_department.split('_')
 
-            # Convert roll_no to an integer
-            volunteer_instance= volunteer.objects.get(volunteer_id=volunteer_id)
-
-            # Save the attendance record
-            event=Event.objects.get(event_name=event)
-            att = Attendance(volunteer=volunteer_instance,date=datet,department=department_name,event=event)
-            att.save()
-
-        return redirect('view_attendance')
-
-    return render(request, 'nss/add_attendance.html',{**vole,**eve})
-@login_required()
-def view_attendance(request):
-    at={
-        'atte':Attendance.objects.all().order_by('date','department').select_related('event')
-    }
-    return render(request,'nss/full_attendance.html',at)
 @login_required()
 def view_attendance2(request):
+    vol={
+        'vol':volunteer.objects.all()
+    }
+    for j in volunteer.objects.all():
+        totalhours=0
+        for i in Attendance.objects.all():
+            if j.volunteer_id == i.volunteer.volunteer_id:
+                totalhours=totalhours+i.no_of_hours
+        j.totalhours=totalhours
+        j.save()
+    return render(request,'nss/full_attendance.html',vol)
+@login_required()
+def view_attendance(request):
     eve = {
         'even': Event.objects.all().order_by('date').values()
     }
     if request.method == "POST":
         ev = request.POST.get('event')
-        selected_event=ev
-        event_id=Event.objects.get(event_name=ev).event_id
+        event_id=ev
+        selected_event=Event.objects.get(event_id=ev)
         res = {
             'resul': Attendance.objects.filter(event=event_id).order_by('date').select_related('volunteer')
         }
@@ -198,6 +178,7 @@ def edit_volunteer(request, pk):
         blood_group = request.POST.get('blood_group')
         height = request.POST.get('height')
         weight = request.POST.get('weight')
+        unit = request.POST.get('unit')
         mobile_no = request.POST.get('mobile_no')
         Email_id = request.POST.get('email')
         year_of_enrollment = request.POST.get('year_of_enrollment')
@@ -227,10 +208,11 @@ def edit_volunteer(request, pk):
         Volunteer.cultural_talents = cultural_talents
         Volunteer.hobbies = hobbies
         Volunteer.roll_no = roll_no
+        Volunteer.unit=unit
 
 
         Volunteer.save()
-        return redirect('view_volunteer')  # Adjust this to redirect to an appropriate page
+        return redirect('view_volunteer')
 
     context = {
         'dep': Programme.objects.all(),
@@ -308,3 +290,49 @@ def approve_attendance(request,pk):
     att.status="approved"
     att.save()
     return HttpResponse('submitted')
+
+def att2(request):
+    eve = {
+        'even': Event.objects.all().order_by('date').values()
+    }
+    return render(request, 'nss/att.html',eve)
+
+def dep_wise(request):
+    if request.method=="POST":
+        unit=request.POST.get('unit')
+        event=request.POST.get('event')
+        event=Event.objects.get(event_id=event)
+        dept={
+            'pog':Programme.objects.all(),
+            'unit':unit,
+            'event':event,
+            'vol':volunteer.objects.filter(unit=unit),
+            'list':[1,2,3]
+            }
+        return render(request,'nss/unit_wise.html',dept)
+
+@login_required()
+def attendance(request,pk):
+    if request.method == "POST":
+        date = request.POST.get('date')
+        id_list = request.POST.getlist('name')
+        time=request.POST.get('time')
+        for volunteer_id in id_list:
+            volunteer_instance= volunteer.objects.get(volunteer_id=volunteer_id)
+
+            # Save the attendance record
+            event=Event.objects.get(event_id=pk)
+            att = Attendance(volunteer=volunteer_instance,date=date,event=event,no_of_hours=time)
+            att.save()
+
+    return redirect('view_attendance')
+
+def promote(request):
+    objec=volunteer.objects.all()
+    for i in objec:
+        if i.year != 3:
+            i.year+=1
+        else:
+            i.status='inactive'
+        i.save()
+    return HttpResponse('updated')

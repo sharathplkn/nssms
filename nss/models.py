@@ -17,6 +17,7 @@ class Programme(models.Model):
 class volunteer(models.Model):
     volunteer_id=models.AutoField(primary_key=True)
     name=models.CharField(max_length=25)
+    status=models.CharField(default='active',max_length=20)
     guard_name=models.CharField(max_length=25)
     guard_mob_no=models.IntegerField()
     sex=models.CharField(max_length=15)
@@ -26,15 +27,17 @@ class volunteer(models.Model):
     address=models.TextField()
     blood_group=models.CharField(max_length=15)
     height=models.IntegerField()
+    unit=models.IntegerField()
     weight=models.IntegerField()
     mobile_no=models.IntegerField()
     Email_id=models.EmailField()
-    year_of_enrollment=models.IntegerField()
+    year_of_enrollment=models.IntegerField()    
     cultural_talents=models.TextField()
     hobbies=models.TextField()
-    roll_no=models.IntegerField(unique=False)
+    roll_no=models.IntegerField(unique=False,null=True)
     image=models.ImageField(upload_to='volunteers',default="")
     program=models.ForeignKey(Programme,on_delete=models.CASCADE)
+    totalhours=models.IntegerField(null=True)
     def __str__(self):
         return f"{self.name}"
 
@@ -46,13 +49,11 @@ class Event(models.Model):
         return f"{self.event_name}"
 class Attendance(models.Model):
     Attendance_id=models.AutoField(primary_key=True)
-    volunteer=models.ForeignKey(volunteer,on_delete=models.CASCADE)
+    volunteer=models.ForeignKey(volunteer,on_delete=models.CASCADE,related_name='attendances')
     date=models.DateField()
-    roll_no=models.IntegerField(null=True)
-    name=models.CharField(max_length=30)
-    department=models.CharField(max_length=20)
     event=models.ForeignKey(Event,on_delete=models.CASCADE)
     status=models.CharField(max_length=40,default="Pending for Approval")
+    no_of_hours=models.IntegerField()
     def __str__(self):
         return f"{self.event.event_name}"
 

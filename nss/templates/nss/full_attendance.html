@@ -6,18 +6,26 @@
 </head> 
 <table border="1px">
     <tr>
-        <th>Date</th>
+        <th>SL.No</th>
         <th>Name</th>
-        <th>Department</th>
+        <th>Programme</th>
         <th>Event</th>
+        <th>total hours</th>
     </tr>
     
-{% for i in atte %}
+    {% for i in vol %}
     <tr>
-        <td>{{i.date}}</td>
-        <td>{{i.volunteer.name}}</td>
-        <td>{{i.department}}</td>
-        <td>{{ i.event.event_name }}</td>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ i.name }}</td>
+        <td>{{ i.program }}</td>
+        <td>
+    {% for attendance in i.attendances.all %}
+        {{ attendance.event.event_name }},
+    {% endfor %}
+        </td>
+    <td>
+        {{i.totalhours}}
+    </td>
     </tr>
 {% endfor %}
 </table>
