@@ -61,13 +61,6 @@ def view_attendance2(request):
     vol={
         'vol':volunteer.objects.all()
     }
-    for j in volunteer.objects.all():
-        totalhours=0
-        for i in Attendance.objects.all():
-            if j.volunteer_id == i.volunteer.volunteer_id:
-                totalhours=totalhours+i.no_of_hours
-        j.totalhours=totalhours
-        j.save()
     return render(request,'nss/full_attendance.html',vol)
 @login_required()
 def view_attendance(request):
@@ -291,11 +284,11 @@ def approve_attendance(request,pk):
     att.save()
     return HttpResponse('submitted')
 
-def att2(request):
+def add_attendance(request):
     eve = {
         'even': Event.objects.all().order_by('date').values()
     }
-    return render(request, 'nss/att.html',eve)
+    return render(request, 'nss/add_attendance.html',eve)
 
 def dep_wise(request):
     if request.method=="POST":
@@ -336,3 +329,9 @@ def promote(request):
             i.status='inactive'
         i.save()
     return HttpResponse('updated')
+
+def more_attendance(request,pk):
+    vol={
+        'vol':volunteer.objects.filter(volunteer_id=pk)
+    }
+    return render(request,'nss/more_attendance.html',vol)

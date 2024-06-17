@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.db.models import Sum
 # Create your models here.
 class Department(models.Model):
     dep_id=models.IntegerField(primary_key=True)
@@ -37,10 +37,10 @@ class volunteer(models.Model):
     roll_no=models.IntegerField(unique=False,null=True)
     image=models.ImageField(upload_to='volunteers',default="")
     program=models.ForeignKey(Programme,on_delete=models.CASCADE)
-    totalhours=models.IntegerField(null=True)
     def __str__(self):
         return f"{self.name}"
-
+    def total_hours(self):
+        return self.attendances.aggregate(Sum('no_of_hours'))['no_of_hours__sum'] or 0
 class Event(models.Model):
     event_id=models.AutoField(primary_key=True)
     event_name=models.CharField(max_length=60)
@@ -56,7 +56,6 @@ class Attendance(models.Model):
     no_of_hours=models.IntegerField()
     def __str__(self):
         return f"{self.event.event_name}"
-
 class Event_details(models.Model):
     event=models.ForeignKey(Event,on_delete=models.CASCADE)
     start_time=models.TimeField(auto_now=False, auto_now_add=False)

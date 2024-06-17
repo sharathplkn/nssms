@@ -9,8 +9,8 @@
         <th>SL.No</th>
         <th>Name</th>
         <th>Programme</th>
-        <th>Event</th>
         <th>total hours</th>
+        <th>Event</th>
     </tr>
     
     {% for i in vol %}
@@ -18,14 +18,8 @@
         <td>{{ forloop.counter }}</td>
         <td>{{ i.name }}</td>
         <td>{{ i.program }}</td>
-        <td>
-    {% for attendance in i.attendances.all %}
-        {{ attendance.event.event_name }},
-    {% endfor %}
-        </td>
-    <td>
-        {{i.totalhours}}
-    </td>
+        <td>{{i.total_hours}}</td>
+        <td><a href="{% url 'more_attendance' i.volunteer_id %}">More</a></td>
     </tr>
 {% endfor %}
 </table>

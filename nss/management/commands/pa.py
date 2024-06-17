@@ -23,7 +23,7 @@ class Command(BaseCommand):
             self.stdout.write(self.style.ERROR('No Event objects found. Please create some Event objects first.'))
             return
 
-        for _ in range(100):  # Adjust the range as needed
+        for _ in range(10000):  # Adjust the range as needed
             volunteer_obj = random.choice(volunteers)
             event_obj = random.choice(events)
             date = faker.date_this_year()

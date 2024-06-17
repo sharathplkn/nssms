@@ -6,101 +6,80 @@
 {% block content %}
 <head>
     <link rel="stylesheet" href="{% static '/css/add_attendance.css'%}">
-</head>
+    <style>
+        /* General container styling */
+        .div1 {
+            padding: 10px;
+            margin-left:25%;
+            margin-right:25%;
+        }
+        
+        /* Styling for each program block */
+        .program-block {
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-bottom: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
 
-    <form class="volunteer-form" method="post" action="{% url 'attendance'%}">
+        /* Styling for each list block */
+        .list-block {
+            margin-top: 15px;
+        }
+
+        /* Styling for year text */
+        .year-text {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        /* Styling for checkboxes */
+        input[type=checkbox] {
+            margin-right: 10px;
+        }
+
+        /* Styling for labels */
+        label {
+            font-size: 14px;
+            color: #555;
+        }
+
+    input[type="submit"] {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+    </style>
+</head>
+    
+    <form class="volunteer-form" method="post" action="{% url 'unit_wise'%}">
         {% csrf_token %}
     <label for="event">Event:</label>
     <select id="event" name="event">
+    <option value="" disabled selected>Select event</option>
     {% for i in even %}
-    <option value="{{ i.event_name }}">{{ i.event_name }}</option>
+    <option value="{{ i.event_id }}">{{ i.event_name }}</option>
     {% endfor %}
     </select><br>
-    <label for="date">Date:</label>
-    <br>
-    <input type="date" id="date" name="date">
-    <br>
-    <br>
-
-    <br>
-        {% for i in vol %}
-            {%if i.program.dept.dep_name == "ComputerScience"%} 
-                <input type=checkbox id="name" name="name" value="{{i.volunteer_id}}_ComputerScience">
-                <label for="name">{{i.name}}</label>
-            {% endif %}
-        {% endfor %}
-    <br>
-    Maths
-    <br>
-        {% for i in vol %}
-            {%if i.program.dept.dep_name == "Maths"%} 
-                <input type=checkbox id="name" name="name" value="{{i.volunteer_id}}_Maths">
-                <label for="name">{{i.name}}</label>
-            {% endif %}
-        {% endfor %}
-    <br>
-    Statistics
-    <br>
-        {% for i in vol %}
-            {%if i.program.dept.dep_name == "Statistics"%} 
-                <input type=checkbox id="name" name="name" value="{{i.volunteer_id}}_Statistics">
-                <label for="name">{{i.name}}</label>
-            {% endif %}
-        {% endfor %}
-    <br>
-    Commerce
-    <br>
-        {% for i in vol %}
-            {%if i.program.dept.dep_name == "commerce"%} 
-                <input type=checkbox id="name" name="name" value="{{i.volunteer_id}}_commerce">
-                <label for="name">{{i.name}}</label>
-            {% endif %}
-        {% endfor %}
-        <br>
-    Chemistry
-    <br>
-        {% for i in vol %}
-            {%if i.program.dept.dep_name == "Chemistry"%} 
-                <input type=checkbox id="name" name="name" value="{{i.volunteer_id}}_chemistry">
-                <label for="name">{{i.name}}</label>
-            {% endif %}
-        {% endfor %}
-    <br>
-    PlantScience
-    <br>
-        {% for i in vol %}
-            {%if i.program.dept.dep_name == "Botany"%} 
-                <input type=checkbox id="name" name="name" value="{{i.volunteer_id}}_Botany">
-                <label for="name">{{i.name}}</label>
-            {% endif %}
-        {% endfor %}
-    <br>
-    Economics
-    <br>
-        {% for i in vol %}
-            {%if i.program.dept.dep_name == "Economics"%} 
-                <input type=checkbox id="name" name="name" value="{{i.volunteer_id}}_Economics">
-                <label for="name">{{i.name}}</label>
-            {% endif %}
-        {% endfor %}
-    <br>
-    History
-    <br>
-        {% for i in vol %}
-            {%if i.program.dept.dep_name == "History"%} 
-                <input type=checkbox id="name" name="name" value="{{i.volunteer_id}}_History">
-                <label for="name">{{i.name}}</label>
-            {% endif %}
-        {% endfor %}
-    <br>
-    Malayalam
-    <br>
-        {% for i in vol %}
-            {%if i.program.dept.dep_name == "Malayalam"%} 
-                <input type=checkbox id="name" name="name" value="{{i.volunteer_id}}_Malayalam">
-                <label for="name">{{i.name}}</label>
-            {% endif %}
-        {% endfor %}
-    <input type="submit" value="submit">
-</form>
+    <label for="unit">Unit:</label>
+    <select id="unit" name="unit" required>
+        <option value="" disabled selected>Select Unit</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+    </select>
+    <input type="submit" value="select">
+    </form>
 {% endblock%}
