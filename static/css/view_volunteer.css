@@ -50,3 +50,21 @@ a {
 .button:hover {
     background-color: #0056b3;
 }
+
+.link {
+    display: inline-block;
+     /* Blue background color */
+    color: blue; /* Text color */
+    padding: 8px 16px; /* Padding inside the button */
+    text-decoration: none; /* Remove underline from links */
+    border: 1px solid transparent; /* Transparent border */
+    border-radius: 4px; /* Rounded corners */
+    cursor: pointer; /* Cursor on hover */
+    text-align: center; /* Center text */
+    margin-right: 5px; /* Margin between buttons */
+}
+
+
+.link:active {
+    background-color: #004286; /* Even darker blue when button is active (clicked) */
+}

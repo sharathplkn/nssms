@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect,reverse
 from django.http import HttpResponse
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import *
 from django.contrib.auth.models import Group,User
 from django.db import connection
@@ -49,10 +50,23 @@ def add_volunteer(request):
     return render(request,'nss/add_volunteer.html',prog)
 @login_required()
 def view_volunteer(request):
-    vol={
-        'volunteer':volunteer.objects.all()
+    volunteers = volunteer.objects.all()
+
+    # Pagination
+    paginator = Paginator(volunteers, 10)  # Show 10 volunteers per page
+    page_number = request.GET.get('page')
+    try:
+        volunteer_list = paginator.page(page_number)
+    except PageNotAnInteger:
+        volunteer_list = paginator.page(1)
+    except EmptyPage:
+        volunteer_list = paginator.page(paginator.num_pages)
+
+    context = {
+        'volunteer_list': volunteer_list,
+        'page_obj': volunteer_list,  # or you can pass paginator.page(page_number) directly
     }
-    return render(request,'nss/view_volunteer.html',vol)
+    return render(request, 'nss/view_volunteer.html', context)
 
 
 
