@@ -6,6 +6,7 @@ from django.contrib.auth.models import Group,User
 from django.db import connection
 from django.contrib.auth.decorators import login_required
 from .decorators import group_required 
+from .filters import VolunteerFilter
 
 def access_denied(request):
     return render(request, 'nss/acess_denied.html')
@@ -13,7 +14,7 @@ def access_denied(request):
 
 @login_required()
 def ns(request):
-    #request.session.set_expiry(60)
+    #request.session.set_expiry(2)
     return render(request,'nss/home.html')
 @login_required()
 def add_volunteer(request):
@@ -51,20 +52,27 @@ def add_volunteer(request):
 @login_required()
 def view_volunteer(request):
     volunteers = volunteer.objects.all()
+    volunteer_filter = VolunteerFilter(request.GET, queryset=volunteers)
+    filtered_volunteers = volunteer_filter.qs
 
-    # Pagination
-    paginator = Paginator(volunteers, 10)  # Show 10 volunteers per page
-    page_number = request.GET.get('page')
-    try:
-        volunteer_list = paginator.page(page_number)
-    except PageNotAnInteger:
-        volunteer_list = paginator.page(1)
-    except EmptyPage:
-        volunteer_list = paginator.page(paginator.num_pages)
+    if volunteer_filter.form.is_bound and volunteer_filter.form.is_valid():
+        # Filters are applied, display all filtered results without pagination
+        volunteer_list = filtered_volunteers
+    else:
+        # No filters applied or form not valid, apply pagination
+        paginator = Paginator(filtered_volunteers, 10)  # Show 10 volunteers per page
+        page_number = request.GET.get('page')
+        try:
+            volunteer_list = paginator.page(page_number)
+        except PageNotAnInteger:
+            volunteer_list = paginator.page(1)
+        except EmptyPage:
+            volunteer_list = paginator.page(paginator.num_pages)
 
     context = {
         'volunteer_list': volunteer_list,
-        'page_obj': volunteer_list,  # or you can pass paginator.page(page_number) directly
+        'page_obj': volunteer_list,  # This is used by the template for pagination
+        'myFilter': volunteer_filter,  # Pass the filter object to the context
     }
     return render(request, 'nss/view_volunteer.html', context)
 

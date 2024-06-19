@@ -40,6 +40,7 @@ SESSION_SAVE_EVERY_REQUEST = True
 
 INSTALLED_APPS = [
     'nss',
+    'django_filters',
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",

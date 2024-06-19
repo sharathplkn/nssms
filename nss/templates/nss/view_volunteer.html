@@ -17,6 +17,11 @@
             <th>Programme</th>
             <th>Actions</th>
         </tr>
+        <form method="get">
+            {% csrf_token %}
+            {{myFilter.form}}
+            <input type="submit" value="search">
+        </form>
         
         {% for volunteer in volunteer_list %}
         <tr>
