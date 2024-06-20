@@ -49,32 +49,18 @@ def add_volunteer(request):
 
         return redirect('view_volunteer')
     return render(request,'nss/add_volunteer.html',prog)
-@login_required()
+
+@login_required
 def view_volunteer(request):
-    volunteers = volunteer.objects.all()
-    volunteer_filter = VolunteerFilter(request.GET, queryset=volunteers)
-    filtered_volunteers = volunteer_filter.qs
+    volunteer_list = volunteer.objects.all()
+    volunteer_filter = VolunteerFilter(request.GET, queryset=volunteer_list)
+    
+    paginator = Paginator(volunteer_filter.qs, 10)  # Show 10 volunteers per page.
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    return render(request, 'nss/view_volunteer.html', {'filter': volunteer_filter, 'page_obj': page_obj})
 
-    if volunteer_filter.form.is_bound and volunteer_filter.form.is_valid():
-        # Filters are applied, display all filtered results without pagination
-        volunteer_list = filtered_volunteers
-    else:
-        # No filters applied or form not valid, apply pagination
-        paginator = Paginator(filtered_volunteers, 10)  # Show 10 volunteers per page
-        page_number = request.GET.get('page')
-        try:
-            volunteer_list = paginator.page(page_number)
-        except PageNotAnInteger:
-            volunteer_list = paginator.page(1)
-        except EmptyPage:
-            volunteer_list = paginator.page(paginator.num_pages)
-
-    context = {
-        'volunteer_list': volunteer_list,
-        'page_obj': volunteer_list,  # This is used by the template for pagination
-        'myFilter': volunteer_filter,  # Pass the filter object to the context
-    }
-    return render(request, 'nss/view_volunteer.html', context)
 
 
 

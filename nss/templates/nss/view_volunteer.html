@@ -7,23 +7,54 @@
 
 {% block content %}
 <head>
-    <link rel="stylesheet" href="{% static '/css/view_volunteer.css' %}">
+    <link rel="stylesheet" href="{% static 'css/view_volunteer.css' %}">
 </head>
 
 <div class="table-container">
+    <form method="get">
+        <div class="form-row">
+            <label for="id_name">Name:</label>
+            {{ filter.form.name }}
+        </div>
+        <div class="form-row">
+            <label for="id_program">Program:</label>
+            {{ filter.form.program }}
+        </div>
+        <div class="form-row">
+            <label for="id_location">Sex:</label>
+            {{ filter.form.sex }}
+        </div>
+        <div class="form-row">
+            <label for="id_unit">Unit:</label>
+            {{ filter.form.unit }}
+        </div>
+        <div class="form-row">
+            <label for="id_community">Community:</label>
+            {{ filter.form.community }}
+        </div>
+        <div class="form-row">
+            <label for="id_community">Blood Group:</label>
+            {{ filter.form.blood_group }}
+        </div>
+        <div class="form-row">
+            <label for="id_community">Year of Enrollement:</label>
+            {{ filter.form.year_of_enrollment }}
+        </div>
+        <div class="form-row">
+            <label for="id_community">Year:</label>
+            {{ filter.form.year }}
+        </div>
+        <input type="submit" value="Search">
+    </form>
+    
     <table>
         <tr>
             <th>Name</th>
             <th>Programme</th>
             <th>Actions</th>
         </tr>
-        <form method="get">
-            {% csrf_token %}
-            {{myFilter.form}}
-            <input type="submit" value="search">
-        </form>
         
-        {% for volunteer in volunteer_list %}
+        {% for volunteer in page_obj.object_list %}
         <tr>
             <td>{{ volunteer.name }}</td>
             <td>{{ volunteer.program.program_name }}</td>
@@ -37,28 +68,24 @@
         </tr>
         {% endfor %}
     </table>
-</div>
+    
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?{% if filter.form.data %}{{ filter.form.data.urlencode }}&{% endif %}page=1">&laquo; first</a>
+                <a href="?{% if filter.form.data %}{{ filter.form.data.urlencode }}&{% endif %}page={{ page_obj.previous_page_number }}">previous</a>
+            {% endif %}
 
-<div class="pagination">
-    <span class="step-links">
-        {% if page_obj.has_previous %}
-            <a href="?page={{ page_obj.previous_page_number }}" class="link">previous</a>
-        {% endif %}
+            <span class="current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
 
-        <span class="current">
-            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            {% if page_obj.has_next %}
+                <a href="?{% if filter.form.data %}{{ filter.form.data.urlencode }}&{% endif %}page={{ page_obj.next_page_number }}">next</a>
+                <a href="?{% if filter.form.data %}{{ filter.form.data.urlencode }}&{% endif %}page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
         </span>
-
-        {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}" class="link">next</a>
-        {% else %}
-            <a href="?page=1" class="link">&laquo; first</a>
-        {% endif %}
-
-        {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.paginator.num_pages }}" class="link">last &raquo;</a>
-        {% endif %}
-    </span>
+    </div>
 </div>
 
 {% endblock %}

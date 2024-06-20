@@ -14,20 +14,36 @@ class Programme(models.Model):
     grad_level=models.CharField(max_length=10)
     def __str__(self):
         return f"{self.program_name}"
+
 class volunteer(models.Model):
     volunteer_id=models.AutoField(primary_key=True)
     name=models.CharField(max_length=25)
     status=models.CharField(default='active',max_length=20)
     guard_name=models.CharField(max_length=25)
     guard_mob_no=models.IntegerField()
-    sex=models.CharField(max_length=15)
+    sex_choices=[
+        ('male','Male'),('female','Female')
+    ]
+    sex=models.CharField(max_length=15,choices=sex_choices)
     dob=models.DateField()
-    year=models.IntegerField()
-    community=models.CharField(max_length=15)
+    year_choices=[
+        ('1','1'),('2','2'),('3','3')
+    ]
+    year=models.IntegerField(choices=year_choices)
+    community_choices=[
+        ('st','ST'),('sc','SC'),('general','General'),('obc','OBC')
+    ]
+    community=models.CharField(max_length=15,choices=community_choices)
     address=models.TextField()
-    blood_group=models.CharField(max_length=15)
+    blood_group_choices=[
+        ('a+','A+'),('a-','A-'),('b+','B+'),('b-','B-'),('o+','O+'),('o-','O-'),('ab+','AB+'),('ab-','AB-')
+    ]
+    blood_group=models.CharField(max_length=15,choices=blood_group_choices)
     height=models.IntegerField()
-    unit=models.IntegerField()
+    unit_choices=[
+        ('1','1'),('2','2'),('3','3')
+    ]
+    unit=models.IntegerField(choices=unit_choices)
     weight=models.IntegerField()
     mobile_no=models.IntegerField()
     Email_id=models.EmailField()

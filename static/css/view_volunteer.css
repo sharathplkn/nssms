@@ -1,9 +1,11 @@
+/* view_volunteer.css */
+
 .table-container {
-    width: 80%; /* Adjust the width as needed */
-    margin: 50px auto; /* Center the container */
+    width: 80%;
+    margin: 50px auto;
     border: 1px solid #ddd;
     border-radius: 10px;
-    overflow-x: auto; /* Enable horizontal scrolling if needed */
+    overflow-x: auto;
 }
 
 table {
@@ -53,18 +55,55 @@ a {
 
 .link {
     display: inline-block;
-     /* Blue background color */
-    color: blue; /* Text color */
-    padding: 8px 16px; /* Padding inside the button */
-    text-decoration: none; /* Remove underline from links */
-    border: 1px solid transparent; /* Transparent border */
-    border-radius: 4px; /* Rounded corners */
-    cursor: pointer; /* Cursor on hover */
-    text-align: center; /* Center text */
-    margin-right: 5px; /* Margin between buttons */
+    color: blue;
+    padding: 8px 16px;
+    text-decoration: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    margin-right: 5px;
 }
 
-
 .link:active {
-    background-color: #004286; /* Even darker blue when button is active (clicked) */
+    background-color: #004286;
+}
+
+/* Additional styles for the filter form */
+
+form {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    display: flex; /* Flexbox container */
+    flex-wrap: wrap; /* Wrap elements to next line if necessary */
+    justify-content: space-between; /* Distribute items evenly */
+    align-items: center; /* Center items vertically */
+}
+
+form label {
+    margin-right: 10px;
+}
+
+form input[type="text"],
+form select {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    flex: 1; /* Expand to fill available space */
+    margin-right: 10px;
+}
+
+form input[type="submit"] {
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+form input[type="submit"]:hover {
+    background-color: #0056b3;
 }
