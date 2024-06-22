@@ -98,7 +98,10 @@ def view_attendance(request):
         res = {
             'resul': Attendance.objects.filter(event=event_id).order_by('date').select_related('volunteer')
         }
-        return render(request, 'nss/view_attendance.html',{**res,**eve,'selected_event': selected_event})
+        status={
+            'status':Attendance_status.objects.get(event=event_id).status
+        }
+        return render(request, 'nss/view_attendance.html',{**status,**res,**eve,'selected_event': selected_event})
     return render(request,'nss/view_attendance.html',eve)
 @login_required()
 def volunteer_details(request, volunteer_name):
@@ -303,7 +306,8 @@ def delete_event(request,pk):
 
 @login_required()
 def approve_attendance(request,pk):
-    att=Attendance.objects.get(Attendance_id=pk)
+    event=Event.objects.get(event_id=pk)
+    att=Attendance_status.objects.get(event=event)
     att.status="approved"
     att.save()
     return HttpResponse('submitted')
@@ -334,12 +338,15 @@ def attendance(request,pk):
         date = request.POST.get('date')
         id_list = request.POST.getlist('name')
         time=request.POST.get('time')
+        event=Event.objects.get(event_id=pk)
+        at_status=Attendance_status(event=event)
+        at_status.save()
         for volunteer_id in id_list:
             volunteer_instance= volunteer.objects.get(volunteer_id=volunteer_id)
 
             # Save the attendance record
             event=Event.objects.get(event_id=pk)
-            att = Attendance(volunteer=volunteer_instance,date=date,event=event,no_of_hours=time)
+            att = Attendance(Attendance_status=at_status,volunteer=volunteer_instance,date=date,event=event,no_of_hours=time)
             att.save()
 
     return redirect('view_attendance')

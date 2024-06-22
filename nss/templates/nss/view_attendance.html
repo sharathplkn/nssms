@@ -18,6 +18,13 @@
             <input type="submit" value="Submit">
         </form>
         <h1 class="event-heading">Selected Event: {{ selected_event.event_name|title }}-{{selected_event.date}}</h1>
+        <h1 class="event-heading">Status: {{status|title}}  
+        {% if status == "pending for approval" %}
+            {% if is_po_group %}
+            <td><a href="{% url 'approve_attendance' selected_event.event_id %}"> Approve</a></td>
+            {% endif %}
+        {% endif %}
+        </h1>
         <table class="attendance-table" border="1">
             <tr>
                 <th>Name</th>
