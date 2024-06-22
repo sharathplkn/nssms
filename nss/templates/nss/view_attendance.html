@@ -4,19 +4,7 @@
 <head>
 <link rel="stylesheet" href="{% static '/css/view_attendance.css'%}">
 </head>
-<script>
-    // Function to set the selected option in the dropdown based on the query parameter
-    function setSelectedEvent() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const eventId = urlParams.get('event');
-        if (eventId) {
-            document.getElementById('event').value = eventId;
-        }
-    }
 
-    // Call the function when the page loads
-    window.onload = setSelectedEvent;
-</script>
     <div class="form-container">
         <form method="post" action="{% url 'view_attendance' %}">
             {% csrf_token %}
@@ -39,9 +27,6 @@
                 <tr>
                     <td>{{ i.volunteer.name }}</td>
                     <td>{{i.volunteer.year}}-Year {{ i.volunteer.program}}</td>
-                   <!-- {% if is_po_group %}
-                    <td><a href="{% url 'approve_attendance' i.Attendance_id %}"> Approve</a></td>
-                    {% endif %}-->
                 </tr>
             {% endfor %}
         </table>

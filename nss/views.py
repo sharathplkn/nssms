@@ -6,7 +6,7 @@ from django.contrib.auth.models import Group,User
 from django.db import connection
 from django.contrib.auth.decorators import login_required
 from .decorators import group_required 
-from .filters import VolunteerFilter
+from .filters import *
 
 def access_denied(request):
     return render(request, 'nss/acess_denied.html')
@@ -55,21 +55,37 @@ def view_volunteer(request):
     volunteer_list = volunteer.objects.all()
     volunteer_filter = VolunteerFilter(request.GET, queryset=volunteer_list)
     
-    paginator = Paginator(volunteer_filter.qs, 10)  # Show 10 volunteers per page.
+    items_per_page = request.GET.get('items_per_page', 10)
+    
+    try:
+        items_per_page = int(items_per_page)
+    except ValueError:
+        items_per_page = 10
+    
+    paginator = Paginator(volunteer_filter.qs, items_per_page)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     
-    return render(request, 'nss/view_volunteer.html', {'filter': volunteer_filter, 'page_obj': page_obj})
-
-
+    return render(request, 'nss/view_volunteer.html', {'filter': volunteer_filter, 'page_obj': page_obj, 'items_per_page': items_per_page})
 
 
 @login_required()
 def view_attendance2(request):
-    vol={
-        'vol':volunteer.objects.all()
-    }
-    return render(request,'nss/full_attendance.html',vol)
+    volunteer_list = volunteer.objects.all()
+    volunteer_filter = VolunteerFilter2(request.GET, queryset=volunteer_list)
+    
+    items_per_page = request.GET.get('items_per_page', 10)
+    
+    try:
+        items_per_page = int(items_per_page)
+    except ValueError:
+        items_per_page = 10
+    
+    paginator = Paginator(volunteer_filter.qs, items_per_page)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    return render(request, 'nss/full_attendance.html', {'filter': volunteer_filter, 'page_obj': page_obj, 'items_per_page': items_per_page})
 @login_required()
 def view_attendance(request):
     eve = {
