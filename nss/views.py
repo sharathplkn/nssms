@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect,reverse
-from django.http import HttpResponse
+from django.http import HttpResponse,HttpResponseBadRequest
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import *
 from django.contrib.auth.models import Group,User
@@ -52,7 +52,7 @@ def add_volunteer(request):
 
 @login_required
 def view_volunteer(request):
-    volunteer_list = volunteer.objects.all()
+    volunteer_list = volunteer.objects.filter(status='active')
     volunteer_filter = VolunteerFilter(request.GET, queryset=volunteer_list)
     
     items_per_page = request.GET.get('items_per_page', 10)
@@ -327,19 +327,28 @@ def dep_wise(request):
             'pog':Programme.objects.all(),
             'unit':unit,
             'event':event,
-            'vol':volunteer.objects.filter(unit=unit),
+            'vol':volunteer.objects.filter(unit=unit,status='active'),
             'list':[1,2,3]
             }
         return render(request,'nss/unit_wise.html',dept)
 
 @login_required()
-def attendance(request,pk):
+def attendance(request,pk,unit):
     if request.method == "POST":
         date = request.POST.get('date')
+        event=Event.objects.get(event_id=pk)
+
+        event = get_object_or_404(Event, event_id=pk)
+        
+        # Check if attendance for this event on the given date already exists
+        existing_attendance = Attendance_status.objects.filter(event=event, date=date,unit=unit).exists()
+        
+        if existing_attendance:
+            return HttpResponseBadRequest("Attendance for this event on the specified date already exists.")
+        
         id_list = request.POST.getlist('name')
         time=request.POST.get('time')
-        event=Event.objects.get(event_id=pk)
-        at_status=Attendance_status(event=event)
+        at_status=Attendance_status(event=event,date=date,unit=unit)
         at_status.save()
         for volunteer_id in id_list:
             volunteer_instance= volunteer.objects.get(volunteer_id=volunteer_id)
@@ -352,14 +361,17 @@ def attendance(request,pk):
     return redirect('view_attendance')
 
 def promote(request):
-    objec=volunteer.objects.all()
-    for i in objec:
-        if i.year != 3:
-            i.year+=1
-        else:
-            i.status='inactive'
-        i.save()
-    return HttpResponse('updated')
+    try:
+        objec=volunteer.objects.all()
+        for i in objec:
+            if i.year != 3:
+                i.year+=1
+            else:
+                i.status='inactive'
+            i.save()
+        return HttpResponse('updated')
+    except Exception:
+        return render(request,'nss/error.html')
 
 def more_attendance(request,pk):
     vol={

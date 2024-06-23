@@ -6,21 +6,21 @@ body, html {
     justify-content: center;
     align-items: center;
     font-family: Arial, sans-serif;
-    background-size: cover; /* Ensure the background covers the entire page */
-    background-position: center; /* Center the background image */
-    background-repeat: no-repeat;
-   
+    background: url("{% static '/images/background.jpeg' %}") no-repeat center center;
+    background-size: cover;
 }
 
 /* Flex container for the login page */
 .login-container {
     display: flex;
-    width: 110%; /* Set container width to 70% */
-    height: 50%; /* Set container height */
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Add shadow to container */
-    border-radius: 10px; /* Add rounded corners to container */
-    overflow: hidden; /* Ensure content doesn't overflow container */
-    opacity: 0.7;
+    flex-direction: row;
+    width: 90%;
+    max-width: 900px;
+    height: auto;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: rgba(255, 255, 255, 0.9);
 }
 
 /* Left section for the illustration */
@@ -35,13 +35,18 @@ body, html {
     padding: 20px;
 }
 
+/* Adjust illustration image size */
+.illustration-section img {
+    max-width: 100%;
+    height: auto;
+}
+
 /* Right section for the form */
 .form-section {
     flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: white;
     padding: 20px;
 }
 
@@ -51,6 +56,8 @@ body, html {
     max-width: 400px;
     padding: 20px;
     background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
 }
 
 /* Heading style */
@@ -113,4 +120,56 @@ body, html {
 .learn-more-btn:hover {
     background-color: white;
     color: #007bff;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+    body, html {
+        background: none;
+    }
+    
+    .login-container {
+        flex-direction: column;
+        width: 90%;
+        height: auto;
+    }
+
+    .illustration-section {
+        display: none;
+    }
+
+    .form-section {
+        flex: none;
+        width: 100%;
+        padding: 10px;
+    }
+
+    .custom-form-container {
+        padding: 10px;
+    }
+
+    .custom-input {
+        width: calc(100% - 30px);
+    }
+
+    .fa {
+        top: 25px;
+    }
+}
+
+@media (max-width: 480px) {
+    .heading {
+        font-size: 20px;
+    }
+
+    .custom-submit {
+        padding: 12px 16px;
+        font-size: 14px;
+    }
+
+    .login-container {
+        width: 100%;
+        box-shadow: none;
+        background-color: rgba(255, 255, 255, 1);
+    }
 }

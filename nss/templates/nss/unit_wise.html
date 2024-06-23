@@ -63,7 +63,7 @@
     }
     </style>
 </head> 
-    <form action="{% url 'attendance' event.event_id %}" method="post">
+    <form action="{% url 'attendance' event.event_id unit %}" method="post">
     {% csrf_token %}
     <div class="volunteer-form">
     <center>

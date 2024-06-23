@@ -65,6 +65,8 @@ class Event(models.Model):
         return f"{self.event_name}"
 class Attendance_status(models.Model):
     status_id=models.AutoField(primary_key=True)
+    date=models.DateField()
+    unit=models.IntegerField()
     event=models.ForeignKey(Event,on_delete=models.CASCADE)
     status=models.CharField(max_length=30,default="pending for approval")
 class Attendance(models.Model):
