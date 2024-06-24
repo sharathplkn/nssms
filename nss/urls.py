@@ -17,7 +17,7 @@ urlpatterns=[
     path('event_photos',views.event_photos,name='event_photos'),
     path('event2',views.event2,name='event2'),
     path('volunteer/<int:pk>/edit/',views.edit_volunteer, name='edit_volunteer'),
-    path('volunteer/<str:volunteer_name>/',views.delete2,name='delete2'),
+    path('volunteer/<int:pk>/',views.delete2,name='delete2'),
     path('volunteer/<int:pk>/delete/', views.delete_volunteer, name='delete_volunteer'),
     path('report_list',views.report_list,name='report_list'),
     path('report_list_more/<int:pk>/',views.report_list_more,name='report_list_more'),
@@ -28,5 +28,6 @@ urlpatterns=[
     path('att3',views.add_attendance,name='att3'),
     path('unit_wise',views.dep_wise,name='unit_wise'),
     path('promote',views.promote,name='promote'),
-    path('more_attendance<int:pk>/',views.more_attendance,name='more_attendance')
+    path('more_attendance/<int:pk>/',views.more_attendance,name='more_attendance'),
+    path('delete_attendance/<int:pk>/', views.delete_attendance, name='delete_attendance'),
 ]

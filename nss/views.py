@@ -89,19 +89,18 @@ def view_attendance2(request):
 @login_required()
 def view_attendance(request):
     eve = {
-        'even': Event.objects.all().order_by('date').values()
+        'even': Attendance_status.objects.all().order_by('date').select_related('event')
     }
     if request.method == "POST":
-        ev = request.POST.get('event')
-        event_id=ev
-        selected_event=Event.objects.get(event_id=ev)
+        at_status_id = request.POST.get('event')
+        at_status=Attendance_status.objects.get(status_id=at_status_id)
         res = {
-            'resul': Attendance.objects.filter(event=event_id).order_by('date').select_related('volunteer')
+            'resul': Attendance.objects.filter(Attendance_status=at_status).order_by('date').select_related('volunteer')
         }
         status={
-            'status':Attendance_status.objects.get(event=event_id).status
+            'status':Attendance_status.objects.get(status_id=at_status_id)
         }
-        return render(request, 'nss/view_attendance.html',{**status,**res,**eve,'selected_event': selected_event})
+        return render(request, 'nss/view_attendance.html',{**status,**res,**eve})
     return render(request,'nss/view_attendance.html',eve)
 @login_required()
 def volunteer_details(request, volunteer_name):
@@ -242,13 +241,13 @@ def edit_volunteer(request, pk):
 
 
 @login_required()
-def delete2(request, volunteer_name):
+def delete2(request, pk):
     vol={
-        'voluntee':volunteer.objects.filter(volunteer_id=volunteer_name)
+        'voluntee':volunteer.objects.filter(volunteer_id=pk)
     }
     
     ev={
-        'even':Attendance.objects.filter(volunteer=volunteer_name)
+        'even':Attendance.objects.filter(volunteer=pk)
     }
     # Pass the volunteer details to the template
     return render(request, 'nss/delete_volunteer.html', {**vol,**ev})
@@ -294,7 +293,7 @@ def view_event(request):
 
 @login_required()
 def edit_event(request,pk):
-
+    print(pk)
     return render(request,'nss/edit_event.html')
 
 @login_required()
@@ -306,8 +305,7 @@ def delete_event(request,pk):
 
 @login_required()
 def approve_attendance(request,pk):
-    event=Event.objects.get(event_id=pk)
-    att=Attendance_status.objects.get(event=event)
+    att=Attendance_status.objects.get(status_id=pk)
     att.status="approved"
     att.save()
     return HttpResponse('submitted')
@@ -378,3 +376,9 @@ def more_attendance(request,pk):
         'vol':volunteer.objects.filter(volunteer_id=pk)
     }
     return render(request,'nss/more_attendance.html',vol)
+
+@login_required()
+def delete_attendance(request,pk):
+    att=get_object_or_404(Attendance_status,status_id=pk)
+    att.delete()
+    return redirect('view_attendance')
