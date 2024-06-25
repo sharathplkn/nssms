@@ -32,3 +32,17 @@
 .add-event-form input[type="submit"]:hover {
     background-color: #0056b3;
 }
+.add-event-form textarea {
+    width: 45%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+.add-event-form textarea {
+    resize: vertical;
+    width: 96%;
+    height: 150px; /* Adjust as needed */
+}

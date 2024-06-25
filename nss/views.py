@@ -139,13 +139,11 @@ def event_details(request):
     }
     if request.method=="POST":
         event=request.POST.get('event_name')
-        start_time=request.POST.get('start_time')
-        end_time=request.POST.get('end_time')
         des=request.POST.get('des')
         event_id=Event.objects.get(event_name=event)
         event_exists = Event_details.objects.filter(event=event_id).exists()
         if not event_exists:
-            ev=Event_details(event=event_id,start_time=start_time,end_time=end_time,des=des)
+            ev=Event_details(event=event_id,des=des)
             ev.save()
             return HttpResponse('submitted')
         else:
@@ -293,8 +291,11 @@ def view_event(request):
 
 @login_required()
 def edit_event(request,pk):
-    print(pk)
-    return render(request,'nss/edit_event.html')
+    eve={
+        'eve':Event.objects.filter(event_id=pk)
+    }
+
+    return render(request,'nss/edit_event.html',eve)
 
 @login_required()
 def delete_event(request,pk):
@@ -382,3 +383,9 @@ def delete_attendance(request,pk):
     att=get_object_or_404(Attendance_status,status_id=pk)
     att.delete()
     return redirect('view_attendance')
+
+@login_required()
+def delete_images(request,pk,ev):
+    pic=get_object_or_404(Event_Photos,id=pk)
+    pic.delete()
+    return redirect(reverse('edit_event', args=[ev])) 

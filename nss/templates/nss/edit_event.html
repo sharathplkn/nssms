@@ -1,0 +1,39 @@
+{% extends 'nss/base.html'%}
+{% load static %}
+{% block title %}
+    attendance
+{% endblock%}
+{% block content %}
+<head>
+    <link rel="stylesheet" href="{% static '/css/add_event.css'%}">
+</head>
+{% for i in eve%}
+<form class="add-event-form" method="post" action="{% url 'add_event' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label for="event_name">Event Name:</label>
+    <input type="text" id="event_name" name="event_name" value="{{i.event_name}}">
+    <label for="date">Date:</label>
+    <input type="date" id="date" name="date" value="{{i.date|date:'Y-m-d'}}">
+
+    <!--Event-details-->
+    <label for="des">Description:</label><br>
+    {% for j in i.eventdetails.all%}
+    <textarea id="des" name="des">{{j.des}}</textarea>
+    {% endfor %}
+    <br><br>
+
+    <label for="photo">Image:</label>
+    Current Images Uploaded are :
+    {% for j in i.eventphotos.all %}
+        <a href="{{j.photo.url}}">Image {{forloop.counter}} </a> -- <a href="{% url 'delete_images' j.id i.event_id %}" onclick="return confirm('Are you sure you want to delete?')"> Delete</a><br>
+    {% endfor %}
+
+    <br><br>
+    <input type="file" id="photo" name="photo"> 
+
+    <input type="submit" value="Submit">
+    <input type="reset" value="Reset">
+    
+</form>
+{% endfor %}
+{% endblock %}

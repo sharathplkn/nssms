@@ -67,7 +67,7 @@ class Attendance_status(models.Model):
     status_id=models.AutoField(primary_key=True)
     date=models.DateField()
     unit=models.IntegerField()
-    event=models.ForeignKey(Event,on_delete=models.CASCADE)
+    event=models.ForeignKey(Event,on_delete=models.CASCADE,related_name='eventattendances')
     status=models.CharField(max_length=30,default="pending for approval")
 class Attendance(models.Model):
     Attendance_status=models.ForeignKey(Attendance_status,on_delete=models.CASCADE)
@@ -79,14 +79,12 @@ class Attendance(models.Model):
     def __str__(self):
         return f"{self.event.event_name}"
 class Event_details(models.Model):
-    event=models.ForeignKey(Event,on_delete=models.CASCADE)
-    start_time=models.TimeField(auto_now=False, auto_now_add=False)
-    end_time=models.TimeField(auto_now=False, auto_now_add=False)
+    event=models.ForeignKey(Event,on_delete=models.CASCADE,related_name='eventdetails') 
     des=models.TextField()
     def __str__(self):
         return f"{self.event.event_name}"
 
 class Event_Photos(models.Model):
-    event=models.ForeignKey(Event,on_delete=models.CASCADE)
+    event=models.ForeignKey(Event,on_delete=models.CASCADE,related_name='eventphotos')
     photo=models.ImageField(upload_to='events')
 
