@@ -1,13 +1,14 @@
 {% extends 'nss/base.html' %}
 {% load static %}
 {% block title %}
-    Add Volunteer
+Add Volunteer
 {% endblock %}
 {% block content %}
+
 <head>
     <link rel="stylesheet" href="{% static 'css/add_volunteer.css' %}">
 </head>
-<form class="volunteer-form" method="post" action="{% url 'add_volunteer' %}"  enctype="multipart/form-data">
+<form class="volunteer-form" method="post" action="{% url 'add_volunteer' %}" enctype="multipart/form-data">
     <fieldset>
         <legend align="center"><b>Volunteer Details</b></legend>
         {% csrf_token %}
@@ -52,7 +53,7 @@
                 <select id="programme" name="programme" required>
                     <option value="" disabled selected>Select Programme</option>
                     {% for i in dep %}
-                        <option value="{{ i.program_name }}">{{ i.program_name }}</option>
+                    <option value="{{ i.program_name }}">{{ i.program_name }}</option>
                     {% endfor %}
                 </select>
             </div>

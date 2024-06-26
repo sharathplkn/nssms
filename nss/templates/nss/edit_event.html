@@ -1,14 +1,18 @@
 {% extends 'nss/base.html'%}
 {% load static %}
 {% block title %}
-    attendance
+attendance
 {% endblock%}
 {% block content %}
+
 <head>
     <link rel="stylesheet" href="{% static '/css/add_event.css'%}">
 </head>
+{% if request.GET.message %}
+<p align="center" style="color:green">{{ request.GET.message }}</p>
+{% endif %}
 {% for i in eve%}
-<form class="add-event-form" method="post" action="{% url 'add_event' %}" enctype="multipart/form-data">
+<form class="add-event-form" method="post" action="{% url 'edit_event' %}" enctype="multipart/form-data">
     {% csrf_token %}
     <label for="event_name">Event Name:</label>
     <input type="text" id="event_name" name="event_name" value="{{i.event_name}}">
@@ -25,15 +29,16 @@
     <label for="photo">Image:</label>
     Current Images Uploaded are :
     {% for j in i.eventphotos.all %}
-        <a href="{{j.photo.url}}">Image {{forloop.counter}} </a> -- <a href="{% url 'delete_images' j.id i.event_id %}" onclick="return confirm('Are you sure you want to delete?')"> Delete</a><br>
+    <a href="{{j.photo.url}}">Image {{forloop.counter}} </a> -- <a href="{% url 'delete_images' j.id i.event_id %}"
+        onclick="return confirm('Are you sure you want to delete?')"> Delete</a><br>
     {% endfor %}
 
     <br><br>
-    <input type="file" id="photo" name="photo"> 
+    <input type="file" id="photo" name="photo">
 
     <input type="submit" value="Submit">
     <input type="reset" value="Reset">
-    
+
 </form>
 {% endfor %}
 {% endblock %}

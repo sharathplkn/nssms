@@ -7,6 +7,9 @@ from django.db import connection
 from django.contrib.auth.decorators import login_required
 from .decorators import group_required 
 from .filters import *
+import os
+from django.conf import settings
+
 
 def access_denied(request):
     return render(request, 'nss/acess_denied.html')
@@ -172,9 +175,14 @@ def event_photos(request):
         photo=request.FILES.get('photo')
         event=request.POST.get('event_name')
         event_id=Event.objects.get(event_name=event)
-        ev=Event_Photos(photo=photo,event=event_id)
-        ev.save()
-        return HttpResponse('submitted')
+        if Event_Photos.objects.filter(event=event_id).count() >= 3:
+            message = "Three images are already uploaded for this event."
+            return redirect(reverse('event_photos') + '?message1=' + message)
+        else:
+            ev=Event_Photos(photo=photo,event=event_id)
+            ev.save()
+            message = "Uploaded Sucessfully"
+            return redirect(reverse('event_photos') + '?message2=' + message)
     return render(request,'nss/add_photos.html',eve)
 def event2(request):
 
@@ -289,13 +297,6 @@ def view_event(request):
     }
     return render(request,'nss/view_event.html',event)
 
-@login_required()
-def edit_event(request,pk):
-    eve={
-        'eve':Event.objects.filter(event_id=pk)
-    }
-
-    return render(request,'nss/edit_event.html',eve)
 
 @login_required()
 def delete_event(request,pk):
@@ -309,7 +310,7 @@ def approve_attendance(request,pk):
     att=Attendance_status.objects.get(status_id=pk)
     att.status="approved"
     att.save()
-    return HttpResponse('submitted')
+    return redirect(reverse('view_attendance')) 
 
 def add_attendance(request):
     eve = {
@@ -388,4 +389,33 @@ def delete_attendance(request,pk):
 def delete_images(request,pk,ev):
     pic=get_object_or_404(Event_Photos,id=pk)
     pic.delete()
-    return redirect(reverse('edit_event', args=[ev])) 
+    photo_path = os.path.join(settings.MEDIA_ROOT, str(pic.photo))
+    if os.path.exists(photo_path):
+        os.remove(photo_path) 
+    message = "Deleted Successfully."
+    return redirect(reverse('edit_event', args=[ev])+ '?message=' + message) 
+
+@login_required()
+def edit_event(request,pk):
+    eve={
+        'eve':Event.objects.filter(event_id=pk)
+    }
+    
+    event_Photos = get_object_or_404(Event_Photos, event=pk)
+    event_details = get_object_or_404(Event_details, pk=pk)
+    event = get_object_or_404(Event, pk=pk)
+    if request.method=='POST':
+        event_name=request.POST.get('event_name')
+        date=request.POST.get('date')
+        des=request.POST.get('des')
+        if 'photo' in request.FILES:
+            image = request.FILES['photo']
+            event_Photos.photo = image
+        event_details.des=des
+        event.event_name=event_name
+        event.date=date
+        event_Photos.save()
+        event_details.save()
+        event.save()
+        return redirect('view_event')
+    return render(request,'nss/edit_event.html',eve)
