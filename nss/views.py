@@ -400,22 +400,19 @@ def edit_event(request,pk):
     eve={
         'eve':Event.objects.filter(event_id=pk)
     }
-    
-    event_Photos = get_object_or_404(Event_Photos, event=pk)
-    event_details = get_object_or_404(Event_details, pk=pk)
-    event = get_object_or_404(Event, pk=pk)
+    ev=Event.objects.get(event_id=pk)
+    event_Photos = Event_Photos.objects.get_or_create(event=ev)
+    event_details = Event_details.objects.get_or_create(event=ev)
+    event1 = get_object_or_404(Event, pk=pk)
     if request.method=='POST':
         event_name=request.POST.get('event_name')
         date=request.POST.get('date')
         des=request.POST.get('des')
-        if 'photo' in request.FILES:
-            image = request.FILES['photo']
-            event_Photos.photo = image
         event_details.des=des
-        event.event_name=event_name
-        event.date=date
+        event1.event_name=event_name
+        event1.date=date
         event_Photos.save()
         event_details.save()
-        event.save()
+        event1.save()
         return redirect('view_event')
     return render(request,'nss/edit_event.html',eve)

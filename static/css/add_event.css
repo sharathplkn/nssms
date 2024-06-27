@@ -12,8 +12,7 @@
     display: block;
 }
 .add-event-form input[type="text"],
-.add-event-form input[type="date"],
-.add-event-form input[type="submit"] {
+.add-event-form input[type="date"]{
     width: calc(100% - 20px); /* Adjusted width */
     padding: 10px;
     margin-bottom: 20px;
@@ -21,17 +20,7 @@
     border-radius: 5px;
     box-sizing: border-box;
 }
-.add-event-form input[type="submit"] {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-.add-event-form input[type="submit"]:hover {
-    background-color: #0056b3;
-}
+
 .add-event-form textarea {
     width: 45%;
     padding: 10px;
@@ -45,4 +34,32 @@
     resize: vertical;
     width: 96%;
     height: 150px; /* Adjust as needed */
+}
+select,
+input[type="file"] {
+    width: calc(100% - 22px); /* Adjusting for padding */
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+.add-event-form input[type="submit"],
+.add-event-form input[type="reset"]{
+    width: 49%;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+input[type="submit"]:hover,
+input[type="reset"]:hover {
+    background-color: #0056b3;
 }
