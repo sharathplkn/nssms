@@ -67,8 +67,8 @@
     <form class="volunteer-form" method="post" action="{% url 'unit_wise'%}">
         {% csrf_token %}
     <label for="event">Event:</label>
-    <select id="event" name="event">
-    <option value="" disabled selected>Select event</option>
+    <select id="event" name="event" required>
+    <option value="" disabled selected >Select event</option>
     {% for i in even %}
     <option value="{{ i.event_id }}">{{ i.event_name }}</option>
     {% endfor %}

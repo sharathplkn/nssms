@@ -360,6 +360,7 @@ def attendance(request,pk,unit):
 
     return redirect('view_attendance')
 
+@group_required('po')
 def promote(request):
     try:
         objec=volunteer.objects.all()
@@ -401,7 +402,7 @@ def edit_event(request,pk):
         'eve':Event.objects.filter(event_id=pk)
     }
     ev=Event.objects.get(event_id=pk)
-    event_Photos = Event_Photos.objects.get_or_create(event=ev)
+    event_Photos = Event_Photos.objects.filter(event=ev)
     event_details = Event_details.objects.get_or_create(event=ev)
     event1 = get_object_or_404(Event, pk=pk)
     if request.method=='POST':
@@ -411,8 +412,12 @@ def edit_event(request,pk):
         event_details.des=des
         event1.event_name=event_name
         event1.date=date
-        event_Photos.save()
         event_details.save()
         event1.save()
         return redirect('view_event')
     return render(request,'nss/edit_event.html',eve)
+
+
+def promote_check(request):
+
+    return render(request,'nss/promote.html')

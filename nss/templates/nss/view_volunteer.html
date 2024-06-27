@@ -80,7 +80,7 @@
                 <div class="button-container">
                     <a class="button" href="{% url 'volunteer_details' volunteer.volunteer_id %}">More</a>
                     <a class="button" href="{% url 'edit_volunteer' pk=volunteer.volunteer_id %}">Edit</a>
-                    <a class="button delete-btn" href="{% url 'delete2' pk=volunteer.volunteer_id %}">Delete</a>
+                    <a class="button delete-btn" href="{% url 'delete2' pk=volunteer.volunteer_id %}"><img src="{% static '/icons/trash.svg' %}">Delete</a>
                 </div>
             </td>
         </tr>

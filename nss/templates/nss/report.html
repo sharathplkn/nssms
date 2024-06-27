@@ -20,10 +20,12 @@
         </div>
         <div class="image-gallery">
             {% for pic_item in pics %}
+            {% if pic_item %}
             {% if pic_item.event.event_id == event_item.event_id %}
             <div class="gallery-item">
                 <img src="{{ pic_item.photo.url }}">
             </div>
+            {% endif %}
             {% endif %}
             {% endfor %}
         </div>

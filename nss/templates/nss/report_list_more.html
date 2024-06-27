@@ -19,11 +19,13 @@
         {%endfor%}
     </div>
     <div class="image-gallery">
+        {% if k.photo %}
         {% for k in pics%}
         <div class="gallery-item">
         <img src="{{k.photo.url}}">
         </div>
         {%endfor%}
+        {% endif %}
     </div>
 </div>
 

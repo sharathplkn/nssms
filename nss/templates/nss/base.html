@@ -50,6 +50,9 @@
           </div>
         </li>
         <li><a href="{% url 'report_list' %}">Report</a></li>
+        {% if is_po_group %}
+        <li><a href="{% url 'promote_check' %}">Promote</a></li>
+        {% endif %}
       </ul>
     </nav>
     

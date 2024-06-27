@@ -30,5 +30,6 @@ urlpatterns=[
     path('promote',views.promote,name='promote'),
     path('more_attendance/<int:pk>/',views.more_attendance,name='more_attendance'),
     path('delete_attendance/<int:pk>/', views.delete_attendance, name='delete_attendance'),
-    path('delete_images/<int:pk>/<int:ev>/',views.delete_images,name='delete_images')
+    path('delete_images/<int:pk>/<int:ev>/',views.delete_images,name='delete_images'),
+    path('promote_check',views.promote_check,name='promote_check')
 ]
