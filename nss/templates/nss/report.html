@@ -6,40 +6,40 @@
     <link rel="stylesheet" href="{% static '/css/report.css' %}">
 </head>
 
-<div class="print-content">
-    {% for event_item in event %}
-    <div class="event-container">
-        <h1 class="event-heading">{{ event_item.event_name | upper }}</h1>
-        <div class="event-date">{{ event_item.date }}</div>
-        <div class="event-description">
-            {% for detail_item in details %}
-            {% if detail_item.event.event_id == event_item.event_id %}
-            {{ detail_item.des }}
-            {% endif %}
-            {% endfor %}
-        </div>
-        <div class="image-gallery">
-            {% for pic_item in pics %}
-            {% if pic_item %}
-            {% if pic_item.event.event_id == event_item.event_id %}
-            <div class="gallery-item">
-                <img src="{{ pic_item.photo.url }}">
+    <div class="print-content">
+        {% for event_item in event %}
+        <div class="event-container">
+            <h1 class="event-heading">{{ event_item.event_name | upper }}</h1>
+            <div class="event-date">{{ event_item.date }}</div>
+            <div class="event-description">
+                {% for detail_item in details %}
+                {% if detail_item.event.event_id == event_item.event_id %}
+                {{ detail_item.des }}
+                {% endif %}
+                {% endfor %}
             </div>
-            {% endif %}
-            {% endif %}
-            {% endfor %}
+            <div class="image-gallery">
+                {% for pic_item in pics %}
+                {% if pic_item.photo %}
+                {% if pic_item.event.event_id == event_item.event_id %}
+                <div class="gallery-item">
+                    <img src="{{ pic_item.photo.url }}">
+                </div>
+                {% endif %}
+                {% endif %}
+                {% endfor %}
+            </div>
         </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-</div>
 
-<div class="no-print">
-    <button  class="buttons" onclick="printPdf()">Print as PDF</button>
-</div>
+    <div class="no-print">
+        <button class="buttons" onclick="printPdf()">Print as PDF</button>
+    </div>
 
-<script>
-function printPdf() {
-    window.print();
-}
-</script>
+    <script>
+    function printPdf() {
+        window.print();
+    }
+    </script>
 {% endblock %}

@@ -31,5 +31,9 @@ urlpatterns=[
     path('more_attendance/<int:pk>/',views.more_attendance,name='more_attendance'),
     path('delete_attendance/<int:pk>/', views.delete_attendance, name='delete_attendance'),
     path('delete_images/<int:pk>/<int:ev>/',views.delete_images,name='delete_images'),
-    path('promote_check',views.promote_check,name='promote_check')
+    path('promote_check',views.promote_check,name='promote_check'),
+    path('report/monthly', views.monthly_report, name='monthly_report'),
+    path('report/yearly', views.yearly_report, name='yearly_report'),
+    path('select_month', views.select_month, name='select_month'),
+    path('select_year', views.select_year, name='select_year'),
 ]

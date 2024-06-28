@@ -12,7 +12,9 @@
     display: block;
 }
 .add-event-form input[type="text"],
-.add-event-form input[type="date"]{
+.add-event-form input[type="date"],
+.add-event-form input[type="month"],
+.add-event-form input[type="number"]{
     width: calc(100% - 20px); /* Adjusted width */
     padding: 10px;
     margin-bottom: 20px;

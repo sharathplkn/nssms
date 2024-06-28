@@ -1,0 +1,14 @@
+{% extends 'nss/base.html' %}
+{% load static %}
+{% block content %}
+<head>
+    <link rel="stylesheet" href="{% static '/css/add_event.css'%}">
+</head>
+    <form class="add-event-form" method="post" action="{% url 'monthly_report' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="year">Year:</label>
+        <input type="number" id="year" name="year" required>
+        <input type="submit" value="Submit">
+        <input type="reset" value="Reset">
+    </form>
+{% endblock %}

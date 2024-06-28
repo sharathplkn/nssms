@@ -6,6 +6,7 @@ from django.contrib.auth.models import Group,User
 from django.db import connection
 from django.contrib.auth.decorators import login_required
 from .decorators import group_required 
+from datetime import datetime
 from .filters import *
 import os
 from django.conf import settings
@@ -370,7 +371,8 @@ def promote(request):
             else:
                 i.status='inactive'
             i.save()
-        return HttpResponse('updated')
+        message="Promoted"
+        return redirect(reverse('promote_check') +'?message=' + message)
     except Exception:
         return render(request,'nss/error.html')
 
@@ -417,7 +419,37 @@ def edit_event(request,pk):
         return redirect('view_event')
     return render(request,'nss/edit_event.html',eve)
 
-
+@login_required()
 def promote_check(request):
 
     return render(request,'nss/promote.html')
+
+
+# Monthly Events Report
+def monthly_report(request):
+    if request.method=="POST":
+        year=request.POST.get('year')
+        print(year)
+        month=request.POST.get('month')
+        print(month)
+        events = Event.objects.filter(date__year=year, date__month=month)
+        details = Event_details.objects.filter(event__in=events)
+        pics = Event_Photos.objects.filter(event__in=events)
+        return render(request, 'nss/report.html', {'event': events, 'details': details, 'pics': pics})
+
+# Yearly Events Report
+def yearly_report(request):
+    if request.method=='POST':
+        year=request.POST.get('year')
+        events = Event.objects.filter(date__year=year)
+        details = Event_details.objects.filter(event__in=events)
+        pics = Event_Photos.objects.filter(event__in=events)
+        return render(request, 'nss/report.html', {'event': events, 'details': details, 'pics': pics})
+
+def select_month(request):
+
+    return render(request,'nss/select_month.html')
+
+def select_year(request):
+
+    return render(request,'nss/select_year.html')
