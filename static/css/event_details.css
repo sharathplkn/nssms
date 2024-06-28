@@ -14,8 +14,9 @@
 }
 
 .event-form input[type="time"],
+.event-form select,
 .event-form textarea {
-    width: 45%;
+    width: 100%;
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ccc;

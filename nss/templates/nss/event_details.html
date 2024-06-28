@@ -4,14 +4,19 @@
 <head>
     <link rel="stylesheet" href="{% static '/css/event_details.css'%}">
 </head>
-
+{% if request.GET.message1 %}
+<p align="center" style="color:green">{{ request.GET.message1 }}</p>
+{% endif %}
+{% if request.GET.message2 %}
+<p align="center" style="color:red">{{ request.GET.message2 }}</p>
+{% endif %}
 <form class="event-form" method="post">
     {% csrf_token %}
     <label for="event_name">Event:</label>
     <select id="event_name" name="event_name">
         <option value="" disabled selected>----</option>
         {% for i in even %}
-        <option value="{{i.event_name}}">{{i.event_name}}</option>
+        <option value="{{i.event_id}}">{{i.event_name}}-{{i.date}}</option>
         {% endfor %}
     </select>
     <br><br>

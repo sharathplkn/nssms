@@ -63,7 +63,9 @@
     }
     </style>
 </head>
-    
+{% if request.GET.message %}
+<p align="center" style="color:green">{{ request.GET.message }}</p>
+{% endif %}
     <form class="volunteer-form" method="post" action="{% url 'unit_wise'%}">
         {% csrf_token %}
     <label for="event">Event:</label>

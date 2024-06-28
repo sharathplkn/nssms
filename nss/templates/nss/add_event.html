@@ -4,6 +4,9 @@
 <head>
     <link rel="stylesheet" href="{% static '/css/add_event.css'%}">
 </head>
+    {% if request.GET.message %}
+    <p align="center" style="color:green">{{ request.GET.message }}</p>
+    {% endif %}
     <form class="add-event-form" method="post" action="{% url 'add_event' %}" enctype="multipart/form-data">
         {% csrf_token %}
         <label for="event_name">Event Name:</label>

@@ -34,20 +34,20 @@
             {{ filter.form.community }}
         </div>
         <div class="form-field">
-            <label for="id_community">Blood Group:</label><br>
+            <label for="id_blood_group">Blood Group:</label><br>
             {{ filter.form.blood_group }}
         </div>
         <div class="form-field">
-            <label for="id_yearofenrollement">Year of Enrollment:</label>
+            <label for="id_yearofenrollement">Year of Enrollment:</label><br>
             {{ filter.form.year_of_enrollment }}
         </div>
         <div class="form-field">
-            <label for="id_community">Year:</label><br>
+            <label for="id_year">Year:</label><br>
             {{ filter.form.year }}
         </div>
                 
         <div class="form-field">
-            <label for="items_per_page">Items per page:</label>
+            <label for="items_per_page">Items per page:</label><br>
             <select name="items_per_page" id="items_per_page">
                 <option value="10" {% if request.GET.items_per_page == "10" %}selected{% endif %}>10</option>
                 <option value="20" {% if request.GET.items_per_page == "20" %}selected{% endif %}>20</option>
