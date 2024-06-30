@@ -1,0 +1,73 @@
+/* static/css/home.css */
+
+.container {
+    display: flex;
+}
+
+.left-div, .right-div {
+    flex: 1; /* Equal width for both columns */
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.left-div {
+    background-color: #f0f0f0;
+}
+
+.right-div {
+    background-color: #ffffff;
+    margin-left: 10px; /* Optional: Add margin between columns */
+}
+
+.slideshow-container {
+    max-width: 100%;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.mySlides {
+    display: none;
+}
+
+.mySlides img {
+    width: 100%;
+    vertical-align: middle;
+}
+
+.slideshow-controls {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    transform: translateY(-50%);
+}
+
+.slideshow-controls button {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    margin: 0 5px;
+    transition: background-color 0.3s;
+}
+
+.slideshow-controls button:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* Optional: Styles for notification items */
+.notification-item {
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.heading{
+    background-color: rgb(4, 4, 68);
+    color: white;
+}

@@ -23,7 +23,7 @@ urlpatterns=[
     path('report_list_more/<int:pk>/',views.report_list_more,name='report_list_more'),
     path('view_event',views.view_event,name='view_event'),
     path('edit_event/<int:pk>/',views.edit_event,name='edit_event'),
-    path('delete_event/<int:pk>/',views.edit_event,name='delete_event'),
+    path('delete_event/<int:pk>/',views.delete_event,name='delete_event'),
     path('approve_attendance/<int:pk>',views.approve_attendance,name='approve_attendance'),
     path('att3',views.add_attendance,name='att3'),
     path('unit_wise',views.dep_wise,name='unit_wise'),
@@ -36,4 +36,5 @@ urlpatterns=[
     path('report/yearly', views.yearly_report, name='yearly_report'),
     path('select_month', views.select_month, name='select_month'),
     path('select_year', views.select_year, name='select_year'),
+    path('view_attendance3/<int:status_id>', views.view_attendance3, name='view_attendance3'),
 ]

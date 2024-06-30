@@ -49,7 +49,14 @@
             <a href="{% url 'view_attendance' %}">View Attendance</a>
           </div>
         </li>
-        <li><a href="{% url 'report_list' %}">Report</a></li>
+        <li class="dropdown">
+          <a href="#">Report</a>
+          <div class="dropdown-content">          
+            <a href="{% url 'report_list' %}">Event-Wise</a>
+            <a href="{% url 'select_month' %}">Monthly Report</a>
+            <a href="{% url 'select_year' %}">Yearly Report</a>
+          </div>
+        </li>
         {% if is_po_group %}
         <li><a href="{% url 'promote_check' %}">Promote</a></li>
         {% endif %}

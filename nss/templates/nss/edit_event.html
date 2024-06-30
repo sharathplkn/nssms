@@ -32,8 +32,10 @@ attendance
     Current Images Uploaded are :<br>
     {% if i.eventphotos %}
     {% for j in i.eventphotos.all %}
+    {% if j.phot %}
     <a href="{{j.photo.url}}">Image {{forloop.counter}} </a> -- <a href="{% url 'delete_images' j.id i.event_id %}"
         onclick="return confirm('Are you sure you want to delete?')"> Delete</a><br>
+    {% endif %}
     {% endfor %}
     {% endif %}
     <br>
