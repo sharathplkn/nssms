@@ -23,7 +23,11 @@ attendance
     <label for="des">Description:</label><br>
     {% if i.event.details %}
     {% for j in i.eventdetails.all%}
+    {% if j.des %}
     <textarea id="des" name="des">{{j.des}}</textarea>
+    {% else %}
+    No Description added yet.<a href="{% url 'event_details' %}">add Description</a>
+    {% endif%}
     {% endfor %}
     {% endif %}
     <br><br>

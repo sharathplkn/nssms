@@ -9,20 +9,26 @@ from .decorators import group_required
 from datetime import datetime
 from .filters import *
 import os
+from django.template.loader import get_template
+from django.utils.timezone import now
 from django.conf import settings
-
 
 def access_denied(request):
     return render(request, 'nss/acess_denied.html')
 
 @login_required()
 def ns(request):
-    try:
-    #request.session.set_expiry(2)
-        pending_statuses = Attendance_status.objects.filter(status="pending for approval")
-        return render(request, 'nss/home.html', {'pending_statuses': pending_statuses})
-    except Exception:
-        return render(request,'nss/error.html')
+#request.session.set_expiry(2)
+    events = Event.objects.filter(date__lte=now()).order_by('-date')[:5]
+    volunteers = volunteer.objects.all()
+    pending_approvals = Attendance_status.objects.filter(status="pending for approval")
+    
+    context = {
+        'events': events,
+        'volunteers': volunteers,
+        'pending_approvals': pending_approvals
+    }
+    return render(request, 'nss/home.html', context)
 @login_required()
 def add_volunteer(request):
     try:
@@ -352,6 +358,15 @@ def approve_attendance(request,pk):
         return redirect('view_attendance3', status_id=pk) 
     except Exception:
         return render(request,'nss/error.html')
+@login_required()
+def reject_attendance(request,pk):
+    try:
+        att=Attendance_status.objects.get(status_id=pk)
+        att.status="rejected"
+        att.save()
+        return redirect('view_attendance3', status_id=pk) 
+    except Exception:
+        return render(request,'nss/error.html')
 def add_attendance(request):
     try:
         eve = {
@@ -458,8 +473,8 @@ def edit_event(request,pk):
         'eve':Event.objects.filter(event_id=pk)
     }
     ev=Event.objects.get(event_id=pk)
-    event_Photos = Event_Photos.objects.filter(event=ev)
-    event_details = Event_details.objects.get_or_create(event=ev)
+    event_Photos = Event_Photos.objects.get(event=ev)
+    event_details = Event_details.objects.get(event=ev)
     event1 = get_object_or_404(Event, pk=pk)
     if request.method=='POST':
         event_name=request.POST.get('event_name')
@@ -468,7 +483,8 @@ def edit_event(request,pk):
         event_details.des=des
         event1.event_name=event_name
         event1.date=date
-        event_details.save()
+        if event_details.des:
+            event_details.save()
         event1.save()
         return redirect('view_event')
     return render(request,'nss/edit_event.html',eve)

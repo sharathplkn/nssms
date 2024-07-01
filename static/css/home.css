@@ -1,73 +1,140 @@
-/* static/css/home.css */
-
-.container {
-    display: flex;
-}
-
-.left-div, .right-div {
-    flex: 1; /* Equal width for both columns */
-    padding: 10px;
+/* Reset default margin and padding */
+* {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
 }
 
-.left-div {
-    background-color: #f0f0f0;
+/* Body styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+    line-height: 1.6;
 }
 
-.right-div {
+/* Section headings */
+h2 {
+    color:white;
+    font-size: 2em;
+    text-align: center;
+    margin-bottom: 20px;
+    background-color: rgb(7, 7, 44);
+}
+
+/* Dashboard section */
+.dashboard-section {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
     background-color: #ffffff;
-    margin-left: 10px; /* Optional: Add margin between columns */
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
 
-.slideshow-container {
-    max-width: 100%;
-    position: relative;
-    overflow: hidden;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+.dashboard-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
 }
 
-.mySlides {
-    display: none;
+.stat-card {
+    background-color: #f0f0f0;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
 }
 
-.mySlides img {
-    width: 100%;
-    vertical-align: middle;
-}
-
-.slideshow-controls {
-    position: absolute;
-    top: 50%;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    transform: translateY(-50%);
-}
-
-.slideshow-controls button {
-    background-color: rgba(0, 0, 0, 0.5);
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    cursor: pointer;
-    margin: 0 5px;
-    transition: background-color 0.3s;
-}
-
-.slideshow-controls button:hover {
-    background-color: rgba(0, 0, 0, 0.8);
-}
-
-/* Optional: Styles for notification items */
-.notification-item {
+.stat-card h3 {
+    font-size: 1.2em;
+    color: #555;
     margin-bottom: 10px;
-    padding: 10px;
-    background-color: #f9f9f9;
-    border: 1px solid #ccc;
-    border-radius: 5px;
 }
-.heading{
-    background-color: rgb(4, 4, 68);
-    color: white;
+
+.stat-card p {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
 }
+
+/* Events section */
+.events-section {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.event-list {
+    list-style: none;
+    padding: 0;
+}
+
+.event-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+/* Tasks section */
+.tasks-section {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.task-list {
+    list-style: none;
+    padding: 0;
+}
+
+.task-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.task-list li a {
+    color: #4CAF50;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.task-list li a:hover {
+    text-decoration: underline;
+}
+/* Ensure container for two-column layout spans full width */
+.events-section {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.event-list {
+    list-style: none;
+    padding: 0;
+}
+
+.event-list li {
+    display: grid;
+    grid-template-columns: auto 1fr; /* First column auto-sized, second column takes remaining space */
+    gap: 10px; /* Adjust the gap between event name and date */
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.event-name {
+    font-weight: bold;
+}
+
+.event-date {
+    text-align: right; /* Align date to the right */
+    color: #666; /* Adjust color for date */
+}
+

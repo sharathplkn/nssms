@@ -25,6 +25,7 @@ urlpatterns=[
     path('edit_event/<int:pk>/',views.edit_event,name='edit_event'),
     path('delete_event/<int:pk>/',views.delete_event,name='delete_event'),
     path('approve_attendance/<int:pk>',views.approve_attendance,name='approve_attendance'),
+    path('reject_attendance/<int:pk>',views.reject_attendance,name='reject_attendance'),
     path('att3',views.add_attendance,name='att3'),
     path('unit_wise',views.dep_wise,name='unit_wise'),
     path('promote',views.promote,name='promote'),

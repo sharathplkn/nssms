@@ -1,68 +1,64 @@
-<!-- templates/home.html -->
 {% extends 'nss/base.html' %}
 {% load static %}
+
 {% block content %}
-<head>
+    <!-- Include CSS -->
     <link rel="stylesheet" href="{% static '/css/home.css' %}">
-</head>
 
-<div class="container">
-    <div class="left-div">
-        <!-- Content for the left div -->
-        <h2>Moving Images</h2>
-        <div class="slideshow-container">
-            <div class="mySlides fade">
-                <img src="{% static 'images/image1.jpg' %}" alt="Slide 1">
+    <!-- NSS Dashboard Section -->
+    <section class="dashboard-section">
+        <div class="dashboard-stats">
+            <div class="stat-card">
+                <h3>Total Volunteers</h3>
+                <p>{{ volunteers.count }}</p>
             </div>
-            <div class="mySlides fade">
-                <img src="{% static 'images/image2.jpg' %}" alt="Slide 2">
+            <div class="stat-card">
+                <h3>Recent Events</h3>
+                <p>{{ events.count }}</p>
             </div>
-            <div class="mySlides fade">
-                <img src="{% static 'images/image3.jpg' %}" alt="Slide 3">
+            {% if is_po_group %}
+            <div class="stat-card">
+                <h3>Pending Approvals</h3>
+                <p>{{ pending_approvals.count }}</p>
             </div>
-            <!-- Optional: Add navigation buttons -->
-            <div class="slideshow-controls">
-                <button onclick="plusSlides(-1)">❮ Prev</button>
-                <button onclick="plusSlides(1)">Next ❯</button>
-            </div>
+            {% endif %}
         </div>
-    </div>
-    <div class="right-div">
-        <!-- Content for the right div -->
-        <table border="1" cellspacing="0">
-        <tr><th class="heading">New Notifications</th></tr>
-        <th>Attendances</th>
-        {% for i in pending_statuses %}
-            <div class="notification-item">
-                <tr><td>{{ i.date }}</td></tr>
-                <tr><td>{{ i.event.event_name | title }}</td></tr>
-            </div>
+
+
+
+    <!-- Pending Tasks Section (if user is a Program Officer) -->
+    {% if is_po_group %}
+    <section class="tasks-section">
+        <h2>Pending Tasks</h2>
+        <ul class="task-list">
+            {% for approval in pending_approvals %}
+            <li>Approval needed for Attendance {{ approval.event.event_name }} on {{ approval.date }} <a href="{% url 'view_attendance3' approval.status_id %}">View</a></li>
+            {% endfor %}
+        </ul>
+    </section>
+    {% endif %}
+    {% if is_vs_group %}
+    <section class="tasks-section">
+        <h2>Attendance Waiting for Approval</h2>
+        <ul class="task-list">
+            {% for approval in pending_approvals %}
+            <li>Approval needed for Attendance {{ approval.event.event_name }} on {{ approval.date }} <a href="{% url 'view_attendance3' approval.status_id %}">View</a></li>
+            {% endfor %}
+        </ul>
+    </section>
+    {% endif %}
+    <!-- Recent Events Section -->
+<section class="events-section">
+    <h2>Recent Events</h2>
+    <ul class="event-list">
+        {% for event in events %}
+        <li>
+            <div class="event-name">{{ event.event_name | title }}</div>
+            <div class="event-date">{{ event.date }}</div>
+        </li>
         {% endfor %}
-        </table>
-    </div>
-</div>
+    </ul>
+</section>
 
-<script>
-    let slideIndex = 0;
-    showSlides();
-
-    function showSlides() {
-        let slides = document.getElementsByClassName("mySlides");
-        for (let i = 0; i < slides.length; i++) {
-            slides[i].style.display = "none";  
-        }
-        slideIndex++;
-        if (slideIndex > slides.length) { slideIndex = 1; }
-        slides[slideIndex-1].style.display = "block";  
-        setTimeout(showSlides, 2000); // Change image every 2 seconds
-    }
-
-    function plusSlides(n) {
-        showSlides(slideIndex += n);
-    }
-
-    function currentSlide(n) {
-        showSlides(slideIndex = n);
-    }
-</script>
+        </section>
 {% endblock %}

@@ -8,13 +8,14 @@
 
 <div class="form-container">
     {% if status %}
-    <h1 class="event-heading">Selected Event: {{ status.event.event_name|title }}-{{status.date}}-Unit-{{status.unit}}
+    <h1 class="event-heading">{{ status.event.event_name|title }}-{{status.date}}-Unit-{{status.unit}}
     </h1>
     <h1 class="event-heading">Status: {{status.status|title}}
         {% endif %}
         {% if status.status == "pending for approval" %}
         {% if is_po_group %}
         <a href="{% url 'approve_attendance' status.status_id %}"> Approve</a>
+        <a href="{% url 'reject_attendance' status.status_id %}"> Reject</a>
         {% endif %}
         {% endif %}
         {% if status.status_id %}
