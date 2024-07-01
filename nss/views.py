@@ -9,20 +9,26 @@ from .decorators import group_required
 from datetime import datetime
 from .filters import *
 import os
+from django.template.loader import get_template
+from django.utils.timezone import now
 from django.conf import settings
-
 
 def access_denied(request):
     return render(request, 'nss/acess_denied.html')
 
-
 @login_required()
 def ns(request):
-    try:
-    #request.session.set_expiry(2)
-        return render(request,'nss/home.html')
-    except Exception:
-        return render(request,'nss/error.html')
+#request.session.set_expiry(2)
+    events = Event.objects.filter(date__lte=now()).order_by('-date')[:5]
+    volunteers = volunteer.objects.all()
+    pending_approvals = Attendance_status.objects.filter(status="pending for approval")
+    
+    context = {
+        'events': events,
+        'volunteers': volunteers,
+        'pending_approvals': pending_approvals
+    }
+    return render(request, 'nss/home.html', context)
 @login_required()
 def add_volunteer(request):
     try:
@@ -102,23 +108,16 @@ def view_attendance2(request):
         return render(request,'nss/error.html')
 @login_required()
 def view_attendance(request):
-    try:
-        eve = {
-            'even': Attendance_status.objects.all().order_by('date').select_related('event')
-        }
-        if request.method == "POST":
-            at_status_id = request.POST.get('event')
-            at_status=Attendance_status.objects.get(status_id=at_status_id)
-            res = {
-                'resul': Attendance.objects.filter(Attendance_status=at_status).order_by('date').select_related('volunteer')
-            }
-            status={
-                'status':Attendance_status.objects.get(status_id=at_status_id)
-            }
-            return render(request, 'nss/view_attendance.html',{**status,**res,**eve})
-        return render(request,'nss/view_attendance.html',eve)
-    except Exception:
-        return render(request,'nss/error.html')
+    eve = {
+        'even': Attendance_status.objects.all().order_by('date').select_related('event')
+    }
+    
+    if request.method == "POST":
+        at_status_id = request.POST.get('event')
+        return redirect('view_attendance3', status_id=at_status_id)
+        
+    return render(request, 'nss/view_attendance.html', eve)
+
 @login_required()
 def volunteer_details(request, volunteer_name):
     try:
@@ -356,7 +355,16 @@ def approve_attendance(request,pk):
         att=Attendance_status.objects.get(status_id=pk)
         att.status="approved"
         att.save()
-        return redirect(reverse('view_attendance')) 
+        return redirect('view_attendance3', status_id=pk) 
+    except Exception:
+        return render(request,'nss/error.html')
+@login_required()
+def reject_attendance(request,pk):
+    try:
+        att=Attendance_status.objects.get(status_id=pk)
+        att.status="rejected"
+        att.save()
+        return redirect('view_attendance3', status_id=pk) 
     except Exception:
         return render(request,'nss/error.html')
 def add_attendance(request):
@@ -461,27 +469,25 @@ def delete_images(request,pk,ev):
         return render(request,'nss/error.html')
 @login_required()
 def edit_event(request,pk):
-    try:
-        eve={
-            'eve':Event.objects.filter(event_id=pk)
-        }
-        ev=Event.objects.get(event_id=pk)
-        event_Photos = Event_Photos.objects.filter(event=ev)
-        event_details = Event_details.objects.get_or_create(event=ev)
-        event1 = get_object_or_404(Event, pk=pk)
-        if request.method=='POST':
-            event_name=request.POST.get('event_name')
-            date=request.POST.get('date')
-            des=request.POST.get('des')
-            event_details.des=des
-            event1.event_name=event_name
-            event1.date=date
+    eve={
+        'eve':Event.objects.filter(event_id=pk)
+    }
+    ev=Event.objects.get(event_id=pk)
+    event_Photos = Event_Photos.objects.get(event=ev)
+    event_details = Event_details.objects.get(event=ev)
+    event1 = get_object_or_404(Event, pk=pk)
+    if request.method=='POST':
+        event_name=request.POST.get('event_name')
+        date=request.POST.get('date')
+        des=request.POST.get('des')
+        event_details.des=des
+        event1.event_name=event_name
+        event1.date=date
+        if event_details.des:
             event_details.save()
-            event1.save()
-            return redirect('view_event')
-        return render(request,'nss/edit_event.html',eve)
-    except Exception:
-        return render(request,'nss/error.html')
+        event1.save()
+        return redirect('view_event')
+    return render(request,'nss/edit_event.html',eve)
 @login_required()
 def promote_check(request):
     try:
@@ -529,3 +535,15 @@ def select_year(request):
         return render(request,'nss/select_year.html')
     except Exception:
         return render(request,'nss/error.html')
+
+
+@login_required()
+def view_attendance3(request,status_id):
+    at_status=Attendance_status.objects.get(status_id=status_id)
+    res = {
+        'resul': Attendance.objects.filter(Attendance_status=at_status).order_by('date').select_related('volunteer')
+    }
+    status={
+        'status':Attendance_status.objects.get(status_id=status_id)
+    }
+    return render(request, 'nss/view_attendance3.html',{**status,**res,'status_id': status_id})

@@ -2,15 +2,13 @@
 {% load static %}
 {% block content %}
 <head>
-    <link rel="stylesheet" href="{% static '/css/report_list_more.css'%}">
+    <link rel="stylesheet" href="{% static '/css/report.css'%}">
 </head>
-<div class="no-print">
-    <button  class="buttons" onclick="printPdf()">Print as PDF</button>
-</div>
+
 <div class="print-content">
     {% for i in eve%}
     <div class="event-container">
-        <h1 class="event-heading">{{i.event_name | upper }}</h1>
+        <h1 class="event-heading" align="center">{{i.event_name | upper }}</h1>
         <div class="event-date">{{i.date}}</div>
     {% endfor %}
     <div class="event-description">
@@ -19,16 +17,18 @@
         {%endfor%}
     </div>
     <div class="image-gallery">
-        {% if k.photo %}
         {% for k in pics%}
+        {% if k.photo %}
         <div class="gallery-item">
         <img src="{{k.photo.url}}">
         </div>
-        {%endfor%}
         {% endif %}
+        {%endfor%}
     </div>
 </div>
-
+<div class="no-print">
+    <button class="print-button" onclick="printPdf()">Print as PDF</button>
+</div>
 
 
 <script>
