@@ -65,3 +65,14 @@ input[type="submit"]:hover,
 input[type="reset"]:hover {
     background-color: #0056b3;
 }
+@media (max-width: 768px) {
+    .add-event-form {
+        width: 80%;
+    }
+
+    .add-event-form input[type="text"],
+    .add-event-form input[type="date"] {
+        width: calc(100% - 20px); /* Adjusted width */
+        font-size: 14px;
+    }
+}

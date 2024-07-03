@@ -63,3 +63,85 @@
         display: inline-block;
         margin-right: 10px; /* Adjust spacing between radio buttons */
     }
+/* General container styling */
+/* General container styling */
+.div1 {
+    padding: 10px;
+    margin-left: 5%; /* Adjusted margin to center within 90% of the browser width */
+    margin-right: 5%;
+    width: 90%; /* Use 90% of the browser window width */
+}
+
+/* Styling for each program block */
+.program-block {
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-bottom: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+}
+
+/* Styling for each list block */
+.list-block {
+    margin-top: 10px; /* Adjusted margin */
+}
+
+/* Styling for year text */
+.year-text {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px; /* Reduced margin */
+    display: block;
+}
+
+/* Styling for checkboxes and labels */
+.checkbox-label {
+    display: inline-block; /* Ensure each checkbox-label pair is inline-block */
+    width: 20%; /* Large screens: 5 items per row */
+    margin-bottom: 8px;
+    padding: 0 10px; /* Adjust padding for spacing */
+}
+
+.checkbox-label input[type=checkbox] {
+    margin-right: 5px; /* Adjust spacing between checkbox and label */
+    /* Adjust size if needed */
+}
+
+.checkbox-label label {
+    font-size: 14px;
+    color: #555;
+}
+
+input[type="submit"] {
+    width: 100%;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+}
+
+input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+@media (max-width: 992px) {
+    .div1 {
+        margin-left: 5%;
+        margin-right: 5%;
+    }
+    
+    .checkbox-label {
+        width: 50%; /* Small screens: 2 items per row */
+    }
+}
+
+@media (max-width: 576px) {
+    .checkbox-label {
+        width: 100%; /* Extra small screens: 1 item per row */
+    }
+}

@@ -6,68 +6,13 @@
 {% block content %}
 <head>
     <link rel="stylesheet" href="{% static '/css/add_attendance.css'%}">
-    <style>
-        /* General container styling */
-        .div1 {
-            padding: 10px;
-            margin-left:25%;
-            margin-right:25%;
-        }
-        
-        /* Styling for each program block */
-        .program-block {
-            border: 1px solid #ccc;
-            padding: 15px;
-            margin-bottom: 20px;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-        }
-
-        /* Styling for each list block */
-        .list-block {
-            margin-top: 15px;
-        }
-
-        /* Styling for year text */
-        .year-text {
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 10px;
-            display: block;
-        }
-
-        /* Styling for checkboxes */
-        input[type=checkbox] {
-            margin-right: 10px;
-        }
-
-        /* Styling for labels */
-        label {
-            font-size: 14px;
-            color: #555;
-        }
-
-    input[type="submit"] {
-        background-color: #007bff;
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        padding: 10px 20px;
-        cursor: pointer;
-        font-size: 16px;
-        transition: background-color 0.3s ease;
-    }
-
-    input[type="submit"]:hover {
-        background-color: #0056b3;
-    }
-    </style>
+  
 </head> 
     <form action="{% url 'attendance' event.event_id unit %}" method="post">
     {% csrf_token %}
     <div class="volunteer-form">
     <center>
-        <h1>{{event.event_name}}</h1>
+        <h1>{{event.event_name | title }}</h1>
         <h3>Unit-{{unit}}</h3>
     </center>
     <label for="date">Date</label>
@@ -79,20 +24,22 @@
         {% for i in pog %}
         <div class="program-block">
             {% for k in list %}
-                <div class="list-block">
-                <br><span class="year-text">{{i.program_name}}_{{k}}_year</span><br>
+            <div class="list-block">
+                <center><span class="year-text" style="background-color: rgb(0, 0, 138); color: white;">{{i.program_name}} - Year {{k}}</span></center><br>
                 {% for j in vol %}
                     {% if i.program_name == j.program.program_name and j.year == k %}
-                    <input type="checkbox" id="name" name="name" value="{{j.volunteer_id}}">
-                    <label for="name">{{j.name}}</label>
+                        <div class="checkbox-label">
+                            <input type="checkbox" id="volunteer_{{ j.volunteer_id }}" name="volunteers" value="{{ j.volunteer_id }}">
+                            <label for="volunteer_{{ j.volunteer_id }}">{{ j.name }}</label>
+                        </div>
                     {% endif %}
-
                 {% endfor %}
-                </div>
+            </div>
+            
             {% endfor %}
         </div>
         {% endfor %}
     </div>
-    <input type="submit">
+    <input type="submit" value="submit" class="submit">
 </form>
 {% endblock%}
