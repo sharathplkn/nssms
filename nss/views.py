@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from .decorators import group_required 
 from datetime import datetime
 from .filters import *
+from .forms import UserForm, GroupForm ,  UserForm2
 import os
 from django.template.loader import get_template
 from django.utils.timezone import now
@@ -547,3 +548,80 @@ def view_attendance3(request,status_id):
         'status':Attendance_status.objects.get(status_id=status_id)
     }
     return render(request, 'nss/view_attendance3.html',{**status,**res,'status_id': status_id})
+
+
+# ADMIN VIEWS
+
+@login_required
+@group_required('admin','po')
+def manage_users(request):
+    groups = Group.objects.all()
+    users = User.objects.all()
+    if request.method == 'POST':
+        form = UserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('manage_users')
+    else:
+        form = UserForm()
+    return render(request, 'admin/manage_users.html', {'groups': groups,'users': users, 'form': form})
+
+@login_required()
+@group_required('admin')
+def manage_groups(request):
+    groups = Group.objects.all()
+    if request.method == 'POST':
+        form = GroupForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('manage_groups')
+    else:
+        form = GroupForm()
+    return render(request, 'admin/manage_groups.html', {'groups': groups, 'form': form})
+
+
+@login_required()
+@group_required('admin','po')
+def edit_user(request, pk):
+    user = get_object_or_404(User, pk=pk)
+    if request.method == 'POST':
+        form = UserForm2(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('manage_users')
+    else:
+        form = UserForm2(instance=user)
+    return render(request, 'admin/edit_user.html', {'form': form})
+
+@login_required()
+@group_required('admin')
+def edit_group(request, pk):
+    group = get_object_or_404(Group, pk=pk)
+    if request.method == 'POST':
+        form = GroupForm(request.POST, instance=group)
+        if form.is_valid():
+            form.save()
+            return redirect('manage_groups')
+    else:
+        form = GroupForm(instance=group)
+    return render(request, 'admin/edit_group.html', {'form': form})
+
+
+@login_required()
+@group_required('admin','po')
+def delete_user(request, pk):
+    user = get_object_or_404(User, pk=pk)
+    if request.method == 'POST':
+        user.delete()
+        return redirect('manage_users')
+    return render(request, 'admin/confirm_delete.html', {'object': user})
+
+
+@login_required()
+@group_required('admin')
+def delete_group(request, pk):
+    group = get_object_or_404(Group, pk=pk)
+    if request.method == 'POST':
+        group.delete()
+        return redirect('manage_groups')
+    return render(request, 'admin/confirm_delete.html', {'object': group})

@@ -1,0 +1,47 @@
+{% extends 'nss/base.html' %}
+{% load static %}
+{% block content %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/manage_users.css' %}">
+</head>
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h2>Manage Users</h2>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div>
+                    <div>{{ form.username.label_tag }}</div>
+                    <div>{{ form.username }}</div>
+                </div>
+
+                <div>
+                    <div>{{ form.email.label_tag }}</div>
+                    <div>{{ form.email }}</div>
+                </div>
+                <div class="form-check">
+                    <div> {{ form.is_active.label }}</div>
+                    <div> {{ form.is_active }}</div>
+                </div>
+                <div>
+                    <div>{{ form.groups.label_tag }}</div>
+                    <div>
+                        <select name="{{ form.groups.name }}" id="{{ form.groups.id }}" class="form-control">
+                            {% for group in form.groups.field.choices %}
+                                <option value="{{ group.0 }}" {% if group.0 == form.groups.value %} selected {% endif %}>{{ group.1 }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Optionally, include a link to reset password -->
+                <!-- <a href="{% url 'password_reset' %}?email={{ form.email.value }}" class="btn btn-info">Reset Password</a> -->
+
+                <button type="submit" class="btn-primary">Update User</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

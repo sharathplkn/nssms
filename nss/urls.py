@@ -38,4 +38,10 @@ urlpatterns=[
     path('select_month', views.select_month, name='select_month'),
     path('select_year', views.select_year, name='select_year'),
     path('view_attendance3/<int:status_id>', views.view_attendance3, name='view_attendance3'),
+    path('manage_users/', views.manage_users, name='manage_users'),
+    path('manage_groups/', views.manage_groups, name='manage_groups'),
+    path('edit_user/<int:pk>/', views.edit_user, name='edit_user'),
+    path('edit_group/<int:pk>/', views.edit_group, name='edit_group'),
+    path('delete_user/<int:pk>/', views.delete_user, name='delete_user'),
+    path('delete_group/<int:pk>/', views.delete_group, name='delete_group'),
 ]

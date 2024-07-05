@@ -57,6 +57,17 @@
             <a href="{% url 'select_year' %}">Yearly Report</a>
           </div>
         </li>
+        {% if is_admin_group  or is_po_group %}
+        <li class="dropdown">
+          <a href="#">Users</a>
+          <div class="dropdown-content">
+            <a href="{% url 'manage_users' %}">Manage Users</a>
+            {% if is_admin_group %}
+            <a href="{% url 'manage_groups' %}">Manage Groups</a>
+            {% endif %}
+          </div>
+        </li>
+        {% endif %}
         {% if is_po_group %}
         <li><a href="{% url 'promote_check' %}">Promote</a></li>
         {% endif %}
