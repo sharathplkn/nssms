@@ -195,6 +195,7 @@ def report(request):
         return render(request,'nss/error.html')
 @login_required()
 def event_photos(request):
+    
     try:
         eve = {
             'even': Event.objects.all().order_by('date').values()
@@ -474,7 +475,7 @@ def edit_event(request,pk):
         'eve':Event.objects.filter(event_id=pk)
     }
     ev=Event.objects.get(event_id=pk)
-    event_Photos = Event_Photos.objects.get(event=ev)
+    event_Photos = Event_Photos.objects.filter(event=ev)
     event_details = Event_details.objects.get(event=ev)
     event1 = get_object_or_404(Event, pk=pk)
     if request.method=='POST':

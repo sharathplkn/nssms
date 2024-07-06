@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models import Sum
+from PIL import Image
 # Create your models here.
 class Department(models.Model):
     dep_id=models.IntegerField(primary_key=True)
@@ -9,7 +10,7 @@ class Department(models.Model):
 class Programme(models.Model):
     programme_id=models.IntegerField(primary_key=True)
     dept=models.ForeignKey(Department,on_delete=models.CASCADE)
-    program_name=models.CharField(max_length=65)
+    program_name=models.CharField(max_length=100)
     no_of_sems=models.IntegerField()
     grad_level=models.CharField(max_length=10)
     def __str__(self):
