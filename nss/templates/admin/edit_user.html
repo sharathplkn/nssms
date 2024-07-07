@@ -29,8 +29,12 @@
                     <div>{{ form.groups.label_tag }}</div>
                     <div>
                         <select name="{{ form.groups.name }}" id="{{ form.groups.id }}" class="form-control">
-                            {% for group in form.groups.field.choices %}
-                                <option value="{{ group.0 }}" {% if group.0 == form.groups.value %} selected {% endif %}>{{ group.1 }}</option>
+                            {% for group_id, group_name in form.groups.field.choices %}
+                            {% if group_name != 'admin' and is_po_group  %}
+                                <option value="{{ group_id }}" {% if group_id == form.instance.groups.first.id %} selected {% endif %}>{{ group_name }}</option>
+                            {% else %}
+                            <option value="{{ group_id }}" {% if group_id == form.instance.groups.first.id %} selected {% endif %}>{{ group_name }}</option>
+                            {% endif %}
                             {% endfor %}
                         </select>
                     </div>

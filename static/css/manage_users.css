@@ -70,7 +70,7 @@ table th {
     background-color: #f5f5f5;
     color: black;
 }
-.btn-warning, .btn-danger {
+.btn-warning, .btn-danger ,.submit{
     padding: 8px 15px;
     border-radius: 4px;
     text-decoration: none;
@@ -81,7 +81,7 @@ table th {
     background-color:  rgb(7, 7, 44);
     border-color:  rgb(7, 7, 44);
 }
-.btn-danger {
+.btn-danger,.submit {
     background-color:  rgb(7, 7, 44);
     border-color:  rgb(7, 7, 44);
 }
