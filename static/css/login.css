@@ -30,7 +30,7 @@ body, html {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: #007bff;
+    background-color: rgb(7, 7, 44);
     color: white;
     padding: 20px;
 }
@@ -91,7 +91,7 @@ body, html {
 /* Submit button styling */
 .custom-submit {
     width: 100%;
-    background-color: #007bff;
+    background-color: rgb(7, 7, 44);
     color: white;
     padding: 14px 20px;
     margin: 8px 0;
@@ -103,7 +103,7 @@ body, html {
 
 /* Hover effect for the submit button */
 .custom-submit:hover {
-    background-color: #0056b3;
+    background-color: rgb(7, 7, 44);
 }
 
 /* Learn more button styling */

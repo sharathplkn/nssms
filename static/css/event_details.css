@@ -27,7 +27,7 @@
 
 .event-form input[type="submit"],
 .event-form input[type="reset"] {
-    background-color: #007bff;
+    background-color: rgb(7, 7, 44);
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -40,7 +40,7 @@
 
 .event-form input[type="submit"]:hover,
 .event-form input[type="reset"]:hover {
-    background-color: #0056b3;
+    background-color: rgb(7, 7, 44);
 }
 
 .event-form textarea {

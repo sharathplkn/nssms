@@ -20,7 +20,7 @@
 
 .form-container input[type="submit"] {
     padding: 8px 16px;
-    background-color: #007bff;
+    background-color: rgb(7, 7, 44);
     color: #fff;
     border: none;
     border-radius: 4px;

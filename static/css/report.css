@@ -19,7 +19,9 @@ body {
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 5px;
+    text-align: justify;
     background-color: #fff;
+    page-break-inside: avoid; /* Prevent breaking inside event containers */
 }
 
 .event-heading {
@@ -85,20 +87,10 @@ body {
         visibility: visible;
     }
     .print-content {
+        margin: 20px;
         position: absolute;
         left: 0;
         top: 0;
     }
-}
-.buttons{
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    margin-left:90%;
-    border-radius: 5px;
-    padding: 10px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
     
 }

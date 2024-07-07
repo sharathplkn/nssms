@@ -44,7 +44,7 @@
 }
 
 .volunteer-form input[type="submit"] {
-    background-color: #007bff;
+    background-color: rgb(7, 7, 44);
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -55,7 +55,7 @@
 }
 
 .volunteer-form input[type="submit"]:hover {
-    background-color: #0056b3;
+    background-color: rgb(7, 7, 44);
 }
 
 .volunteer-form .radio-group label {

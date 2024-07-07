@@ -32,17 +32,17 @@ class volunteer(models.Model):
     ]
     year=models.IntegerField(choices=year_choices)
     community_choices=[
-        ('st','ST'),('sc','SC'),('general','General'),('obc','OBC')
+        ('ST','ST'),('SC','SC'),('General','General'),('OBC','OBC')
     ]
     community=models.CharField(max_length=15,choices=community_choices)
     address=models.TextField()
     blood_group_choices=[
-        ('a+','A+'),('a-','A-'),('b+','B+'),('b-','B-'),('o+','O+'),('o-','O-'),('ab+','AB+'),('ab-','AB-')
+        ('A+','A+'),('A-','A-'),('B+','B+'),('B-','B-'),('O+','O+'),('O-','O-'),('AB+','AB+'),('AB-','AB-')
     ]
     blood_group=models.CharField(max_length=15,choices=blood_group_choices)
     height=models.IntegerField()
     unit_choices=[
-        ('1','1'),('2','2'),('3','3')
+        ('4','4'),('5','5'),('96','96')
     ]
     unit=models.IntegerField(choices=unit_choices)
     weight=models.IntegerField()

@@ -13,15 +13,15 @@
 <form class="event-form" method="post">
     {% csrf_token %}
     <label for="event_name">Event:</label>
-    <select id="event_name" name="event_name">
-        <option value="" disabled selected>----</option>
+    <select id="event_name" name="event_name" required>
+        <option value="" disabled selected> Select Event</option>
         {% for i in even %}
         <option value="{{i.event_id}}">{{i.event_name}}-{{i.date}}</option>
         {% endfor %}
     </select>
     <br><br>
     <label for="des">Description:</label><br>
-    <textarea id="des" name="des"></textarea>
+    <textarea id="des" name="des" required></textarea>
     <br><br>
     <input type="submit" value="Submit">
     <input type="reset" value="Reset">

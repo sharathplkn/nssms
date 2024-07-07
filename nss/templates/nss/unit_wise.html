@@ -20,11 +20,12 @@
     <label for="time">Number of hours</label>
     <input type="number" name="time" id="time">
     </div>
-    <div class="div1" action="{% url 'attendance'}">
+    <div class="div1">
         {% for i in pog %}
         <div class="program-block">
             {% for k in list %}
             <div class="list-block">
+                
                 <center><span class="year-text" style="background-color: rgb(0, 0, 138); color: white;">{{i.program_name}} - Year {{k}}</span></center><br>
                 {% for j in vol %}
                     {% if i.program_name == j.program.program_name and j.year == k %}

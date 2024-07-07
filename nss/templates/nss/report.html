@@ -8,6 +8,7 @@
 
     {% if event %}
         <div class="print-content">
+
             {% for event_item in event %}
                 <div class="event-container">
                     <h1 class="event-heading" align="center">{{ event_item.event_name | upper }}</h1>

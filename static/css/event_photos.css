@@ -26,7 +26,7 @@ input[type="file"] {
 
 .buttons{
     width: 49%;
-    background-color: #007bff;
+    background-color: rgb(7, 7, 44);
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -38,5 +38,5 @@ input[type="file"] {
 
 input[type="submit"]:hover,
 input[type="reset"]:hover {
-    background-color: #0056b3;
+    background-color: rgb(7, 7, 44);
 }

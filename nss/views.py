@@ -18,6 +18,7 @@ def access_denied(request):
     return render(request, 'nss/acess_denied.html')
 
 @login_required()
+@group_required('po','vs','admin')
 def ns(request):
 #request.session.set_expiry(2)
     events = Event.objects.filter(date__lte=now()).order_by('-date')[:5]
@@ -31,6 +32,7 @@ def ns(request):
     }
     return render(request, 'nss/home.html', context)
 @login_required()
+@group_required('po','vs')
 def add_volunteer(request):
     try:
         prog={
@@ -67,6 +69,7 @@ def add_volunteer(request):
     except Exception:
         return render(request,'nss/error.html')
 @login_required()
+@group_required('po','vs')
 def view_volunteer(request):
     try:
         volunteer_list = volunteer.objects.filter(status='active')
@@ -88,6 +91,7 @@ def view_volunteer(request):
         return render(request,'nss/error.html')
 
 @login_required()
+@group_required('po','vs')
 def view_attendance2(request):
     try:
         volunteer_list = volunteer.objects.all()
@@ -108,6 +112,7 @@ def view_attendance2(request):
     except Exception:
         return render(request,'nss/error.html')
 @login_required()
+@group_required('po','vs')
 def view_attendance(request):
     eve = {
         'even': Attendance_status.objects.all().order_by('date').select_related('event')
@@ -120,6 +125,7 @@ def view_attendance(request):
     return render(request, 'nss/view_attendance.html', eve)
 
 @login_required()
+@group_required('po','vs')
 def volunteer_details(request, volunteer_name):
     try:
         # Assuming you have a Volunteer model with a 'name' field
@@ -135,6 +141,7 @@ def volunteer_details(request, volunteer_name):
     except Exception:
         return render(request,'nss/error.html')
 @login_required()
+@group_required('po','vs')
 def event(request):
     try:
 
@@ -144,6 +151,7 @@ def event(request):
         return render(request,'nss/error.html')
 
 @login_required()
+@group_required('po','vs')
 def add_event(request):
     try:
         if request.method=="POST":
@@ -157,6 +165,7 @@ def add_event(request):
     except Exception:
         return render(request,'nss/error.html')
 @login_required()
+@group_required('po','vs')
 def event_details(request):
     try:
         eve = {
@@ -179,6 +188,7 @@ def event_details(request):
     except Exception:
         return render(request,'nss/error.html')
 @login_required()
+@group_required('po','vs')
 def report(request):
     try:
         report={
@@ -194,6 +204,7 @@ def report(request):
     except Exception:
         return render(request,'nss/error.html')
 @login_required()
+@group_required('po','vs')
 def event_photos(request):
     
     try:
@@ -215,11 +226,16 @@ def event_photos(request):
         return render(request,'nss/add_photos.html',eve)
     except Exception:
         return render(request,'nss/error.html')
+@login_required()
+@group_required('po','vs')
 def event2(request):
     try:
         return render(request,'nss/event2.html')
     except Exception:
         return render(request,'nss/error.html')
+
+@login_required()
+@group_required('po','vs')
 def edit_volunteer(request, pk):
     try:
         Volunteer = get_object_or_404(volunteer, pk=pk)
@@ -280,7 +296,14 @@ def edit_volunteer(request, pk):
     except Exception:
         return render(request,'nss/error.html')
 
+
+
 @login_required()
+@group_required('po','vs')
+
+
+@login_required()
+@group_required('po','vs')
 def delete2(request, pk):
     try:
         vol={
@@ -295,6 +318,7 @@ def delete2(request, pk):
     except Exception:
         return render(request,'nss/error.html')
 @login_required()
+@group_required('po','vs')
 def delete_volunteer(request, pk):
     try:
         Volunteer = get_object_or_404(volunteer, pk=pk)
@@ -303,6 +327,7 @@ def delete_volunteer(request, pk):
     except Exception:
         return render(request,'nss/error.html')
 @login_required()
+@group_required('po','vs')
 def report_list(request):
     try:
         report={
@@ -318,6 +343,7 @@ def report_list(request):
     except Exception:
         return render(request,'nss/error.html')
 @login_required()
+@group_required('po','vs')
 def report_list_more(request,pk):
     try:
         event={
@@ -333,6 +359,7 @@ def report_list_more(request,pk):
     except Exception:
         return render(request,'nss/error.html')
 @login_required()
+@group_required('po','vs')
 def view_event(request):
     try:
         event={
@@ -343,6 +370,7 @@ def view_event(request):
         return render(request,'nss/error.html')
 
 @login_required()
+@group_required('po','vs')
 def delete_event(request,pk):
     try:
         event = get_object_or_404(Event, pk=pk)
@@ -352,6 +380,7 @@ def delete_event(request,pk):
     except Exception:
         return render(request,'nss/error.html')
 @login_required()
+@group_required('po')
 def approve_attendance(request,pk):
     try:
         att=Attendance_status.objects.get(status_id=pk)
@@ -361,6 +390,7 @@ def approve_attendance(request,pk):
     except Exception:
         return render(request,'nss/error.html')
 @login_required()
+@group_required('po')
 def reject_attendance(request,pk):
     try:
         att=Attendance_status.objects.get(status_id=pk)
@@ -369,6 +399,10 @@ def reject_attendance(request,pk):
         return redirect('view_attendance3', status_id=pk) 
     except Exception:
         return render(request,'nss/error.html')
+
+
+@login_required()
+@group_required('po','vs')
 def add_attendance(request):
     try:
         eve = {
@@ -377,6 +411,9 @@ def add_attendance(request):
         return render(request, 'nss/add_attendance.html',eve)
     except Exception:
         return render(request,'nss/error.html')
+
+@login_required()
+@group_required('po','vs')
 def dep_wise(request):
     try:
         if request.method=="POST":
@@ -393,37 +430,39 @@ def dep_wise(request):
             return render(request,'nss/unit_wise.html',dept)
     except Exception:
         return render(request,'nss/error.html')
+
 @login_required()
+@group_required('po','vs')
 def attendance(request,pk,unit):
-    try:
-        if request.method == "POST":
-            date = request.POST.get('date')
+    if request.method == "POST":
+        date = request.POST.get('date')
+        event=Event.objects.get(event_id=pk)
+
+        event = get_object_or_404(Event, event_id=pk)
+        
+        # Check if attendance for this event on the given date already exists
+        existing_attendance = Attendance_status.objects.filter(event=event, date=date,unit=unit).exists()
+        
+        if existing_attendance:
+            
+            message="Attendance for this event on the specified date already exists."
+            return redirect(reverse('unit_wise') +'?message=' + message)
+        
+        id_list = request.POST.getlist('volunteers')
+        time=request.POST.get('time')
+        at_status=Attendance_status(event=event,date=date,unit=unit)
+        at_status.save()
+        for volunteer_id in id_list:
+            volunteer_instance= volunteer.objects.get(volunteer_id=volunteer_id)
+            
+            # Save the attendance record
             event=Event.objects.get(event_id=pk)
+            att = Attendance(Attendance_status=at_status,volunteer=volunteer_instance,date=date,event=event,no_of_hours=time)
+            print(att)           
+            att.save()
 
-            event = get_object_or_404(Event, event_id=pk)
-            
-            # Check if attendance for this event on the given date already exists
-            existing_attendance = Attendance_status.objects.filter(event=event, date=date,unit=unit).exists()
-            
-            if existing_attendance:
-                message="Attendance for this event on the specified date already exists."
-                return redirect(reverse('attendance') +'?message=' + message)
-            
-            id_list = request.POST.getlist('name')
-            time=request.POST.get('time')
-            at_status=Attendance_status(event=event,date=date,unit=unit)
-            at_status.save()
-            for volunteer_id in id_list:
-                volunteer_instance= volunteer.objects.get(volunteer_id=volunteer_id)
+    return redirect('view_attendance')
 
-                # Save the attendance record
-                event=Event.objects.get(event_id=pk)
-                att = Attendance(Attendance_status=at_status,volunteer=volunteer_instance,date=date,event=event,no_of_hours=time)
-                att.save()
-
-        return redirect('view_attendance')
-    except Exception:
-        return render(request,'nss/error.html')
 
 @group_required('po')
 def promote(request):
@@ -440,6 +479,8 @@ def promote(request):
     except Exception:
         return render(request,'nss/error.html')
 
+@login_required
+@group_required('po','vs')
 def more_attendance(request,pk):
     try:
         vol={
@@ -450,6 +491,7 @@ def more_attendance(request,pk):
         return render(request,'nss/error.html')
 
 @login_required()
+@group_required('po','vs')
 def delete_attendance(request,pk):
     try:
         att=get_object_or_404(Attendance_status,status_id=pk)
@@ -458,6 +500,7 @@ def delete_attendance(request,pk):
     except Exception:
         return render(request,'nss/error.html')
 @login_required()
+@group_required('po','vs')
 def delete_images(request,pk,ev):
     try:
         pic=get_object_or_404(Event_Photos,id=pk)
@@ -470,6 +513,7 @@ def delete_images(request,pk,ev):
     except Exception:
         return render(request,'nss/error.html')
 @login_required()
+@group_required('po','vs')
 def edit_event(request,pk):
     eve={
         'eve':Event.objects.filter(event_id=pk)
@@ -491,6 +535,7 @@ def edit_event(request,pk):
         return redirect('view_event')
     return render(request,'nss/edit_event.html',eve)
 @login_required()
+@group_required('po','vs')
 def promote_check(request):
     try:
         return render(request,'nss/promote.html')
@@ -498,6 +543,7 @@ def promote_check(request):
         return render(request,'nss/error.html')
 
 @login_required()
+@group_required('po','vs')
 def monthly_report(request):
     try:
         if request.method=="POST":
@@ -512,6 +558,7 @@ def monthly_report(request):
     except Exception:
         return render(request,'nss/error.html')
 @login_required()
+@group_required('po','vs')
 def yearly_report(request):
     try:
         if request.method=='POST':
@@ -526,12 +573,14 @@ def yearly_report(request):
     except Exception:
         return render(request,'nss/error.html')
 @login_required()
+@group_required('po','vs')
 def select_month(request):
     try:
         return render(request,'nss/select_month.html')
     except Exception:
         return render(request,'nss/error.html')
 @login_required()
+@group_required('po','vs')
 def select_year(request):
     try:
         return render(request,'nss/select_year.html')
@@ -540,6 +589,7 @@ def select_year(request):
 
 
 @login_required()
+@group_required('po','vs')
 def view_attendance3(request,status_id):
     at_status=Attendance_status.objects.get(status_id=status_id)
     res = {

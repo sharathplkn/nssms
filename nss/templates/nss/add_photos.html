@@ -14,8 +14,8 @@
 <form class="event-picture-forms" method="post" action="{% url 'event_photos' %}" enctype="multipart/form-data">
     {% csrf_token %}
     <label for="event_name">Event:</label>
-    <select id="event_name" name="event_name">
-        <option value="" disabled selected>----</option>
+    <select id="event_name" name="event_name" required>
+        <option value="" disabled selected></option>
         {% for i in even %}
         <option value="{{ i.event_name }}">{{ i.event_name }}</option>
         {% endfor %}
@@ -24,7 +24,7 @@
     <h4>Maximum Image Size:500 kb</h4>
     <h4>Maximum Images:3</h4>
     <label for="photo">Image:</label>
-    <input type="file" id="photo" name="photo" accept="image/*" maxlength="500000">
+    <input type="file" id="photo" name="photo" accept="image/*" maxlength="500000" required>
     <input class="buttons" type="submit" value="Upload" onclick="return validateFileSize()">
     <input class="buttons" type="reset" value="Reset">
 </form>

@@ -20,7 +20,7 @@
 }
 
 .link {
-  color: #007bff;
+  color: rgb(7, 7, 44);
   text-decoration: none;
   font-size: 18px;
   transition: color 0.3s;
@@ -32,7 +32,7 @@
 }
 
 .link:hover {
-  color: #0056b3;
+  color: rgb(7, 7, 44);
 }
 
 .card-image {
@@ -44,4 +44,6 @@
 
 .card-text {
   padding: 10px 0;
+  color:rgb(7, 7, 44);
+
 }

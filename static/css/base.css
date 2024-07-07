@@ -51,7 +51,7 @@ body {
 }
 
 .logout-button {
-  background-color: #04083f;
+  background-color: transparent;
   color: #fff;
   border: none;
   margin-bottom: 3px;
@@ -65,6 +65,23 @@ body {
 .logout-button:hover {
   background-color: #1abc9c;
 }
+
+
+.logout{
+  padding: 5px 10px;
+  background-color: transparent; /* White background for a subtle difference */
+  color: white; /* Darker text color */
+  text-decoration: none;
+  border: 1px solid #ddd; /* Thin border for definition */
+  border-radius: 5px; /* Consistent rounded corners */
+  cursor: pointer;
+  &:hover {
+    border-color: #007bff; /* Same blue as other buttons, but only on hover */
+  }
+  
+  /* Optional: Add a small icon beside the text */
+}
+
 
 /* Navigation styles */
 nav {
