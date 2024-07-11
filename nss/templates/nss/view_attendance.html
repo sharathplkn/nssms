@@ -4,8 +4,27 @@
 
 <head>
     <link rel="stylesheet" href="{% static '/css/view_attendance.css'%}">
+    <style>
+        li.error{
+        color: red;
+        list-style-type: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 10vh;
+        font-size: 16px;
+        text-transform: uppercase;
+        font-weight: bolder;
+    }
+    </style>
 </head>
-
+{% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+{% endif %}
 <div class="form-container">
     <form method="post" action="{% url 'view_attendance' %}">
         {% csrf_token %}

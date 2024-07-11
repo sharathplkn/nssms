@@ -17,7 +17,7 @@
     <select id="event_name" name="event_name" required>
         <option value="" disabled selected></option>
         {% for i in even %}
-        <option value="{{ i.event_name }}">{{ i.event_name }}</option>
+        <option value="{{ i.event_id }}">{{ i.event_name }}</option>
         {% endfor %}
     </select>
 

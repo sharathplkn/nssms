@@ -4,11 +4,12 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import *
 from django.contrib.auth.models import Group,User
 from django.db import connection
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .decorators import group_required 
 from datetime import datetime
 from .filters import *
-from .forms import UserForm, GroupForm ,  UserForm2
+from .forms import UserForm, GroupForm ,  UserForm2, UserForm3,UserForm4
 import os
 from django.template.loader import get_template
 from django.utils.timezone import now
@@ -20,7 +21,7 @@ def access_denied(request):
 @login_required()
 @group_required('po','vs','admin')
 def ns(request):
-#request.session.set_expiry(2)
+
     events = Event.objects.filter(date__lte=now()).order_by('-date')[:5]
     volunteers = volunteer.objects.all()
     pending_approvals = Attendance_status.objects.filter(status="pending for approval")
@@ -444,24 +445,24 @@ def attendance(request,pk,unit):
         existing_attendance = Attendance_status.objects.filter(event=event, date=date,unit=unit).exists()
         
         if existing_attendance:
-            
-            message="Attendance for this event on the specified date already exists."
-            return redirect(reverse('unit_wise') +'?message=' + message)
-        
-        id_list = request.POST.getlist('volunteers')
-        time=request.POST.get('time')
-        at_status=Attendance_status(event=event,date=date,unit=unit)
-        at_status.save()
-        for volunteer_id in id_list:
-            volunteer_instance= volunteer.objects.get(volunteer_id=volunteer_id)
-            
-            # Save the attendance record
-            event=Event.objects.get(event_id=pk)
-            att = Attendance(Attendance_status=at_status,volunteer=volunteer_instance,date=date,event=event,no_of_hours=time)
-            print(att)           
-            att.save()
+            status_id = Attendance_status.objects.get(event=event, date=date, unit=unit).status_id
+            messages.error(request,f"Attendance for the event {event} on the date {date} already exists.")
+        else:
+            id_list = request.POST.getlist('volunteers')
+            time=request.POST.get('time')
+            at_status=Attendance_status(event=event,date=date,unit=unit)
+            at_status.save()
+            for volunteer_id in id_list:
+                volunteer_instance= volunteer.objects.get(volunteer_id=volunteer_id)
+                
+                # Save the attendance record
+                event=Event.objects.get(event_id=pk)
+                att = Attendance(Attendance_status=at_status,volunteer=volunteer_instance,date=date,event=event,no_of_hours=time)
+                print(att)           
+                att.save()
 
     return redirect('view_attendance')
+        
 
 
 @group_required('po')
@@ -607,14 +608,23 @@ def view_attendance3(request,status_id):
 @group_required('admin','po')
 def manage_users(request):
     groups = Group.objects.all()
-    users = User.objects.all()
+    
     if request.method == 'POST':
-        form = UserForm(request.POST)
+        if request.user.groups.filter(name='admin').exists():
+            form = UserForm(request.POST)
+        else:
+            form=UserForm3(request.POST)
         if form.is_valid():
             form.save()
             return redirect('manage_users')
     else:
-        form = UserForm()
+        if request.user.groups.filter(name='admin').exists():
+            form = UserForm()
+            users = User.objects.all()
+        else:
+            group_vs = Group.objects.get(name='vs')
+            users = User.objects.filter(groups=group_vs)
+            form=UserForm3
     return render(request, 'admin/manage_users.html', {'groups': groups,'users': users, 'form': form})
 
 @login_required()
@@ -636,12 +646,18 @@ def manage_groups(request):
 def edit_user(request, pk):
     user = get_object_or_404(User, pk=pk)
     if request.method == 'POST':
-        form = UserForm2(request.POST, instance=user)
+        if request.user.groups.filter(name='admin').exists():
+            form = UserForm2(request.POST, instance=user)
+        else:
+            form = UserForm4(request.POST, instance=user)
         if form.is_valid():
             form.save()
             return redirect('manage_users')
     else:
-        form = UserForm2(instance=user)
+        if request.user.groups.filter(name='admin').exists():
+            form = UserForm2(instance=user)
+        else:
+            form=UserForm4(instance=user)
     return render(request, 'admin/edit_user.html', {'form': form})
 
 @login_required()
