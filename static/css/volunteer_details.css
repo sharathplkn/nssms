@@ -20,8 +20,16 @@ tr:hover {
 
 
 
-#link {
+#back{
     display: block;
     margin-top: 20px;
     text-align: center; /* Center the link */
+    background-color: rgb(7, 7, 44);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
 }

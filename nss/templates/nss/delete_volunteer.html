@@ -38,7 +38,7 @@
 {% endfor %}
 <br>
 <center>
-<a class="button" href="{% url 'view_volunteer' %}" >Back to Volunteer List</a>
+<button id="back" onclick="history.back(-1)">Go Back</button>
 {% for i in voluntee %}
 <a class="button" href="{% url 'delete_volunteer' pk=i.volunteer_id %}" onclick="return confirm('Are you sure you want to delete?')">Delete</a>
 {% endfor %}

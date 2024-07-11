@@ -27,8 +27,9 @@
         <tr><th>Roll_no</th><td colspan="2">{{ i.roll_no }}</td></tr>
         <tr><th>Cultural talents</th><td colspan="2">{{ i.cultural_talents }}</td></tr>
         <tr><th>Hobbies</th><td colspan="2">{{ i.hobbies }}</td></tr>
-        <tr><th>Events Participated</th><td><a href="{% url 'more_attendance' i.volunteer_id %}">view</a></td></tr>
+        <tr><th>Events Participated</th><td colspan="2"><a href="{% url 'more_attendance' i.volunteer_id %}">view</a></td></tr>
+        <tr><td colspan="3"><button id="back" onclick="history.back(-1)">Go Back</button></td></tr>
     </table>
 {% endfor %}
-<a id="link" href="{% url 'view_volunteer' %}" style="color: blue; text-decoration: underline;">Back to Volunteer List</a>
+
 {% endblock %}
