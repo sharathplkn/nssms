@@ -21,17 +21,19 @@ def access_denied(request):
 @login_required()
 @group_required('po','vs','admin')
 def ns(request):
-
-    events = Event.objects.filter(date__lte=now()).order_by('-date')[:5]
-    volunteers = volunteer.objects.all()
-    pending_approvals = Attendance_status.objects.filter(status="pending for approval")
-    
-    context = {
-        'events': events,
-        'volunteers': volunteers,
-        'pending_approvals': pending_approvals
-    }
-    return render(request, 'nss/home.html', context)
+    try:
+        events = Event.objects.filter(date__lte=now()).order_by('-date')[:5]
+        volunteers = volunteer.objects.all()
+        pending_approvals = Attendance_status.objects.filter(status="pending for approval")
+        
+        context = {
+            'events': events,
+            'volunteers': volunteers,
+            'pending_approvals': pending_approvals
+        }
+        return render(request, 'nss/home.html', context)
+    except Exception:
+        return render(request,'nss/error.html')
 @login_required()
 @group_required('po','vs')
 def add_volunteer(request):
@@ -115,16 +117,18 @@ def view_attendance2(request):
 @login_required()
 @group_required('po','vs')
 def view_attendance(request):
-    eve = {
-        'even': Attendance_status.objects.all().order_by('date').select_related('event')
-    }
-    
-    if request.method == "POST":
-        at_status_id = request.POST.get('event')
-        return redirect('view_attendance3', status_id=at_status_id)
+    try:
+        eve = {
+            'even': Attendance_status.objects.all().order_by('date').select_related('event')
+        }
         
-    return render(request, 'nss/view_attendance.html', eve)
-
+        if request.method == "POST":
+            at_status_id = request.POST.get('event')
+            return redirect('view_attendance3', status_id=at_status_id)
+            
+        return render(request, 'nss/view_attendance.html', eve)
+    except Exception:
+        return render(request,'nss/error.html')
 @login_required()
 @group_required('po','vs')
 def volunteer_details(request, volunteer_name):
@@ -300,10 +304,6 @@ def edit_volunteer(request, pk):
 
 @login_required()
 @group_required('po','vs')
-
-
-@login_required()
-@group_required('po','vs')
 def delete2(request, pk):
     try:
         vol={
@@ -434,35 +434,37 @@ def dep_wise(request):
 @login_required()
 @group_required('po','vs')
 def attendance(request,pk,unit):
-    if request.method == "POST":
-        date = request.POST.get('date')
-        event=Event.objects.get(event_id=pk)
+    try:
+        if request.method == "POST":
+            date = request.POST.get('date')
+            event=Event.objects.get(event_id=pk)
 
-        event = get_object_or_404(Event, event_id=pk)
-        
-        # Check if attendance for this event on the given date already exists
-        existing_attendance = Attendance_status.objects.filter(event=event, date=date,unit=unit).exists()
-        
-        if existing_attendance:
-            status_id = Attendance_status.objects.get(event=event, date=date, unit=unit).status_id
-            messages.error(request,f"Attendance for the event {event} on the date {date} already exists.")
-        else:
-            id_list = request.POST.getlist('volunteers')
-            time=request.POST.get('time')
-            at_status=Attendance_status(event=event,date=date,unit=unit)
-            at_status.save()
-            for volunteer_id in id_list:
-                volunteer_instance= volunteer.objects.get(volunteer_id=volunteer_id)
-                
-                # Save the attendance record
-                event=Event.objects.get(event_id=pk)
-                att = Attendance(Attendance_status=at_status,volunteer=volunteer_instance,date=date,event=event,no_of_hours=time)
-                print(att)           
-                att.save()
+            event = get_object_or_404(Event, event_id=pk)
+            
+            # Check if attendance for this event on the given date already exists
+            existing_attendance = Attendance_status.objects.filter(event=event, date=date,unit=unit).exists()
+            
+            if existing_attendance:
+                status_id = Attendance_status.objects.get(event=event, date=date, unit=unit).status_id
+                messages.error(request,f"Attendance for the event {event} on the date {date} already exists.")
+            else:
+                id_list = request.POST.getlist('volunteers')
+                time=request.POST.get('time')
+                at_status=Attendance_status(event=event,date=date,unit=unit)
+                at_status.save()
+                for volunteer_id in id_list:
+                    volunteer_instance= volunteer.objects.get(volunteer_id=volunteer_id)
+                    
+                    # Save the attendance record
+                    event=Event.objects.get(event_id=pk)
+                    att = Attendance(Attendance_status=at_status,volunteer=volunteer_instance,date=date,event=event,no_of_hours=time)
+                    print(att)           
+                    att.save()
 
-    return redirect('view_attendance')
+        return redirect('view_attendance')
         
-
+    except Exception:
+        return render(request,'nss/error.html')
 
 @group_required('po')
 def promote(request):
@@ -515,12 +517,13 @@ def delete_images(request,pk,ev):
 @login_required()
 @group_required('po','vs')
 def edit_event(request,pk):
+
     eve={
         'eve':Event.objects.filter(event_id=pk)
     }
     ev=Event.objects.get(event_id=pk)
     event_Photos = Event_Photos.objects.filter(event=ev)
-    event_details = Event_details.objects.get(event=ev)
+    event_details = Event_details.objects.filter(event=ev)
     event1 = get_object_or_404(Event, pk=pk)
     if request.method=='POST':
         event_name=request.POST.get('event_name')
@@ -534,6 +537,7 @@ def edit_event(request,pk):
         event1.save()
         return redirect('view_event')
     return render(request,'nss/edit_event.html',eve)
+
 @login_required()
 @group_required('po','vs')
 def promote_check(request):
@@ -591,103 +595,118 @@ def select_year(request):
 @login_required()
 @group_required('po','vs')
 def view_attendance3(request,status_id):
-    at_status=Attendance_status.objects.get(status_id=status_id)
-    res = {
-        'resul': Attendance.objects.filter(Attendance_status=at_status).order_by('date').select_related('volunteer')
-    }
-    status={
-        'status':Attendance_status.objects.get(status_id=status_id)
-    }
-    return render(request, 'nss/view_attendance3.html',{**status,**res,'status_id': status_id})
-
+    try:
+        at_status=Attendance_status.objects.get(status_id=status_id)
+        res = {
+            'resul': Attendance.objects.filter(Attendance_status=at_status).order_by('date').select_related('volunteer')
+        }
+        status={
+            'status':Attendance_status.objects.get(status_id=status_id)
+        }
+        return render(request, 'nss/view_attendance3.html',{**status,**res,'status_id': status_id})
+    except Exception:
+        return render(request,'nss/error.html')
 
 # ADMIN VIEWS
 
 @login_required
 @group_required('admin','po')
 def manage_users(request):
-    groups = Group.objects.all()
-    
-    if request.method == 'POST':
-        if request.user.groups.filter(name='admin').exists():
-            form = UserForm(request.POST)
+    try:
+        groups = Group.objects.all()
+        
+        if request.method == 'POST':
+            if request.user.groups.filter(name='admin').exists():
+                form = UserForm(request.POST)
+            else:
+                form=UserForm3(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('manage_users')
         else:
-            form=UserForm3(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('manage_users')
-    else:
-        if request.user.groups.filter(name='admin').exists():
-            form = UserForm()
-            users = User.objects.all()
-        else:
-            group_vs = Group.objects.get(name='vs')
-            users = User.objects.filter(groups=group_vs)
-            form=UserForm3
-    return render(request, 'admin/manage_users.html', {'groups': groups,'users': users, 'form': form})
-
+            if request.user.groups.filter(name='admin').exists():
+                form = UserForm()
+                users = User.objects.all()
+            else:
+                group_vs = Group.objects.get(name='vs')
+                users = User.objects.filter(groups=group_vs)
+                form=UserForm3
+        return render(request, 'admin/manage_users.html', {'groups': groups,'users': users, 'form': form})
+    except Exception:
+        return render(request,'nss/error.html')
 @login_required()
 @group_required('admin')
 def manage_groups(request):
-    groups = Group.objects.all()
-    if request.method == 'POST':
-        form = GroupForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('manage_groups')
-    else:
-        form = GroupForm()
-    return render(request, 'admin/manage_groups.html', {'groups': groups, 'form': form})
+    try:
+        groups = Group.objects.all()
+        if request.method == 'POST':
+            form = GroupForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('manage_groups')
+        else:
+            form = GroupForm()
+        return render(request, 'admin/manage_groups.html', {'groups': groups, 'form': form})
 
-
+    except Exception:
+        return render(request,'nss/error.html')
 @login_required()
 @group_required('admin','po')
 def edit_user(request, pk):
-    user = get_object_or_404(User, pk=pk)
-    if request.method == 'POST':
-        if request.user.groups.filter(name='admin').exists():
-            form = UserForm2(request.POST, instance=user)
+    try:
+        user = get_object_or_404(User, pk=pk)
+        if request.method == 'POST':
+            if request.user.groups.filter(name='admin').exists():
+                form = UserForm2(request.POST, instance=user)
+            else:
+                form = UserForm4(request.POST, instance=user)
+            if form.is_valid():
+                form.save()
+                return redirect('manage_users')
         else:
-            form = UserForm4(request.POST, instance=user)
-        if form.is_valid():
-            form.save()
-            return redirect('manage_users')
-    else:
-        if request.user.groups.filter(name='admin').exists():
-            form = UserForm2(instance=user)
-        else:
-            form=UserForm4(instance=user)
-    return render(request, 'admin/edit_user.html', {'form': form})
-
+            if request.user.groups.filter(name='admin').exists():
+                form = UserForm2(instance=user)
+            else:
+                form=UserForm4(instance=user)
+        return render(request, 'admin/edit_user.html', {'form': form})
+    except Exception:
+        return render(request,'nss/error.html')
 @login_required()
 @group_required('admin')
 def edit_group(request, pk):
-    group = get_object_or_404(Group, pk=pk)
-    if request.method == 'POST':
-        form = GroupForm(request.POST, instance=group)
-        if form.is_valid():
-            form.save()
-            return redirect('manage_groups')
-    else:
-        form = GroupForm(instance=group)
-    return render(request, 'admin/edit_group.html', {'form': form})
-
+    try:
+        group = get_object_or_404(Group, pk=pk)
+        if request.method == 'POST':
+            form = GroupForm(request.POST, instance=group)
+            if form.is_valid():
+                form.save()
+                return redirect('manage_groups')
+        else:
+            form = GroupForm(instance=group)
+        return render(request, 'admin/edit_group.html', {'form': form})
+    except Exception:
+        return render(request,'nss/error.html')
 
 @login_required()
 @group_required('admin','po')
 def delete_user(request, pk):
-    user = get_object_or_404(User, pk=pk)
-    if request.method == 'POST':
-        user.delete()
-        return redirect('manage_users')
-    return render(request, 'admin/confirm_delete.html', {'object': user})
-
+    try:
+        user = get_object_or_404(User, pk=pk)
+        if request.method == 'POST':
+            user.delete()
+            return redirect('manage_users')
+        return render(request, 'admin/confirm_delete.html', {'object': user})
+    except Exception:
+        return render(request,'nss/error.html')
 
 @login_required()
 @group_required('admin')
 def delete_group(request, pk):
-    group = get_object_or_404(Group, pk=pk)
-    if request.method == 'POST':
-        group.delete()
-        return redirect('manage_groups')
-    return render(request, 'admin/confirm_delete.html', {'object': group})
+    try:
+        group = get_object_or_404(Group, pk=pk)
+        if request.method == 'POST':
+            group.delete()
+            return redirect('manage_groups')
+        return render(request, 'admin/confirm_delete.html', {'object': group})
+    except Exception:
+        return render(request,'nss/error.html')

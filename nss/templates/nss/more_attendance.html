@@ -16,5 +16,6 @@
     <tr><td>{{attendance.event.event_name|title}}</td><td>{{attendance.event.date}}</td><td>{{attendance.no_of_hours}}</td></tr>
     {% endfor %}
 {%  endfor %}
+<tr><td colspan="3"><button id="back" onclick="history.back(-1)">Go Back</button></td></tr>
 </table>
 {% endblock %}

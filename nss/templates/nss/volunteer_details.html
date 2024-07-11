@@ -10,7 +10,7 @@
 
 {% for i in voluntee %}
     <table>
-        <tr><th>Name</th><td>{{ i.name }}</td><td rowspan="4"><img src="{{ i.image.url }}" alt="Volunteer Image" height="100px" width="100px"></td></tr>
+        <tr><th>Name</th><td>{{ i.name }}</td><td rowspan="4" align="center"><img src="{{ i.image.url }}" alt="Volunteer Image" height="120px" width="100px"></td></tr>
         <tr><th>Fathers/Guardian Name</th><td>{{ i.guard_name }}</td></tr>
         <tr><th>Fathers/Guardian Mobile-No</th><td>{{ i.guard_mob_no }}</td></tr>
         <tr><th>Sex</th><td>{{ i.sex }}</td></tr>
