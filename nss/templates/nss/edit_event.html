@@ -36,7 +36,7 @@ attendance
     {% if i.eventphotos %}
     {% for j in i.eventphotos.all %}
     {% if j.photo %}
-    <a href="{{j.photo.url}}">Image {{forloop.counter}} </a> -- <a href="{% url 'delete_images' j.id i.event_id %}"
+    <a href="{{j.photo.url}}" target="_blank">Image {{forloop.counter}} </a> -- <a href="{% url 'delete_images' j.id i.event_id %}"
         onclick="return confirm('Are you sure you want to delete?')"> Delete</a><br>
     {% endif %}
     {% endfor %}

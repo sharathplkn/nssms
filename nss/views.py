@@ -207,15 +207,14 @@ def report(request):
 @login_required()
 @group_required('po','vs')
 def event_photos(request):
-    
     try:
         eve = {
             'even': Event.objects.all().order_by('date').values()
         }
         if request.method == "POST" and request.FILES:
             photo=request.FILES.get('photo')
-            event=request.POST.get('event_name')
-            event_id=Event.objects.get(event_name=event)
+            event_id=request.POST.get('event_name')
+            event_id=Event.objects.get(event_id=event_id)
             if Event_Photos.objects.filter(event=event_id).count() >= 3:
                 message = "Three images are already uploaded for this event."
                 return redirect(reverse('event_photos') + '?message1=' + message)
