@@ -16,7 +16,11 @@
     text-transform: capitalize;
     margin-bottom: 20px;
 }
-
+.reportimg{
+    width: 100%;
+    height: auto;
+    top: 0;
+}
 .event-date {
     font-size: 18px;
     font-weight: bold;
@@ -62,6 +66,9 @@
         position: absolute;
         left: 0;
         top: 0;
+    }
+    .event-container{
+        border: none;
     }
 }
 .buttons{

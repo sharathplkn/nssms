@@ -187,7 +187,10 @@ def event_details(request):
                 message="Submitted Successfully"
                 return redirect(reverse('event_details') + '?message1=' + message)
             else:
-                message="Already Exist"
+                ev=Event_details.object.get(event=event_id)
+                ev.des=des
+                ev.save()
+                message="Submitted Successfully"
                 return redirect(reverse('event_details') + '?message2=' + message)
         return render(request,'nss/event_details.html',eve)
     except Exception:
@@ -566,10 +569,9 @@ def monthly_report(request):
 def yearly_report(request):
     try:
         if request.method=='POST':
-            year=request.POST.get('year')
-            print(f"Year received: {year}")  # Add a debug print statement
-            print(f"Year received: {year}, type: {type(year)}")
-            events = Event.objects.filter(date__year=year)
+            fromyear=request.POST.get('fromyear')
+            toyear=request.POST.get('toyear')
+            events = Event.objects.filter(date__gte=fromyear, date__lte=toyear)
             print(events)  # Add a debug print statement
             details = Event_details.objects.filter(event__in=events)
             pics = Event_Photos.objects.filter(event__in=events)
@@ -710,3 +712,8 @@ def delete_group(request, pk):
         return render(request, 'admin/confirm_delete.html', {'object': group})
     except Exception:
         return render(request,'nss/error.html')
+
+
+def camp(request):
+    
+    return render(request,'camp/camp.html')

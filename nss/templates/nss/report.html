@@ -11,6 +11,9 @@
 
             {% for event_item in event %}
                 <div class="event-container">
+                    <div class="header-content">
+                        <img src="{% static '/images/banner2.png' %}" class="reportimg"> 
+                    </div>
                     <h1 class="event-heading" align="center">{{ event_item.event_name | upper }}</h1>
                     <div class="event-date">{{ event_item.date }}</div>
                     <div class="event-description">

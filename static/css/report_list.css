@@ -15,7 +15,11 @@ th, td {
     padding: 10px;
     text-align: left;
 }
-
+.reportimg{
+    width: 100%;
+    height: auto;
+    top: 0;
+}
 th {
     background-color: rgb(7, 7, 44);
     color: #fff;

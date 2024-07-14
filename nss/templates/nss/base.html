@@ -68,7 +68,13 @@
         {% endif %}
         {% if is_po_group %}
         <li><a href="{% url 'promote_check' %}">Promote</a></li>
+        <li class="dropdown">
+          <a href="{% url 'camp' %}">Camp</a>
+        <div class="dropdown-content">
+
+        </div>
         {% endif %}
+        </li>
         <li>
           <form  method="post" action="{% url 'logout' %}">
             {% csrf_token %}
