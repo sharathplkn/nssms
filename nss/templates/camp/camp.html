@@ -8,9 +8,21 @@
 </head>
   <div style="display: flex; justify-content: center; gap: 20px;">
     <div class="card">
-      <a href="#" class="link">
+      <a href="{% url 'add_camp' %}" class="link">
+        <img src="{% static '/images/eventpic.jpg' %}" alt="Event Pictures" class="card-image">
+        <div class="card-text">Add Camp</div>
+      </a>
+    </div>
+    <div class="card">
+      <a href="{% url 'campattendance' %}" class="link">
         <img src="{% static '/images/eventdet.png' %}" alt="Event Details" class="card-image">
         <div class="card-text">Attendance</div>
+      </a>
+    </div>
+    <div class="card">
+      <a href="#" class="link">
+        <img src="{% static '/images/eventpic.jpg' %}" alt="Event Pictures" class="card-image">
+        <div class="card-text">Camp Event</div>
       </a>
     </div>
     <div class="card">

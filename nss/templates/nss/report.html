@@ -8,7 +8,7 @@
 
     {% if event %}
         <div class="print-content">
-
+            <img src="{% static 'images/nss.png' %}" alt="Watermark" class="watermark">
             {% for event_item in event %}
                 <div class="event-container">
                     <div class="header-content">
@@ -16,6 +16,7 @@
                     </div>
                     <h1 class="event-heading" align="center">{{ event_item.event_name | upper }}</h1>
                     <div class="event-date">{{ event_item.date }}</div>
+
                     <div class="event-description">
                         {% for detail_item in details %}
                             {% if detail_item.event.event_id == event_item.event_id %}
@@ -23,6 +24,7 @@
                             {% endif %}
                         {% endfor %}
                     </div>
+
                     <div class="image-gallery">
                         {% for pic_item in pics %}
                             {% if pic_item.photo %}

@@ -44,5 +44,8 @@ urlpatterns=[
     path('edit_group/<int:pk>/', views.edit_group, name='edit_group'),
     path('delete_user/<int:pk>/', views.delete_user, name='delete_user'),
     path('delete_group/<int:pk>/', views.delete_group, name='delete_group'),
-    path('camp',views.camp,name='camp')
+    path('camp',views.camp,name='camp'),
+    path('addcamp',views.addcamp,name='add_camp'),
+    path('campattendance',views.campattendance,name='campattendance'),
+    path('addcampattendance',views.add_camp_attendance,name='addcampattendance'),
 ]

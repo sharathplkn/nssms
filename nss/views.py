@@ -717,3 +717,47 @@ def delete_group(request, pk):
 def camp(request):
     
     return render(request,'camp/camp.html')
+
+def addcamp(request):
+    if request.method=="POST":
+        camp_name=request.POST.get('camp_name')
+        fromdate=request.POST.get('fromdate')
+        todate=request.POST.get('todate')
+        ca=Camp(camp_name=camp_name,fromdate=fromdate,todate=todate)
+        ca.save()
+        message="Submitted Successfully"
+        return redirect(reverse('add_camp') + '?message=' + message)
+    return render(request,'camp/add_camp.html')
+
+
+def campattendance(request):
+    dept={
+        'pog':Programme.objects.all(),
+        'vol':volunteer.objects.filter(status='active'),
+        'list':[2],
+        'camps':Camp.objects.all()
+       }
+    return render(request,'camp/campattendance.html',dept)
+
+
+
+def add_camp_attendance(request):
+    if request.method == "POST":
+        camp = request.POST.get('camp')
+        camp=Camp.objects.get(camp_id=camp)
+        # Check if attendance for this event on the given date already exists
+        existing_attendance = Camp_Attendance.objects.filter(camp=camp).exists()
+        
+        if existing_attendance:
+            message = "Attendance Exists"
+            return redirect(reverse('campattendance') + '?message1=' + message)
+        else:
+            id_list = request.POST.getlist('volunteers')
+            for volunteer_id in id_list:
+                volunteer_instance= volunteer.objects.get(volunteer_id=volunteer_id)
+                # Save the attendance record
+                att = Camp_Attendance(camp=camp,volunteer=volunteer_instance)
+                print(att)           
+                att.save()
+            message = "Attendance Added"
+            return redirect(reverse('campattendance') + '?message2=' + message)

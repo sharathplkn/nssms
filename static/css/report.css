@@ -82,6 +82,18 @@ body {
     border-radius: 5px;
     cursor: pointer;
 }
+.watermark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.1;
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+    visibility:hidden;
+}
+
 @media print {
     .no-print {
         display: none !important;
@@ -101,5 +113,14 @@ body {
     .event-container{
         border: none;
     }
-    
+    .watermark {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 0.1;
+        pointer-events: none;
+        user-select: none;
+        z-index: 0;
+    }
 }
