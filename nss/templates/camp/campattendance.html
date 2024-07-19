@@ -17,8 +17,9 @@
         {% if request.GET.message2 %}
         <p align="center" style="color:green">{{ request.GET.message2 }}</p>
         {% endif %}
+        <label for="camp"><b>Camp:</b></label>
         <select name="camp" id="camp" required>
-            <option value="" selected disabled></option>
+            <option value="" selected disabled>Select Camp</option>
             {% for i in camps%}
                 <option value="{{i.camp_id}}">{{i.camp_name}}</option>
             {% endfor %}

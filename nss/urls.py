@@ -2,8 +2,8 @@ from django.urls import path
 from . import views
 
 urlpatterns=[
-    path('access-denied/', views.access_denied, name='access_denied'),
-    path('',views.ns,name='ns'),
+    path('',views.launch,name='launch'),
+    path('home',views.ns,name='ns'),
     path('nss',views.add_volunteer,name='add_volunteer'),
     path('event',views.event,name='event'),
     path('event_details',views.event_details,name='event_details'),
@@ -21,6 +21,7 @@ urlpatterns=[
     path('volunteer/<int:pk>/delete/', views.delete_volunteer, name='delete_volunteer'),
     path('report_list',views.report_list,name='report_list'),
     path('report_list_more/<int:pk>/',views.report_list_more,name='report_list_more'),
+    path('report_list_more_camp/<int:pk>/',views.report_list_more_camp,name='report_list_more_camp'),
     path('view_event',views.view_event,name='view_event'),
     path('edit_event/<int:pk>/',views.edit_event,name='edit_event'),
     path('delete_event/<int:pk>/',views.delete_event,name='delete_event'),
@@ -50,9 +51,10 @@ urlpatterns=[
     path('addcampattendance',views.add_camp_attendance,name='addcampattendance'),
     path('campevent',views.camp_event, name='campevent'),
     path('addcampevent/', views.add_camp_event, name='add_camp_event'),
-    #path('campphotos',views.camp_photos,name='campphotos'),
     path('camp_photo/', views.camp_photo, name='camp_photo'),
-    path('camp_event_view/', views.view_event, name='camp_event_view'),
+    path('camp_event_view/', views.view_camp_event, name='camp_event_view'),
     path('edit_camp_event/<int:pk>/', views.edit_camp_event, name='edit_camp_event'),
-    path('delete_camp_images/<int:pk>/<int:ev>/', views.delete_camp_images, name='delete_camp_images'),    
+    path('delete_camp_event/<int:pk>/', views.delete_camp_event, name='delete_camp_event'),
+    path('delete_camp_images/<int:pk>/<int:ev>/', views.delete_camp_images, name='delete_camp_images'),  
+    path('camp_report',views.camp_report,name='camp_report') , 
     ]

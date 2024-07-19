@@ -15,8 +15,8 @@ from django.template.loader import get_template
 from django.utils.timezone import now
 from django.conf import settings
 
-def access_denied(request):
-    return render(request, 'nss/acess_denied.html')
+def launch(request):
+    return render(request,'launch.html')
 
 @login_required()
 @group_required('po','vs','admin')
@@ -179,16 +179,18 @@ def event_details(request):
         if request.method=="POST":
             event_id=request.POST.get('event_name')
             des=request.POST.get('des')
+            expense=request.POST.get('expense')
             event_id=Event.objects.get(event_id=event_id)
             event_exists = Event_details.objects.filter(event=event_id).exists()
             if not event_exists:
-                ev=Event_details(event=event_id,des=des)
+                ev=Event_details(event=event_id,des=des,expense=expense)
                 ev.save()
                 message="Submitted Successfully"
                 return redirect(reverse('event_details') + '?message1=' + message)
             else:
                 ev=Event_details.object.get(event=event_id)
                 ev.des=des
+                ev.expense=expense
                 ev.save()
                 message="Submitted Successfully"
                 return redirect(reverse('event_details') + '?message2=' + message)
@@ -713,11 +715,14 @@ def delete_group(request, pk):
     except Exception:
         return render(request,'nss/error.html')
 
-
+@login_required()
+@group_required('po','vs')
 def camp(request):
     
     return render(request,'camp/camp.html')
 
+@login_required()
+@group_required('po','vs')
 def addcamp(request):
     if request.method=="POST":
         camp_name=request.POST.get('camp_name')
@@ -729,7 +734,8 @@ def addcamp(request):
         return redirect(reverse('add_camp') + '?message=' + message)
     return render(request,'camp/add_camp.html')
 
-
+@login_required()
+@group_required('po','vs')
 def campattendance(request):
     dept={
         'pog':Programme.objects.all(),
@@ -740,7 +746,8 @@ def campattendance(request):
     return render(request,'camp/campattendance.html',dept)
 
 
-
+@login_required()
+@group_required('po','vs')
 def add_camp_attendance(request):
     if request.method == "POST":
         camp = request.POST.get('camp')
@@ -762,12 +769,14 @@ def add_camp_attendance(request):
             message = "Attendance Added"
             return redirect(reverse('campattendance') + '?message2=' + message)
 
-
+@login_required()
+@group_required('po','vs')
 def camp_event(request):
     
     return render(request,'camp/campevent.html')
 
-
+@login_required()
+@group_required('po','vs')
 def add_camp_event(request):
 
     camp={
@@ -786,96 +795,113 @@ def add_camp_event(request):
     return render(request, 'camp/add_camp_event.html',camp)
 
 
-    
+@login_required()
+@group_required('po','vs')
 def campevent(request):
     return render(request,'camp/campuploads.html')
 
     
 
+@login_required()
+@group_required('po','vs')
 def camp_photo(request):
-        # Fetch events related to Camp_event_details
-    camp_events = Camp_event.objects.select_related('event').order_by('event__date').values('event__event_id', 'event__event_name', 'event__date')
-    
     eve = {
-        'camp_event_details': camp_events
+        'even': Camp_event.objects.all().order_by('date').values()
     }
-
     if request.method == "POST" and request.FILES:
-        photo = request.FILES.get('photo')
-        event_id = request.POST.get('event_name')
-
-        if not event_id:
-            message = "Please select an event."
-            return redirect(reverse('camp_photo') + '?message1=' + message)
-
-        try:
-            event = Event.objects.get(event_id=event_id)
-        except Event.DoesNotExist:
-            message = "Selected event does not exist."
-            return redirect(reverse('camp_photo') + '?message1=' + message)
-
-        if Camp_event_photos.objects.filter(event=event).count() >= 3:
+        photo=request.FILES.get('photo')
+        event_id=request.POST.get('event_name')
+        event_id=Camp_event.objects.get(event_id=event_id)
+        if Camp_event_photos.objects.filter(event=event_id).count() >= 3:
             message = "Three images are already uploaded for this event."
             return redirect(reverse('camp_photo') + '?message1=' + message)
         else:
-            ev = Camp_event_photos(photo=photo, event=event)
+            ev=Camp_event_photos(photo=photo,event=event_id)
             ev.save()
-            message = "Uploaded Successfully"
+            message = "Uploaded Sucessfully"
             return redirect(reverse('camp_photo') + '?message2=' + message)
-
-    return render(request, 'camp/camp_photo.html', eve)
+    return render(request,'camp/camp_photo.html',eve)
 
     
     
+@login_required()
+@group_required('po','vs')
+def view_camp_event(request):
 
-def view_event(request):
-    try:
-        event = {
-            'camp_events': Camp_event_details.objects.select_related('event').all()
-        }
-        return render(request, 'camp/camp_view_event.html', event)
-    except Exception as e:
-        print(e)
-        return render(request, 'nss/error.html')
-    
-    
-def edit_camp_event(request, pk):
-    event = get_object_or_404(Event, pk=pk)
-    camp_event_details = get_object_or_404(Camp_event_details, event=event)
-
-    if request.method == 'POST':
-        event_name = request.POST.get('event_name')
-        date = request.POST.get('date')
-        description = request.POST.get('description')
-
-        # Update the event and camp event details
-        event.event_name = event_name
-        event.date = date
-        camp_event_details.des = description
-
-        event.save()
-        camp_event_details.save()
-
-        message = "Updated Successfully"
-        return redirect(reverse('edit_camp_event', args=[pk]) + '?message=' + message)
-
-    context = {
-        'event': event,
-        'camp_event_details': camp_event_details
+    event = {
+        'camp_events': Camp_event.objects.select_related('camp').all()
     }
-    return render(request, 'camp/edit_camp_event.html', context)
+    return render(request, 'camp/camp_view_event.html', event)
+    
+    
+@login_required()
+@group_required('po','vs')
+def edit_camp_event(request,pk):
 
+    eve={
+        'eve':Camp_event.objects.filter(event_id=pk)
+    }
+    ev=Camp_event.objects.get(event_id=pk)
+    event_Photos = Camp_event_photos.objects.filter(event=ev)
+    event1 = get_object_or_404(Camp_event, pk=pk)
+    if request.method=='POST':
+        event_name=request.POST.get('event_name')
+        date=request.POST.get('date')
+        des=request.POST.get('des')
+        event1.des=des
+        event1.event_name=event_name
+        event1.date=date
+        event1.save()
+        message = "Updated Successfully."
+        return redirect(reverse('edit_camp_event', args=[pk]) + '?message=' + message)
+    return render(request,'camp/edit_camp_event.html',eve)
+
+@login_required()
+@group_required('po','vs')
 def delete_camp_images(request, pk, ev):
+
+    photo = get_object_or_404(Camp_event_photos, id=pk)
+    event_id = photo.event_id  
+    photo.delete()
+    
+    photo_path = os.path.join(settings.MEDIA_ROOT, str(photo.photo))
+    if os.path.exists(photo_path):
+        os.remove(photo_path)
+    
+    message = "Image Deleted Successfully."
+    return redirect(reverse('edit_camp_event', args=[event_id]) + '?message=' + message)
+
+
+@login_required()
+@group_required('po','vs')
+def report_list_more_camp(request,pk):
+    event={
+        'eve':Camp_event.objects.filter(event_id=pk)
+    }
+    pics={
+        'pics':Camp_event_photos.objects.filter(event_id=pk)
+    }
+    return render(request,'camp/report_list_more_camp.html',{**event,**pics})
+
+
+@login_required()
+@group_required('po','vs')
+def delete_camp_event(request,pk):
     try:
-        photo = get_object_or_404(Camp_event_photos, id=pk)
-        event_id = photo.event_id  
-        photo.delete()
-        
-        photo_path = os.path.join(settings.MEDIA_ROOT, str(photo.photo))
-        if os.path.exists(photo_path):
-            os.remove(photo_path)
-        
-        message = "Image Deleted Successfully."
-        return redirect(reverse('camp/edit_camp_event', args=[event_id]) + '?message=' + message)
+        event = get_object_or_404(Camp_event, pk=pk)
+        print(event)
+        event.delete()
+        return redirect('camp_event_view')
     except Exception:
-        return render(request, 'nss/error.html')
+        return render(request,'nss/error.html')
+
+@login_required()
+@group_required('po','vs')
+def camp_report(request):
+    report={
+        'event':Camp_event.objects.all()
+    }
+    pics={
+        'pics':Camp_event_photos.objects.all()
+    }
+    return render(request,'camp/camp_report.html',{**report,**pics})
