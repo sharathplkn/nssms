@@ -94,6 +94,7 @@ class Camp(models.Model):
     camp_name=models.CharField(max_length=40,null=True)
     fromdate=models.DateField()
     todate=models.DateField()
+    
 class Camp_Attendance(models.Model):
     Attendance_id=models.AutoField(primary_key=True)
     volunteer=models.ForeignKey(volunteer,on_delete=models.CASCADE,related_name='camp_attendances')
@@ -101,12 +102,15 @@ class Camp_Attendance(models.Model):
     def __str__(self):
         return f"{self.camp.camp_name}"
 
-class Camp_event_details(models.Model):
-    event=models.ForeignKey(Event,on_delete=models.CASCADE,related_name='camp_eventdetails') 
-    des=models.TextField()
+class Camp_event(models.Model):
+    event_id=models.AutoField(primary_key=True)
+    camp=models.ForeignKey(Camp,on_delete=models.CASCADE)
+    event_name=models.CharField(max_length=60)
+    des = models.TextField()
+    date=models.DateField()
     def __str__(self):
-        return f"{self.camp.event_name}"
+        return f"{self.event_name}"
 
 class Camp_event_photos(models.Model):
-    event=models.ForeignKey(Event,on_delete=models.CASCADE,related_name='camp_eventphotos')
-    photo=models.ImageField(upload_to='events')
+    event = models.ForeignKey(Camp_event, on_delete=models.CASCADE, related_name='camp_eventphotos')
+    photo = models.ImageField(upload_to='events')

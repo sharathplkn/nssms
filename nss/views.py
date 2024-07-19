@@ -761,3 +761,121 @@ def add_camp_attendance(request):
                 att.save()
             message = "Attendance Added"
             return redirect(reverse('campattendance') + '?message2=' + message)
+
+
+def camp_event(request):
+    
+    return render(request,'camp/campevent.html')
+
+
+def add_camp_event(request):
+
+    camp={
+        'camp':Camp.objects.all()
+    }
+    if request.method == "POST":
+        event_name = request.POST.get('event_name')
+        date = request.POST.get('date')
+        description = request.POST.get('description')
+        camp=request.POST.get('camp')
+        camp=Camp.objects.get(camp_id=camp)
+        camp_event = Camp_event(camp=camp,event_name=event_name, des=description,date=date)
+        camp_event.save()
+        message = "Submitted Successfully"
+        return redirect(reverse('add_camp_event') + '?message=' + message)
+    return render(request, 'camp/add_camp_event.html',camp)
+
+
+    
+def campevent(request):
+    return render(request,'camp/campuploads.html')
+
+    
+
+def camp_photo(request):
+        # Fetch events related to Camp_event_details
+    camp_events = Camp_event.objects.select_related('event').order_by('event__date').values('event__event_id', 'event__event_name', 'event__date')
+    
+    eve = {
+        'camp_event_details': camp_events
+    }
+
+    if request.method == "POST" and request.FILES:
+        photo = request.FILES.get('photo')
+        event_id = request.POST.get('event_name')
+
+        if not event_id:
+            message = "Please select an event."
+            return redirect(reverse('camp_photo') + '?message1=' + message)
+
+        try:
+            event = Event.objects.get(event_id=event_id)
+        except Event.DoesNotExist:
+            message = "Selected event does not exist."
+            return redirect(reverse('camp_photo') + '?message1=' + message)
+
+        if Camp_event_photos.objects.filter(event=event).count() >= 3:
+            message = "Three images are already uploaded for this event."
+            return redirect(reverse('camp_photo') + '?message1=' + message)
+        else:
+            ev = Camp_event_photos(photo=photo, event=event)
+            ev.save()
+            message = "Uploaded Successfully"
+            return redirect(reverse('camp_photo') + '?message2=' + message)
+
+    return render(request, 'camp/camp_photo.html', eve)
+
+    
+    
+
+def view_event(request):
+    try:
+        event = {
+            'camp_events': Camp_event_details.objects.select_related('event').all()
+        }
+        return render(request, 'camp/camp_view_event.html', event)
+    except Exception as e:
+        print(e)
+        return render(request, 'nss/error.html')
+    
+    
+def edit_camp_event(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+    camp_event_details = get_object_or_404(Camp_event_details, event=event)
+
+    if request.method == 'POST':
+        event_name = request.POST.get('event_name')
+        date = request.POST.get('date')
+        description = request.POST.get('description')
+
+        # Update the event and camp event details
+        event.event_name = event_name
+        event.date = date
+        camp_event_details.des = description
+
+        event.save()
+        camp_event_details.save()
+
+        message = "Updated Successfully"
+        return redirect(reverse('edit_camp_event', args=[pk]) + '?message=' + message)
+
+    context = {
+        'event': event,
+        'camp_event_details': camp_event_details
+    }
+    return render(request, 'camp/edit_camp_event.html', context)
+
+def delete_camp_images(request, pk, ev):
+    try:
+        photo = get_object_or_404(Camp_event_photos, id=pk)
+        event_id = photo.event_id  
+        photo.delete()
+        
+        photo_path = os.path.join(settings.MEDIA_ROOT, str(photo.photo))
+        if os.path.exists(photo_path):
+            os.remove(photo_path)
+        
+        message = "Image Deleted Successfully."
+        return redirect(reverse('camp/edit_camp_event', args=[event_id]) + '?message=' + message)
+    except Exception:
+        return render(request, 'nss/error.html')

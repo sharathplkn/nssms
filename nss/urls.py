@@ -48,4 +48,11 @@ urlpatterns=[
     path('addcamp',views.addcamp,name='add_camp'),
     path('campattendance',views.campattendance,name='campattendance'),
     path('addcampattendance',views.add_camp_attendance,name='addcampattendance'),
-]
+    path('campevent',views.camp_event, name='campevent'),
+    path('addcampevent/', views.add_camp_event, name='add_camp_event'),
+    #path('campphotos',views.camp_photos,name='campphotos'),
+    path('camp_photo/', views.camp_photo, name='camp_photo'),
+    path('camp_event_view/', views.view_event, name='camp_event_view'),
+    path('edit_camp_event/<int:pk>/', views.edit_camp_event, name='edit_camp_event'),
+    path('delete_camp_images/<int:pk>/<int:ev>/', views.delete_camp_images, name='delete_camp_images'),    
+    ]
