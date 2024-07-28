@@ -15,8 +15,6 @@ from django.template.loader import get_template
 from django.utils.timezone import now
 from django.conf import settings
 
-def launch(request):
-    return render(request,'launch.html')
 
 @login_required()
 @group_required('po','vs','admin')
