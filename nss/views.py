@@ -525,7 +525,7 @@ def edit_event(request,pk):
     }
     ev=Event.objects.get(event_id=pk)
     event_Photos = Event_Photos.objects.filter(event=ev)
-    event_details = Event_details.objects.filter(event=ev)
+    event_details, created = Event_details.objects.get_or_create(event=ev)
     event1 = get_object_or_404(Event, pk=pk)
     if request.method=='POST':
         event_name=request.POST.get('event_name')
