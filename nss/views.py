@@ -172,7 +172,7 @@ def add_event(request):
 @login_required()
 @group_required('po','vs')
 def event_details(request):
-    try:
+
         eve = {
             'even': Event.objects.all().order_by('date').values()
         }
@@ -188,15 +188,14 @@ def event_details(request):
                 message="Submitted Successfully"
                 return redirect(reverse('event_details') + '?message1=' + message)
             else:
-                ev=Event_details.object.get(event=event_id)
+                ev=Event_details.objects.get(event=event_id)
                 ev.des=des
                 ev.expense=expense
                 ev.save()
                 message="Submitted Successfully"
-                return redirect(reverse('event_details') + '?message2=' + message)
+                return redirect(reverse('event_details') + '?message1=' + message)
         return render(request,'nss/event_details.html',eve)
-    except Exception:
-        return render(request,'nss/error.html')
+
 @login_required()
 @group_required('po','vs')
 def report(request):

@@ -5,8 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Launch</title>
-    <style>
-        /* launch.css */
+   <style>
 * {
     margin: 0;
     padding: 0;
@@ -46,7 +45,6 @@
     border: none;
     padding: 10px 20px;
     font-size: 18px;
-    border-radius: 15px;
     cursor: pointer;
     transition: background-color 0.3s, transform 0.3s;
 }
@@ -77,6 +75,7 @@
     animation: animate 0.2s ease infinite;
     transition: transform 1s;
 }
+
 @keyframes animate {
     0%, 100% {
         transform: translateY(-2px);
@@ -86,7 +85,9 @@
     }
 }
 
-
+.scene .rocket .launch {
+    transform: translateY(-200vh);
+}
 
 .scene .rocket::before {
     content: '';
@@ -104,72 +105,22 @@
     position: absolute;
     bottom: -200px;
     left: 50%;
-    transform: translateX(-50%);
-    width: 10px;
-    height: 200px;
-    background: linear-gradient(#00d0ff, transparent);
-    filter: blur(20px);
 }
-
-.scene .rocket1.launch {
-    transform: translateY(0);
-    animation: launchAnimation 2s ease-in-out;
-  }
-  
-  @keyframes launchAnimation {
-    0% {
-      transform: translateY(0);
-    }
-    100% {
-      transform: translateY(-200vh); /* Move off-screen after animation */
-    }
-  }
-
-
-.scene .rocket1::before {
-    content: '';
-    position: absolute;
-    bottom: -200px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 10px;
-    height: 200px;
-    background: linear-gradient(#00d0ff, transparent);
-}
-
-.scene .rocket1::after {
-    content: '';
-    position: absolute;
-    bottom: -200px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 10px;
-    height: 200px;
-    background: linear-gradient(#00d0ff, transparent);
-    filter: blur(20px);
-}
-
-.fade-out {
-    opacity: 0;
-    transition: opacity 1s;
-}
-
-    </style>
+   </style>
 </head>
 <body>
     <div class="scene">
         <div class="content">
-            <h1 class="title">Unveiling NSSMS</h1>
-            <p class="subtitle">Empowering NSS Digitally</p>
+            <h1 class="title">Welcome to the Launch</h1>
+            <p class="subtitle">Get ready for an amazing journey</p>
             <button id="launchButton" class="launch-button">Launch</button>
         </div>
         <div class="rocket">
             <img src="{% static 'images/rocket.png' %}" alt="Rocket">
         </div>
     </div>
-    <script>
-        // launch.js
-function stars() {
+    <script type="text/javascript">
+        function stars() {
     let count = 50;
     let scene = document.querySelector('.scene');
     let i = 0;
@@ -189,21 +140,13 @@ function stars() {
 }
 
 document.getElementById('launchButton').addEventListener('click', function() {
-    let h = Math.random() * 100;
-    document.querySelector('.content').innerHTML = '';
-    document.querySelector('.rocket').classList.add('rocket1');
     document.querySelector('.rocket').classList.add('launch');
-    const stars = document.querySelectorAll('.scene i');
-    stars.forEach(star => {
-        star.style.height = 100 + h + 'px'; // Adjust the height as desired (in pixels)
-    });
-    document.querySelector('.rocket').classList.remove('rocket');
     setTimeout(function() {
         document.body.classList.add('fade-out');
         setTimeout(function() {
             window.location.href = "{% url 'login' %}";
-        }, 1000); // Adjust the timeout to match your fade-out animation duration
-    }, 1000); // Adjust this timeout to match the rocket launch animation duration
+        }, 100); // Adjust the timeout to match your fade-out animation duration
+    }, 100); // Adjust this timeout to match the rocket launch animation duration
 });
 
 stars();

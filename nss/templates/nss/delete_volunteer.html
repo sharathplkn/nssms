@@ -38,7 +38,7 @@
 {% endfor %}
 <br>
 <center>
-<button id="back" onclick="history.back(-1)">Go Back</button>
+    <a href="javascript:history.back()" class="buttons" id="back" style="margin-left: 10px; text-decoration: none;">Cancel</a>
 {% for i in voluntee %}
 <a class="button" href="{% url 'delete_volunteer' pk=i.volunteer_id %}" onclick="return confirm('Are you sure you want to delete?')">Delete</a>
 {% endfor %}
