@@ -14,7 +14,8 @@ import os
 from django.template.loader import get_template
 from django.utils.timezone import now
 from django.conf import settings
-
+from docx import Document
+from docx.shared import Inches, Cm
 
 @login_required()
 @group_required('po','vs','admin')
@@ -347,19 +348,18 @@ def report_list(request):
 @login_required()
 @group_required('po','vs')
 def report_list_more(request,pk):
-    try:
-        event={
-            'eve':Event.objects.filter(event_id=pk)
-        }
-        pics={
-            'pics':Event_Photos.objects.filter(event_id=pk)
-        }
-        desc={
-            'desc':Event_details.objects.filter(event_id=pk)
-        }
-        return render(request,'nss/report_list_more.html',{**event,**pics,**desc})
-    except Exception:
-        return render(request,'nss/error.html')
+
+    event={
+        'eve':Event.objects.filter(event_id=pk)
+    }
+    pics={
+        'pics':Event_Photos.objects.filter(event_id=pk)
+    }
+    desc={
+        'desc':Event_details.objects.filter(event_id=pk)
+    }
+    return render(request,'nss/report_list_more.html',{**event,**pics,**desc})
+
 @login_required()
 @group_required('po','vs')
 def view_event(request):
@@ -902,3 +902,34 @@ def camp_report(request):
         'pics':Camp_event_photos.objects.all()
     }
     return render(request,'camp/camp_report.html',{**report,**pics})
+
+
+def generate_event_report(request, event_id):
+    # Get the event and related data
+    event = Event.objects.get(event_id=event_id)
+    event_details = Event_details.objects.filter(event=event)
+    attendance_list = Attendance.objects.filter(event=event)
+    event_photos = Event_Photos.objects.filter(event=event)
+    
+    # Create a new Document
+    doc = Document()
+    doc.add_heading(f'Report for {event.event_name}', 0)
+
+    # Add event date
+    doc.add_paragraph(f'{event.date}')
+
+    # Add event details
+    for detail in event_details:
+        doc.add_paragraph(f'{detail.des}')
+
+    # Add event photos
+    for photo in event_photos:
+        doc.add_picture(photo.photo.path, width=Inches(4))
+
+    # Prepare the response to download the document
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+    response['Content-Disposition'] = f'attachment; filename={event.event_name}_report.docx'
+    
+    # Save the document to the response
+    doc.save(response)
+    return response

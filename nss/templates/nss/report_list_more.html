@@ -31,12 +31,18 @@
 </div>
 <div class="no-print">
     <button class="print-button" onclick="printPdf()">Print as PDF</button>
+
+{% for i in eve%}
+<a class="print-button" href="{% url 'generate_event_report' event_id=i.event_id %}">
+    <button class="print-button">docx</button>
+</a>
+{% endfor %}
 </div>
-
-
 <script>
 function printPdf() {
     window.print();
 }
+
+
 </script>
 {% endblock %}
