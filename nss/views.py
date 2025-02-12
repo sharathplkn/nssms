@@ -219,7 +219,7 @@ def event_details(request):
 def report(request):
     try:
         report={
-            'event':Event.objects.all()
+            'event':Event.objects.all().order_by('date')
         }
         pics={
             'pics':Event_Photos.objects.all()
@@ -576,7 +576,7 @@ def monthly_report(request):
             print(year)
             month=request.POST.get('month')
             print(month)
-            events = Event.objects.filter(date__year=year, date__month=month)
+            events = Event.objects.filter(date__year=year, date__month=month).order_by('date')
             details = Event_details.objects.filter(event__in=events)
             pics = Event_Photos.objects.filter(event__in=events)
             return render(request, 'nss/report.html', {'event': events, 'details': details, 'pics': pics})
@@ -589,7 +589,7 @@ def yearly_report(request):
         if request.method=='POST':
             fromyear=request.POST.get('fromyear')
             toyear=request.POST.get('toyear')
-            events = Event.objects.filter(date__gte=fromyear, date__lte=toyear)
+            events = Event.objects.filter(date__gte=fromyear, date__lte=toyear).order_by('date')
             print(events)  # Add a debug print statement
             details = Event_details.objects.filter(event__in=events)
             pics = Event_Photos.objects.filter(event__in=events)
