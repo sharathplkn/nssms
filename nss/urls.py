@@ -17,6 +17,7 @@ urlpatterns=[
     path('even',views.add_event,name='add_event'),
     path('report',views.report,name='report'),
     path('event_photos',views.event_photos,name='event_photos'),
+    path('unit_wise_attendance',views.unit_wise_attendance,name='unit_wise_attendance'),
     path('event2',views.event2,name='event2'),
     path('volunteer/<int:pk>/edit/',views.edit_volunteer, name='edit_volunteer'),
     path('volunteer/<int:pk>/',views.delete2,name='delete2'),
@@ -59,4 +60,5 @@ urlpatterns=[
     path('delete_camp_event/<int:pk>/', views.delete_camp_event, name='delete_camp_event'),
     path('delete_camp_images/<int:pk>/<int:ev>/', views.delete_camp_images, name='delete_camp_images'),  
     path('camp_report',views.camp_report,name='camp_report') , 
+
     ]

@@ -63,3 +63,35 @@ class GroupForm(forms.ModelForm):
     class Meta:
         model = Group
         fields = ['name', 'permissions']
+
+class UnitWiseAttendanceForm(forms.Form):
+    UNIT_CHOICES = [
+        ('', 'Select Unit'),
+        ('4', 'Unit 4'),
+        ('5', 'Unit 5'),
+        ('96', 'Unit 96'),
+    ]
+    
+    unit = forms.ChoiceField(
+        choices=UNIT_CHOICES,
+        widget=forms.Select(attrs={
+            'class': 'form-control',
+            'required': True
+        })
+    )
+    
+    from_date = forms.DateField(
+        widget=forms.DateInput(attrs={
+            'type': 'date',
+            'class': 'form-control',
+            'required': True
+        })
+    )
+    
+    to_date = forms.DateField(
+        widget=forms.DateInput(attrs={
+            'type': 'date',
+            'class': 'form-control',
+            'required': True
+        })
+    )
