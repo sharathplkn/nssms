@@ -28,7 +28,7 @@ class volunteer(models.Model):
     sex=models.CharField(max_length=15,choices=sex_choices)
     dob=models.DateField()
     year_choices=[
-        ('1','1'),('2','2'),('3','3')
+        (1,'1'),(2,'2'),(3,'3')
     ]
     year=models.IntegerField(choices=year_choices)
     community_choices=[
@@ -42,7 +42,7 @@ class volunteer(models.Model):
     blood_group=models.CharField(max_length=15,choices=blood_group_choices)
     height=models.IntegerField()
     unit_choices=[
-        ('4','4'),('5','5'),('96','96')
+        (4,'4'),(5,'5'),(96,'96')
     ]
     unit=models.IntegerField(choices=unit_choices)
     weight=models.IntegerField()

@@ -1,5 +1,12 @@
 /* General styles */
 
+/* Reset and basic styles */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Malayalam&display=swap');
+
+/* Apply this font to the body or specific elements */
+body {
+  font-family: 'Noto Sans Malayalam', 'Malayalam MN', sans-serif;
+}
 
 .print-content {
     margin: 20px auto;
@@ -34,6 +41,37 @@
     color: #666;
     line-height: 1.4;
     margin-bottom: 20px;
+}
+/* Container for the buttons */
+.button-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Styling for the individual buttons */
+.button-container button {
+    background-color: #07072C; /* Blue background */
+    color: white; /* White text */
+    font-size: 16px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    margin: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Hover effect for buttons */
+.button-container button:hover {
+    background-color: #1a1a66; /* Darker shade of blue */
+}
+
+/* For stacking buttons vertically on smaller screens */
+@media (max-width: 768px) {
+    .button-container button {
+        width: 100%;
+        margin: 5px 0;
+    }
 }
 
 .image-gallery {

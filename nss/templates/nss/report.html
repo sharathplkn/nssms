@@ -1,55 +1,81 @@
-{% extends 'nss/base.html' %}
-{% load static %}
+    {% extends 'nss/base.html' %}
+    {% load static %}
 
 
 
-{% block content %}
-<link rel="stylesheet" href="{% static 'css/report.css' %}">
+    {% block content %}
+    <link rel="stylesheet" href="{% static 'css/report.css' %}">
 
-    {% if event %}
-        <div class="print-content">
-            <img src="{% static 'images/nss.png' %}" alt="Watermark" class="watermark">
-            {% for event_item in event %}
-                <div class="event-container">
-                    <div class="header-content">
-                        <img src="{% static '/images/banner2.png' %}" class="reportimg"> 
-                    </div>
-                    <h1 class="event-heading" align="center">{{ event_item.event_name | upper }}</h1>
-                    <div class="event-date">{{ event_item.date }}</div>
+        {% if event %}
+            <div class="print-content">
+                <img src="{% static 'images/nss.png' %}" alt="Watermark" class="watermark">
+                {% for event_item in event %}
+                    <div class="event-container">
+                        <div class="header-content">
+                            <img src="{% static '/images/banner2.png' %}" class="reportimg"> 
+                        </div>
+                        <h1 class="event-heading" align="center">{{ event_item.event_name | upper }}</h1>
+                        <div class="event-date">{{ event_item.date }}</div>
 
-                    <div class="event-description">
-                        {% for detail_item in details %}
-                            {% if detail_item.event.event_id == event_item.event_id %}
-                                {{ detail_item.des }}
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-
-                    <div class="image-gallery">
-                        {% for pic_item in pics %}
-                            {% if pic_item.photo %}
-                                {% if pic_item.event.event_id == event_item.event_id %}
-                                    <div class="gallery-item">
-                                        <img src="{{ pic_item.photo.url }}">
-                                    </div>
+                        <div class="event-description">
+                            {% for detail_item in details %}
+                                {% if detail_item.event.event_id == event_item.event_id %}
+                                    {{ detail_item.des }}
                                 {% endif %}
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
+                            {% endfor %}
+                        </div>
 
-        <div class="no-print">
-            <button class="print-button" onclick="printPdf()">Print as PDF</button>
-        </div>
-    {% else %}
-        <h1 align="center">No events held in this Period.</h1> 
-    {% endif %}
-        
-    <script>
-        function printPdf() {
-            window.print();
-        }
-    </script>
-{% endblock %}
+                        <div class="image-gallery">
+                            {% for pic_item in pics %}
+                                {% if pic_item.photo %}
+                                    {% if pic_item.event.event_id == event_item.event_id %}
+                                        <div class="gallery-item">
+                                            <img src="{{ pic_item.photo.url }}">
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            {% if yearly %}
+            <div class="no-print">
+                <div class="button-container">
+                    <button class="print-button" onclick="printPdf()">Print as PDF</button>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="fromyear" value="{{ fromyear }}">
+                        <input type="hidden" name="toyear" value="{{ toyear }}">
+                        <button type="submit" name="download_docx">Download as DOCX</button>
+                    </form>
+                </div>
+                
+                
+            </div>
+            {% elif  monthly %}
+          <div class="no-print">
+    <div class="button-container">
+        <button class="print-button" onclick="printPdf()">Print as PDF</button>
+
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="year" value="{{ year }}">
+            <input type="hidden" name="month" value="{{ month }}">
+            <button type="submit" name="download_monthly_docx">Download Monthly Report (DOCX)</button>
+        </form>
+    </div>
+</div>
+
+            {% endif %}
+        {% else %}
+            <h1 align="center">No events held in this Period.</h1> 
+        {% endif %}
+            
+        <script>
+            function printPdf() {
+                window.print();
+            }
+        </script>
+    {% endblock %}

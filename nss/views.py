@@ -567,35 +567,135 @@ def promote_check(request):
     except Exception:
         return render(request,'nss/error.html')
 
-@login_required()
-@group_required('po','vs')
+
+def generate_docx(events, details, pics):
+    doc = Document()
+    doc.add_heading('Monthly Event Report', level=1)
+
+    for event in events:
+        doc.add_heading(f"{event.event_name} ({event.date})", level=2)
+        
+        # Add event details
+        event_details = details.filter(event=event)
+        for detail in event_details:
+            doc.add_paragraph(f" - {detail.des}")
+
+        # Add event images
+        event_pics = pics.filter(event=event)
+        for pic_item in event_pics:
+            if pic_item.photo:
+                photo_path = pic_item.photo.path  # Get the local path of the image
+                if os.path.exists(photo_path):  # Check if the file exists
+                    try:
+                        # Open the image using Pillow to verify if it's a valid image
+                        with Image.open(photo_path) as img:
+                            img.verify()  # Verify if the image is valid
+                        doc.add_picture(photo_path, width=Inches(2))  # Adjust image width as necessary
+                    except Exception as e:
+                        print(f"Error with image {photo_path}: {e}")
+                        doc.add_paragraph(f"Image {photo_path} could not be processed.")
+                else:
+                    print(f"Image {photo_path} not found.")  # Log if image is missing
+                    doc.add_paragraph(f"Image {photo_path} not found.")
+    
+    # Prepare the response for downloading the DOCX file
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+    response['Content-Disposition'] = f'attachment; filename=monthly_report_{datetime.now().strftime("%Y%m%d")}.docx'
+    
+    # Save the document to the response
+    doc.save(response)
+    
+    return response
+
+
 def monthly_report(request):
-    try:
-        if request.method=="POST":
-            year=request.POST.get('year')
-            print(year)
-            month=request.POST.get('month')
-            print(month)
-            events = Event.objects.filter(date__year=year, date__month=month).order_by('date')
-            details = Event_details.objects.filter(event__in=events)
-            pics = Event_Photos.objects.filter(event__in=events)
-            return render(request, 'nss/report.html', {'event': events, 'details': details, 'pics': pics})
-    except Exception:
-        return render(request,'nss/error.html')
+    if request.method == "POST":
+        year = request.POST.get('year')
+        month = request.POST.get('month')
+
+        events = Event.objects.filter(date__year=year, date__month=month).order_by('date')
+        details = Event_details.objects.filter(event__in=events)
+        pics = Event_Photos.objects.filter(event__in=events)
+
+        if 'download_monthly_docx' in request.POST:  # Handle DOCX request
+            return generate_docx(events, details, pics)
+
+        return render(request, 'nss/report.html', {'event': events, 'details': details, 'pics': pics, 'year': year, 'month': month,'monthly':True})
+    return render(request, 'nss/error.html')
+
+# Normalize month abbreviations like "Feb." -> "Feb"
+def normalize_date_format(date_str):
+    """ Cleans and parses various date formats safely. """
+    if not date_str:
+        raise ValueError("Date is empty")
+
+    date_str = date_str.replace(".", "")  # Remove periods from month names
+
+    formats = ["%Y-%m-%d", "%B %d, %Y", "%b %d, %Y"]  # Multiple formats
+
+    for fmt in formats:
+        try:
+            return datetime.strptime(date_str, fmt).date()
+        except ValueError:
+            continue  # Try next format
+
+    raise ValueError(f"Date Parsing Error: '{date_str}' does not match expected formats.")
+
+
+
 @login_required()
 @group_required('po','vs')
 def yearly_report(request):
     try:
-        if request.method=='POST':
-            fromyear=request.POST.get('fromyear')
-            toyear=request.POST.get('toyear')
+        if request.method == 'POST':
+            print("🔹 Received POST request")
+
+            fromyear = request.POST.get('fromyear')
+            toyear = request.POST.get('toyear')
+            print(f"📆 Raw Date Range: From {fromyear} To {toyear}")
+
+            if not fromyear or not toyear:
+                print("❌ Missing fromyear or toyear")
+                return render(request, 'nss/error.html', {'error': 'Please provide a valid date range'})
+
+            try:
+                fromyear = normalize_date_format(fromyear)
+                toyear = normalize_date_format(toyear)
+            except ValueError as ve:
+                print(f"❌ {ve}")
+                return render(request, 'nss/error.html', {'error': str(ve)})
+
+            # Fetch events in the date range
             events = Event.objects.filter(date__gte=fromyear, date__lte=toyear).order_by('date')
-            print(events)  # Add a debug print statement
+            print(f"🔍 Found {len(events)} events")
+
             details = Event_details.objects.filter(event__in=events)
             pics = Event_Photos.objects.filter(event__in=events)
-            return render(request, 'nss/report.html', {'event': events, 'details': details, 'pics': pics})
-    except Exception:
-        return render(request,'nss/error.html')
+
+            if 'download_docx' in request.POST:
+                print("📥 Download DOCX requested")
+                return generate_docx(events, details, pics)
+
+            return render(request, 'nss/report.html', {
+                'event': events,
+                'details': details,
+                'pics': pics,
+                'fromyear': fromyear,
+                'toyear': toyear,
+                'yearly':True
+            })
+
+        print("ℹ️ GET request received, showing empty form")
+        return render(request, 'nss/report.html', {
+            'event': None,
+            'details': None,
+            'pics': None,
+        })
+
+    except Exception as e:
+        print(f"🔥 Unexpected Error: {e}")
+        return render(request, 'nss/error.html', {'error': 'An unexpected error occurred. Please try again.'})
+
 @login_required()
 @group_required('po','vs')
 def select_month(request):
