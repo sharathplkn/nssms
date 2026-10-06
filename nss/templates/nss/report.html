@@ -60,11 +60,36 @@
         <button class="print-button" onclick="printPdf()">Print as PDF</button>
 
         <form method="POST">
-            {% csrf_token %}
-            <input type="hidden" name="year" value="{{ year }}">
-            <input type="hidden" name="month" value="{{ month }}">
-            <button type="submit" name="download_monthly_docx">Download Monthly Report (DOCX)</button>
-        </form>
+    {% csrf_token %}
+
+    {% if monthly %}
+        <input type="hidden" name="year" value="{{ year }}">
+        <input type="hidden" name="month" value="{{ month }}">
+    {% elif yearly %}
+        <input type="hidden" name="fromyear" value="{{ fromyear }}">
+        <input type="hidden" name="toyear" value="{{ toyear }}">
+    {% endif %}
+
+    <h3>Select Events to Include</h3>
+
+    {% for event_item in event %}
+        <label>
+            <input type="checkbox" name="selected_events" value="{{ event_item.event_id }}" checked>
+            {{ event_item.event_name }} ({{ event_item.date }})
+        </label><br>
+    {% endfor %}
+
+    <br>
+
+    <button type="button" class="print-button" onclick="printPdf()">Print as PDF</button>
+
+    {% if yearly %}
+        <button type="submit" name="download_docx">Download DOCX</button>
+    {% elif monthly %}
+        <button type="submit" name="download_monthly_docx">Download DOCX</button>
+    {% endif %}
+
+</form>
     </div>
 </div>
 

@@ -608,20 +608,44 @@ def generate_docx(events, details, pics):
     return response
 
 
+@login_required()
+@group_required('po','vs')
 def monthly_report(request):
-    if request.method == "POST":
-        year = request.POST.get('year')
-        month = request.POST.get('month')
+    try:
+        if request.method == "POST":
+            year = request.POST.get('year')
+            month = request.POST.get('month')
 
-        events = Event.objects.filter(date__year=year, date__month=month).order_by('date')
-        details = Event_details.objects.filter(event__in=events)
-        pics = Event_Photos.objects.filter(event__in=events)
+            # Get all events in the selected month
+            events = Event.objects.filter(date__year=year, date__month=month).order_by('date')
 
-        if 'download_monthly_docx' in request.POST:  # Handle DOCX request
-            return generate_docx(events, details, pics)
+            # Get selected events from checkboxes
+            selected_events = request.POST.getlist('selected_events')
 
-        return render(request, 'nss/report.html', {'event': events, 'details': details, 'pics': pics, 'year': year, 'month': month,'monthly':True})
-    return render(request, 'nss/error.html')
+            if selected_events:
+                events = Event.objects.filter(event_id__in=selected_events).order_by('date')
+
+            details = Event_details.objects.filter(event__in=events)
+            pics = Event_Photos.objects.filter(event__in=events)
+
+            # DOCX download
+            if 'download_monthly_docx' in request.POST:
+                return generate_docx(events, details, pics)
+
+            return render(request, 'nss/report.html', {
+                'event': events,
+                'details': details,
+                'pics': pics,
+                'year': year,
+                'month': month,
+                'monthly': True
+            })
+
+        return render(request, 'nss/error.html')
+
+    except Exception as e:
+        print(f"Error in monthly report: {e}")
+        return render(request,'nss/error.html')
 
 # Normalize month abbreviations like "Feb." -> "Feb"
 def normalize_date_format(date_str):
@@ -648,32 +672,39 @@ def normalize_date_format(date_str):
 def yearly_report(request):
     try:
         if request.method == 'POST':
-            print("🔹 Received POST request")
 
             fromyear = request.POST.get('fromyear')
             toyear = request.POST.get('toyear')
-            print(f"📆 Raw Date Range: From {fromyear} To {toyear}")
 
             if not fromyear or not toyear:
-                print("❌ Missing fromyear or toyear")
-                return render(request, 'nss/error.html', {'error': 'Please provide a valid date range'})
+                return render(request, 'nss/error.html', {
+                    'error': 'Please provide a valid date range'
+                })
 
+            # Normalize dates
             try:
                 fromyear = normalize_date_format(fromyear)
                 toyear = normalize_date_format(toyear)
             except ValueError as ve:
-                print(f"❌ {ve}")
                 return render(request, 'nss/error.html', {'error': str(ve)})
 
-            # Fetch events in the date range
-            events = Event.objects.filter(date__gte=fromyear, date__lte=toyear).order_by('date')
-            print(f"🔍 Found {len(events)} events")
+            # Get all events in range
+            events = Event.objects.filter(
+                date__gte=fromyear,
+                date__lte=toyear
+            ).order_by('date')
+
+            # Get selected events from checkboxes
+            selected_events = request.POST.getlist('selected_events')
+
+            if selected_events:
+                events = Event.objects.filter(event_id__in=selected_events).order_by('date')
 
             details = Event_details.objects.filter(event__in=events)
             pics = Event_Photos.objects.filter(event__in=events)
 
+            # DOCX download
             if 'download_docx' in request.POST:
-                print("📥 Download DOCX requested")
                 return generate_docx(events, details, pics)
 
             return render(request, 'nss/report.html', {
@@ -682,10 +713,9 @@ def yearly_report(request):
                 'pics': pics,
                 'fromyear': fromyear,
                 'toyear': toyear,
-                'yearly':True
+                'yearly': True
             })
 
-        print("ℹ️ GET request received, showing empty form")
         return render(request, 'nss/report.html', {
             'event': None,
             'details': None,
@@ -693,8 +723,8 @@ def yearly_report(request):
         })
 
     except Exception as e:
-        print(f"🔥 Unexpected Error: {e}")
-        return render(request, 'nss/error.html', {'error': 'An unexpected error occurred. Please try again.'})
+        print(f"Unexpected Error: {e}")
+        return render(request,'nss/error.html')
 
 @login_required()
 @group_required('po','vs')

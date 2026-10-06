@@ -8,7 +8,7 @@
 
 <div class="form-container">
     {% if status %}
-    <h1 class="event-heading">{{ status.event.event_name|title }}-{{status.date}}-Unit-{{status.unit}}
+    <h1 class="event-heading">{{ status.event.event_name|title }}-{{status.date}}-Unit-{{status.unit}}, Hour-{{ resul.first.no_of_hours }}
     </h1>
     <h1 class="event-heading">Status: {{status.status|title}}
         {% endif %}
@@ -26,11 +26,13 @@
         <tr>
             <th>Name</th>
             <th>Programme</th>
+            {% comment %} <th>Hours</th> {% endcomment %}
         </tr>
         {% for i in resul %}
         <tr>
             <td>{{ i.volunteer.name }}</td>
             <td>{{i.volunteer.year}}-Year {{ i.volunteer.program}}</td>
+            {% comment %} <td>{{ i.no_of_hours }}</td> {% endcomment %}
         </tr>
         {% endfor %}
     </table>

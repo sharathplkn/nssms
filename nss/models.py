@@ -58,18 +58,21 @@ class volunteer(models.Model):
         return f"{self.name}"
     def total_hours(self):
         return self.attendances.aggregate(Sum('no_of_hours'))['no_of_hours__sum'] or 0
+
 class Event(models.Model):
     event_id=models.AutoField(primary_key=True)
     event_name=models.CharField(max_length=60)
     date=models.DateField()
     def __str__(self):
         return f"{self.event_name}"
+
 class Attendance_status(models.Model):
     status_id=models.AutoField(primary_key=True)
     date=models.DateField()
     unit=models.IntegerField()
     event=models.ForeignKey(Event,on_delete=models.CASCADE,related_name='eventattendances')
     status=models.CharField(max_length=30,default="pending for approval")
+
 class Attendance(models.Model):
     Attendance_status=models.ForeignKey(Attendance_status,on_delete=models.CASCADE)
     Attendance_id=models.AutoField(primary_key=True)
@@ -79,6 +82,7 @@ class Attendance(models.Model):
     no_of_hours=models.IntegerField()
     def __str__(self):
         return f"{self.event.event_name}"
+        
 class Event_details(models.Model):
     event=models.ForeignKey(Event,on_delete=models.CASCADE,related_name='eventdetails') 
     des=models.TextField()
